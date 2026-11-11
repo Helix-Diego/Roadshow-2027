@@ -1,0 +1,894 @@
+<!doctype html><html lang="es"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Helix Arena · Centro de alto rendimiento</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#edf0ed;color:#162822;font-family:system-ui,sans-serif}header,footer{display:flex;justify-content:space-between;align-items:center;padding:18px 4vw;border-bottom:1px solid #ccd4ce;font:600 12px monospace;letter-spacing:.13em}main{position:relative;height:calc(100svh - 118px);min-height:520px;overflow:hidden;background:radial-gradient(ellipse at 60% 45%,white,#e0e6e2)}canvas{width:100%;height:100%;display:block;touch-action:none;cursor:grab}article{position:absolute;top:5%;left:4vw;width:min(320px,85vw);pointer-events:none}small{font:700 12px monospace;letter-spacing:.18em;color:#287455}h1{font-size:clamp(34px,5vw,78px);line-height:.9;letter-spacing:-.08em;margin:14px 0}p{font-size:15px;line-height:1.45;margin:0;color:#30473c}nav{position:absolute;bottom:3%;left:4vw;right:4vw;display:flex;gap:7px;flex-wrap:wrap}button{font:600 13px system-ui;background:#f8faf8;border:1px solid #a7b9ae;color:#162822;border-radius:5px;padding:10px 13px;cursor:pointer}button[aria-pressed=true],#play{background:#133c2c;color:white}footer{border-top:1px solid #ccd4ce;border-bottom:0;padding-block:12px;gap:10px}@media(max-width:650px){footer span:last-child{display:none}main{min-height:620px}article{top:4%}}
+body.night main{background:radial-gradient(ellipse at 60% 50%,#355749,#101d19)}body.night article h1,body.night article p{color:#f5fbf6}body.night article small{color:#92e0bb}main{transition:background-color .3s}
+
+main{display:grid;grid-template-columns:300px 1fr;height:calc(100svh - 115px);min-height:560px}
+aside{padding:22px;background:#f7f9f7;border-right:1px solid #c6d3ca;z-index:1;overflow:auto}
+article,nav{position:static;width:auto;pointer-events:auto}
+article{margin:25px 0}h1{font-size:45px}nav button{flex:1;padding:9px 6px}
+.section{margin:18px 0}.section button,#zones button{margin:4px 3px 0 0}
+.stage{position:relative;min-width:0;min-height:0}
+.zoom{position:absolute;right:15px;bottom:15px;display:flex;gap:5px}
+.zoom button{font-size:20px;min-width:42px;padding:6px}
+#status{padding:10px;border-left:3px solid #2d8f70;background:#e7efe9;font-size:13px}
+#failure[aria-pressed=true]{background:#a71b2c;color:white}
+.network .stage{background:radial-gradient(ellipse at 50% 45%,#e6f0e9,#b9cec3)}
+@media(max-width:720px){main{display:flex;flex-direction:column;height:auto}aside{padding:14px}article{margin:12px 0}h1{font-size:34px}.stage{height:60svh;min-height:380px}.section{margin:10px 0}}
+
+header{background:#10251f;border-bottom-color:#244437}
+header #full{background:#19392e;color:#f3f9f3;border-color:#638476}
+.brand{display:flex;align-items:center;background:#10251f;border-radius:6px;padding:0 8px}
+.brand img{width:140px;height:auto;display:block}
+.zoom{align-items:center;background:#f7f9f7;border:1px solid #a7b9ae;padding:7px;border-radius:8px}
+.zoom label{font-size:12px;font-weight:650}.zoom output{display:block;font-variant-numeric:tabular-nums}
+#zoom-level{width:clamp(80px,16vw,175px);accent-color:#287455}
+#network-detail p{font-size:12px;margin-top:8px}
+
+.header-actions{display:flex;gap:8px}
+.presenting main{display:block;height:calc(100svh - 80px);min-height:0}
+.presenting aside,.presenting footer,.presenting .zoom{display:none}
+.presenting .stage{height:100%;min-height:0}
+ .presenting .stage{display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr);padding-bottom:72px}
+.presenting .stage:has(#cue:not([hidden])){grid-template-columns:minmax(0,1fr) minmax(270px,33%)}
+.presenting .stage canvas{grid-column:1;grid-row:1;min-height:0}
+#cue:not([hidden]){grid-column:2;grid-row:1;display:flex;align-items:center;padding:clamp(12px,2vw,34px);overflow:auto}
+#cue-card{min-width:0;overflow-wrap:anywhere}
+@media(max-width:720px){
+  .presenting .stage:has(#cue:not([hidden])){grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(130px,1fr) auto}
+  #cue:not([hidden]){grid-column:1;grid-row:2;max-height:45vh}
+}
+#cue-card{width:min(100%,1020px);padding:clamp(16px,2vw,34px);background:#102820;color:#f7fff7;border-radius:20px;border:1px solid #648774;box-shadow:0 22px 80px #06150e50}
+#cue-card small{color:#d6f996;font-size:clamp(11px,1.3vw,20px)}
+#cue-card h2{font-size:clamp(24px,3.2vw,54px);line-height:1;letter-spacing:-.045em;margin:.28em 0 .42em}
+#cue-card p{color:#edf9ef;font-size:clamp(16px,1.65vw,26px);line-height:1.25;margin:.48em 0 0}
+#cue-card p[hidden]{display:none}
+#cue-card #cue-agent{color:#d6f996;font-size:clamp(14px,1.6vw,25px);font-weight:650}
+#cue.overview{place-items:start;padding-bottom:0}
+#cue.overview #cue-card{width:auto;max-width:550px;padding:16px 24px;border-radius:12px}
+#cue.overview h2{font-size:clamp(23px,3vw,47px);margin:.25em 0}
+#cue.overview p{font-size:clamp(14px,1.35vw,21px)}
+#stage-controls:not([hidden]){position:absolute;bottom:18px;left:50%;transform:translateX(-50%);z-index:3;display:flex;align-items:center;justify-content:center;gap:8px;width:max-content;max-width:96%;flex-wrap:wrap;padding:8px;background:#102820;color:white;border-radius:10px}
+#stage-controls button:disabled{opacity:.45;cursor:default}#step-count{font:600 13px monospace;padding:0 6px}
+@media(max-height:570px){#cue-card{padding:16px 24px}#cue-card h2{font-size:clamp(24px,4vw,48px)}#cue-card p{font-size:clamp(15px,2vw,24px)}}
+
+
+#sketch-slot:not([hidden]){grid-area:1/1;align-self:start;justify-self:center;z-index:2;width:min(90%,820px);margin-top:clamp(8px,2.5vh,32px);pointer-events:none;max-height:100%;overflow:auto}
+.sketch-stack{display:grid;gap:8px;grid-template-columns:1.1fr .9fr;color:#163a2c;font-size:clamp(11px,1.1vw,17px)}
+.mock-window{background:#eff7ef;border:1px solid #97b5a3;border-radius:12px;overflow:hidden;box-shadow:0 10px 30px #12282045;animation:window-enter .55s ease both;animation-delay:var(--delay,0s)}
+.mock-window header{display:flex;justify-content:space-between;padding:8px 12px;background:#204437;color:#f6fff3;border:0;font-weight:700;letter-spacing:0}
+.mock-body{padding:10px 12px;display:grid;gap:8px}
+.monitor{grid-column:1/-1}
+.timeline{display:grid;grid-template-columns:repeat(12,1fr);gap:4px}
+.timeline i{height:9px;background:#70a78d;border-radius:2px}
+.timeline i:nth-last-child(-n+4){background:#c86a52}
+.flow{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:center;text-align:center;gap:5px}
+.flow span,.chat,.review{padding:7px;background:#dcecdf;border-radius:6px}
+.flow b{color:#457b61}.review{border-left:4px solid #84a94d;background:#e2efce}
+.change-sketch{width:min(100%,620px);margin:auto}
+@keyframes window-enter{from{opacity:0;transform:translateY(16px) scale(.97)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.mock-window{animation:none}}
+
+.after-recovery .mock-window{--delay:1.65s}
+.split-sketch,.metric-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.metric-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.metric-grid strong{display:block;font-size:1.35em;color:#215d45}
+@media(max-width:460px){.metric-grid{grid-template-columns:1fr}}
+
+/* Stage mockups share the same window frame and panel grid. */
+.mock-window{background:#f5f9f4;border:1px solid #afc4b5;border-radius:16px;box-shadow:0 16px 40px #10251f32}
+.mock-window header{background:#244b3d;padding:10px 16px;color:#f6fff4}
+.mock-window header span{color:#d4efad}
+.mock-body{padding:clamp(10px,1.5vw,22px);gap:10px}
+.mock-body>strong{font-size:clamp(16px,1.8vw,29px);letter-spacing:-.03em}
+.panel-label{display:block;margin-bottom:5px;color:#315b49;font-size:.9em;font-weight:700}
+.timeline-panel,.flow,.dashboard-panel{padding:10px;background:#e6efe6;border:1px solid #d6e4d8;border-radius:8px}
+.timeline{gap:5px}
+.timeline i{height:clamp(7px,1vw,14px);background:#70a78d}
+.timeline i:nth-last-child(-n+4){background:#d46855}
+.flow span,.chat,.review{background:#d9e9de;padding:9px 10px}
+.flow span{position:relative;min-width:0;overflow-wrap:anywhere}
+.flow span:last-child{background:#d7edaf}
+.flow b{color:#42735b}
+.review{background:#e5f1ce;border-color:#91bc56}
+.metric-grid .chat{background:#e6efe6;border:1px solid #d6e4d8}
+.metric-grid strong{font-size:1.65em}
+.cluster-input{display:grid;gap:5px}
+.cluster-input span{padding:6px;background:#d9e9de;border-radius:5px}
+.dashboard-bars{display:grid;gap:6px;margin-top:6px}
+.dashboard-bars div{display:grid;grid-template-columns:minmax(0,1.3fr) 1fr auto;align-items:center;gap:8px}
+.dashboard-bars i{height:7px;border-radius:4px;background:linear-gradient(90deg,#65a785 var(--share),#d5e5d8 var(--share))}
+
+.stage canvas{transition:opacity .4s ease}
+.product-slide .stage canvas{opacity:0;pointer-events:none}
+.product-slide #sketch-slot:not([hidden]){width:94%;align-self:center;margin:0;max-height:98%;padding:6px}
+.aiops-product{display:grid;gap:10px;color:#163a2c;font-size:clamp(12px,1.15vw,18px);animation:product-enter .65s .25s ease both}
+.product-tabs{background:#e6efe6;color:#315b49;padding:8px 14px;word-spacing:10px;font-size:.8em}
+.product-tabs b{border-bottom:2px solid #386d51}
+.product-kpis,.product-handoff{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.product-handoff{grid-template-columns:1fr 1fr}
+.product-kpis span{padding:7px;background:#e1ece4;border-radius:5px;font-size:.8em}
+.product-kpis b{display:block}
+.ci-topology{border:1px solid #cfdfd3;padding:8px;border-radius:6px}
+.ci-topology svg{display:block;width:100%;max-height:200px}
+@keyframes product-enter{from{opacity:0;transform:translateY(18px) scale(.98)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.aiops-product{animation:none}.stage canvas{transition:none}}
+
+.product-slide #sketch-slot:not([hidden]){align-self:center;max-height:100%;overflow:auto}
+.aiops-product{gap:5px}
+.aiops-product .product-tabs{padding:5px 12px}
+.aiops-product .mock-body{padding:8px 12px;gap:5px}
+.aiops-product .mock-body>strong{font-size:clamp(16px,1.6vw,25px)}
+.aiops-product .product-kpis span{padding:4px 7px}
+.aiops-product .timeline-panel{padding:6px 8px}
+.aiops-product .timeline i{height:7px}
+.aiops-product .ci-topology{padding:6px}
+.aiops-product .ci-topology svg{max-height:105px}
+.value-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.value-note{display:grid;gap:2px;padding:6px 8px;background:#e0eddd;border-left:3px solid #88b65c;border-radius:4px;font-size:.8em}
+.value-note strong{color:#214d36}
+.value-note span{line-height:1.18}
+.ci-topology .value-note{grid-template-columns:auto 1fr;align-items:center}
+.situation-link{display:flex;flex-direction:column;align-items:center;color:#366e50;height:20px;line-height:10px}
+.situation-link span{height:12px;width:2px;background:#5c916f;animation:link-grow .55s .35s ease both;transform-origin:top}
+.situation-content{display:grid;grid-template-columns:1fr 1.2fr;gap:10px;padding:10px 12px}
+.situation-summary{display:grid;gap:6px;align-content:start}
+.situation-summary .flow{font-size:.75em;padding:6px;gap:3px}
+.situation-summary .flow span{padding:5px}
+.situation-incident{font-size:.75em}
+.root-cause{display:grid;gap:6px;border-left:1px solid #b7ccbc;padding-left:10px;font-size:.85em}
+.root-cause>strong{color:#286045}
+.analysis-tools{display:grid;gap:4px}
+.analysis-tools span{padding:5px 7px;border-radius:5px;background:#e0eae2;animation:window-enter .4s var(--tool-delay) ease both}
+.recommendation{display:grid;gap:3px;background:#dceec0;padding:6px 8px;border-radius:5px;animation:window-enter .45s 1.6s ease both}
+.product-handoff .mock-body{font-size:.8em}
+.product-handoff .mock-window header,.situation-window header{padding:6px 10px;font-size:.85em}
+@keyframes link-grow{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@media(max-height:750px) and (min-width:721px){
+  .aiops-product{font-size:clamp(11px,1vw,15px)}
+  .aiops-product .ci-topology svg{max-height:80px}
+  .aiops-product .product-tabs{display:none}
+  .aiops-product .mock-body{gap:4px;padding:6px 10px}
+  .situation-content{padding:7px 10px;gap:7px}
+}
+@media(prefers-reduced-motion:reduce){.situation-link span,.analysis-tools span,.recommendation{animation:none}}
+
+/* Give the service dependency graph priority in the AIOps slide. */
+.product-slide #sketch-slot:not([hidden]){width:98%;padding:4px}
+.aiops-product .ci-topology svg{height:clamp(170px,27vh,330px);max-height:none}
+.aiops-product .ci-topology svg text{font-size:14px;font-weight:650}
+@media(max-height:750px) and (min-width:721px){
+  .aiops-product .ci-topology svg{height:clamp(145px,25vh,230px);max-height:none}
+}
+
+.annotated-monitor{position:relative;padding:48px 20px 60px}
+.annotated-monitor .monitor{position:relative;z-index:0}
+.value-callout{position:absolute;z-index:2;display:grid;gap:3px;width:clamp(140px,24%,240px);padding:9px 12px;background:#f6fbe9;border:1px solid #89ab65;border-radius:9px;box-shadow:0 5px 18px #153b2d30;color:#214d36;font-size:clamp(11px,1.05vw,16px);line-height:1.2;animation:window-enter .5s .4s both}
+.value-callout span{font-size:.85em;font-weight:400}
+.callout-discovery{top:7px;left:0}
+.callout-situations{bottom:2px;left:0}
+.callout-automation{bottom:2px;right:0}
+.callout-lines{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none;overflow:visible}
+.callout-lines path{fill:none;stroke:#52834d;stroke-width:1.8;vector-effect:non-scaling-stroke;stroke-dasharray:500;stroke-dashoffset:500;animation:draw-callout .65s .4s forwards}
+.callout-lines circle{fill:#cde88e;stroke:#376c42;stroke-width:1.5;vector-effect:non-scaling-stroke}
+.situation-target{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px;background:#e3efdc;border:1px solid #a7c094;border-radius:5px;font-size:.8em}
+@keyframes draw-callout{to{stroke-dashoffset:0}}
+@media(max-height:750px) and (min-width:721px){
+.annotated-monitor{padding:40px 12px 52px}
+.value-callout{padding:7px 9px;font-size:11px}
+.aiops-product .ci-topology svg{height:clamp(110px,19vh,180px)}
+}
+@media(prefers-reduced-motion:reduce){.value-callout{animation:none}.callout-lines path{animation:none;stroke-dashoffset:0}}
+
+body:not(.presenting) main{display:block;height:calc(100svh - 80px);min-height:400px}
+body:not(.presenting) .stage{height:100%}
+body:not(.presenting) aside,body:not(.presenting) footer,body:not(.presenting) .zoom{display:none}
+#tour-label:not([hidden]){position:absolute;left:28px;bottom:28px;padding:14px 22px;border-radius:10px;background:#133c2cea;color:#f2ffe9;border:1px solid #82a287;font-size:clamp(18px,2vw,34px);font-weight:650;box-shadow:0 8px 30px #163e3228;pointer-events:none}
+.header-actions #network-toggle{background:#d5e8c2;border-color:#adc793;color:#173d2b}
+.presenting #network-toggle,.presenting #next-zone{display:none}
+@media(max-width:650px){header{padding:10px;gap:8px}.header-actions{flex-wrap:wrap;justify-content:flex-end}.header-actions button{padding:7px;font-size:11px}.brand img{width:100px}}
+
+.annotated-monitor{padding:66px 12px 76px}
+.value-callout{width:29%;background:#f6fbf7;border:1px solid #abc8b2;box-shadow:0 7px 22px #183c2920;border-radius:12px;padding:10px 12px}
+.value-callout strong{font-size:1em}
+.callout-discovery{top:2px;left:12px}
+.callout-situations{bottom:2px;left:12px}
+.callout-automation{bottom:2px;right:12px}
+.callout-lines path{stroke:#5b8e6b;stroke-width:1.5;stroke-linecap:round}
+.callout-lines circle{fill:#c9e9a7;stroke:#386f4d}
+@media(max-height:750px) and (min-width:721px){.annotated-monitor{padding:55px 10px 62px}.value-callout{font-size:11px;padding:8px 10px}}
+
+.value-callout{background:#effad9;border:2px solid #527e35;box-shadow:0 6px 20px #163d2c40,0 0 0 3px #ffffffa6}
+.value-callout strong{color:#173c25;font-weight:800}
+.value-callout::before{content:"PUNTO DE VALOR";font:750 9px system-ui;letter-spacing:.1em;color:#52703c}
+.callout-lines path{stroke:#315c32;stroke-width:2.5;stroke-dasharray:7 5;stroke-dashoffset:0;animation:none}
+.callout-lines circle{fill:#d6f18a;stroke:#274f2d;stroke-width:2.2}
+.situation-content{grid-template-columns:1.15fr 1fr}
+.situation-summary>strong{font-size:1.1em}
+.situation-summary svg{display:block;width:100%;max-height:95px}
+.situation-badges{display:flex;gap:5px;font-size:.7em}
+.situation-badges span{padding:3px 7px;border-radius:4px;background:#e4ece4}
+.situation-badges span:first-child{background:#b84f42;color:white}
+.best-action{display:grid;gap:4px;padding:9px 11px;border-radius:7px;background:#d9edc2;border:1px solid #99b77b;font-size:.85em}
+.best-action small{font:inherit;font-size:.8em;color:#4c6848;letter-spacing:0}
+.root-cause{background:#e8f1e9;border:1px solid #bfd1c2;border-radius:8px;padding:10px}
+.root-cause .analysis-tools span{background:#f6faf6;border:1px solid #cadbcd}
+@media(max-height:750px) and (min-width:721px){
+.value-callout{font-size:10px;padding:6px 8px}
+.value-callout::before{font-size:8px}
+.situation-content{font-size:11px;padding:7px}
+.situation-summary svg{max-height:70px}
+.root-cause{padding:7px;gap:4px}
+.best-action{padding:6px 8px}
+}
+
+.annotated-monitor{padding:82px 12px 88px}
+.value-callout{background:#edf6d8;opacity:1;box-shadow:0 4px 12px #153b2d28;border:1.5px solid #577a3e;width:29%;max-width:240px}
+.callout-discovery{top:0;left:12px}
+.callout-situations,.callout-automation{bottom:0}
+.value-callout span{color:#344e2d}
+.situation-link{height:40px;min-height:40px;position:relative;gap:0;line-height:12px;overflow:visible}
+.situation-link span{display:block;width:3px;height:29px;min-height:29px;background:#285a3a;animation:none}
+.situation-link b{display:block;color:#285a3a;font-size:18px;line-height:12px}
+#helixgpt-capabilities[hidden]{display:none}
+#helixgpt-capabilities{display:grid;gap:7px;margin:16px 0 8px;padding:13px;background:#214536;border-radius:10px;color:#edf9e6}
+#helixgpt-capabilities strong{color:#d6f996;font-size:clamp(14px,1.5vw,23px)}
+#helixgpt-capabilities span{font-size:clamp(13px,1.1vw,18px);line-height:1.25}
+@media(max-height:750px) and (min-width:721px){
+.annotated-monitor{padding:70px 10px 74px}
+.value-callout{font-size:10px;padding:6px 8px}
+.situation-link{height:32px;min-height:32px}
+.situation-link span{height:21px;min-height:21px}
+#helixgpt-capabilities{padding:9px;margin:10px 0;gap:5px}
+}
+
+.dashboard-product{color:#214b38;animation:window-enter .65s ease both}
+.dashboard-product .mock-body{gap:12px;padding:16px}
+.dashboard-subtitle{font-size:.8em;color:#527560}
+.dashboard-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.dashboard-stats>div{display:grid;gap:7px;padding:12px 10px;background:#dcefcf;border:1px solid #b4cea9;border-radius:7px}
+.dashboard-stats span{font-size:clamp(10px,.9vw,15px)}
+.dashboard-stats strong{font-size:clamp(14px,2.1vw,34px);letter-spacing:-.035em}
+.technical-charts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.business-charts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.dash-chart{display:grid;gap:5px;padding:9px;border:1px solid #cfdfd2;background:#f7fbf6;border-radius:7px;overflow:hidden}
+.dash-chart>strong{font-size:clamp(11px,1.1vw,18px)}
+.dash-chart>span{font-size:.7em;color:#547462}
+.dash-chart svg{width:100%;display:block;max-height:145px;background:repeating-linear-gradient(0deg,transparent 0 23px,#dce7de 24px 25px)}
+.chart-fill{fill:#c5e1bd;opacity:.35}
+.chart-line{fill:none;stroke:#468d61;stroke-width:2.3;stroke-dasharray:700;stroke-dashoffset:700;animation:chart-draw 2.2s ease forwards,chart-breathe 5s 2.2s ease-in-out infinite;vector-effect:non-scaling-stroke}
+.chart-line.lime{stroke:#8fae33;animation-delay:.3s,2.5s}
+.chart-line.coral{stroke:#c76d59}
+.threshold{fill:none;stroke:#aab995;stroke-width:1;stroke-dasharray:5 4}
+.dashboard-footer{font-size:.8em;display:flex;align-items:center;gap:7px}
+.live-dot{width:8px;height:8px;border-radius:50%;background:#66a36b;animation:chart-breathe 2s infinite}
+@keyframes chart-draw{to{stroke-dashoffset:0}}
+@keyframes chart-breathe{0%,100%{opacity:1}50%{opacity:.62}}
+@media(max-height:750px) and (min-width:721px){
+.dashboard-product .mock-body{gap:8px;padding:11px}
+.dash-chart svg{max-height:105px}
+.dashboard-stats>div{padding:8px}
+}
+@media(prefers-reduced-motion:reduce){.chart-line,.live-dot{animation:none;stroke-dashoffset:0}}
+
+.dashboard-annotated{position:relative;padding-top:86px}
+.dashboard-benefit{position:absolute;top:0;left:5%;max-width:70%;display:grid;gap:4px;padding:11px 15px;background:#edf6d8;color:#21472e;border:1.5px solid #577a3e;border-radius:12px;box-shadow:0 5px 18px #153b2d25;font-size:clamp(12px,1.2vw,19px);animation:window-enter .5s .4s both}
+.dashboard-benefit span{font-size:.85em;line-height:1.25}
+.dashboard-benefit-link{position:absolute;top:68px;left:17%;height:25px;border-left:2px dashed #315c32;z-index:2}
+.dashboard-benefit-link::after{content:"";position:absolute;bottom:-4px;left:-5px;width:7px;height:7px;border:1px solid #315c32;background:#d2eba4;border-radius:50%}
+@media(max-height:750px) and (min-width:721px){.dashboard-benefit{font-size:12px;padding:8px 12px}.dashboard-annotated{padding-top:75px}.dashboard-benefit-link{top:58px;height:24px}}
+@media(prefers-reduced-motion:reduce){.dashboard-benefit{animation:none}}
+
+.change-product{position:relative;padding-top:95px;color:#214b38;font-size:clamp(12px,1.15vw,18px)}
+.change-benefit{position:absolute;top:0;left:5%;max-width:82%;padding:11px 15px;background:#edf6d8;border:1.5px solid #577a3e;border-radius:12px;display:grid;gap:5px;box-shadow:0 5px 18px #153b2d25;animation:window-enter .5s .3s both}
+.change-benefit span{font-size:.85em;line-height:1.25}
+.change-benefit-line{position:absolute;left:20%;top:78px;height:25px;border-left:2px dashed #315c32;z-index:2}
+.change-benefit-line::after{content:"";position:absolute;bottom:-4px;left:-5px;width:7px;height:7px;background:#d2eba4;border:1px solid #315c32;border-radius:50%}
+.change-heading{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.change-heading>strong{font-size:clamp(16px,1.8vw,28px)}
+.risk-pill{background:#dcefa4;padding:5px 8px;border-radius:20px;white-space:nowrap;font-size:.8em}
+.change-status{font-size:.8em;color:#597361}
+.change-progress{display:flex;align-items:center;gap:7px;font-size:.75em;padding:8px 0;border-bottom:1px solid #cfdfd2}
+.change-progress i{width:8px;height:8px;background:#9eb8a4;border-radius:50%}
+.change-progress i:nth-of-type(2){background:#689d49}
+.coordinator-banner{display:grid;gap:4px;background:#e1efc5;border:1px solid #a9c188;border-radius:8px;padding:11px;animation:window-enter .5s .35s both}
+.coordinator-banner span{font-size:.85em}
+.change-columns{display:grid;grid-template-columns:.8fr 1.2fr;gap:12px}
+.change-context{display:grid;align-content:start;gap:10px;font-size:.85em}
+.change-activity{display:grid;gap:8px;border-top:1px solid #cfdfd2;padding-top:10px}
+.change-activity span{color:#47725a}
+.validation-panel{background:#f8fbf6;border:1px solid #bfd0c2;border-radius:9px;padding:12px;display:grid;gap:6px;box-shadow:-5px 3px 15px #1c402516;animation:window-enter .55s .65s both;font-size:.85em}
+.validation-tabs{display:flex;gap:10px;font-size:.8em;color:#52745b;padding:7px 0}
+.validation-tabs b{border-bottom:2px solid #689d49}
+.validation-row{display:flex;gap:7px;align-items:center;background:#e6efe7;padding:7px;border-radius:5px}
+.validation-row>span{color:#36744b;font-weight:800}
+.validation-row.missing{background:#f3e3d5}
+.validation-row.missing>span{color:#ad553c}
+.change-recommendation{display:grid;gap:4px;padding:9px;background:#e3efce;border-radius:6px;animation:window-enter .5s 1.1s both}
+@media(max-height:750px) and (min-width:721px){
+.change-product{padding-top:80px;font-size:12px}
+.change-benefit{padding:9px 12px}
+.change-benefit-line{top:65px;height:23px}
+.change-product .mock-body{gap:8px;padding:12px}
+.validation-panel{padding:9px;gap:4px}
+.validation-row{padding:6px}
+}
+@media(prefers-reduced-motion:reduce){.change-benefit,.coordinator-banner,.validation-panel,.change-recommendation{animation:none}}
+
+.teams-product{padding-top:80px;position:relative;color:#214b38;font-size:clamp(12px,1.2vw,19px)}
+.teams-benefit{position:absolute;top:0;left:6%;max-width:85%;padding:14px 18px;background:#edf6d8;border:1.5px solid #577a3e;border-radius:12px;box-shadow:0 5px 18px #153b2d25;animation:window-enter .5s .2s both}
+.teams-benefit-line{position:absolute;top:58px;left:24%;height:30px;border-left:2px dashed #315c32;z-index:2}
+.teams-benefit-line::after{content:"";position:absolute;bottom:-4px;left:-5px;width:7px;height:7px;background:#d2eba4;border:1px solid #315c32;border-radius:50%}
+.teams-layout{display:grid;grid-template-columns:24% 1fr}
+.teams-sidebar{display:grid;align-content:start;gap:16px;padding:17px 12px;background:#dfece2;font-size:.8em;border-right:1px solid #c1d4c6}
+.teams-sidebar b{background:#c6dec9;padding:10px 7px;border-radius:6px}
+.teams-channel{padding:16px;display:grid;gap:16px}
+.teams-channel-title{display:grid;gap:4px;padding-bottom:10px;border-bottom:1px solid #cdddcf}
+.teams-channel-title span{font-size:.75em}
+.teams-message{display:grid;grid-template-columns:30px 1fr;gap:9px;align-items:start}
+.teams-avatar{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:#c6ddc7;color:#254f34;font-size:11px;font-weight:700}
+.bot-avatar{background:#315c45;color:#e7f4c9;font-size:20px}
+.teams-message strong{font-size:.85em}
+.teams-message small{font-size:9px;color:#5b7c63;letter-spacing:.06em;margin-left:5px}
+.teams-message p{font-size:.85em;color:#2f513b;line-height:1.35;margin:5px 0}
+.teams-response{background:#e3efdf;padding:12px;border-radius:0 10px 10px 10px;margin-top:6px;border:1px solid #c5d9c4}
+.teams-response>b{font-size:.85em}
+.teams-compose{font-size:.75em;border:1px solid #b8cbbb;padding:12px;border-radius:7px;color:#6d8573;background:#f9fcf8}
+.user-message{animation:window-enter .45s .4s both}
+.bot-message{animation:window-enter .65s 1.1s both}
+@media(max-height:750px) and (min-width:721px){.teams-product{font-size:13px;padding-top:70px}.teams-benefit{padding:11px 14px}.teams-benefit-line{top:50px;height:28px}.teams-channel{gap:10px;padding:12px}.teams-response{padding:9px}}
+@media(prefers-reduced-motion:reduce){.teams-benefit,.user-message,.bot-message{animation:none}}
+
+.teams-topology{display:block;width:min(100%,470px);max-height:80px;margin:7px 0 0}
+.situation-question{animation:window-enter .45s 1.8s both}
+.situation-answer{animation:window-enter .6s 2.4s both}
+.teams-channel{gap:11px}
+@media(max-height:750px) and (min-width:721px){
+.teams-channel{gap:8px;padding:10px}
+.teams-response{padding:7px 10px}
+.teams-message p{margin:3px 0}
+.teams-topology{max-height:59px}
+}
+@media(prefers-reduced-motion:reduce){.situation-question,.situation-answer{animation:none}}
+
+.knowledge-product{position:relative;display:grid;gap:8px;color:#214b38;font-size:clamp(12px,1.1vw,18px)}
+.knowledge-benefit{justify-self:start;max-width:82%;margin:0 0 10px 4%;display:grid;gap:4px;padding:11px 15px;background:#edf6d8;border:1.5px solid #577a3e;border-radius:12px;box-shadow:0 5px 18px #153b2d25}
+.knowledge-benefit span{font-size:.85em}
+.knowledge-source{display:grid;gap:4px;padding:12px 16px;text-align:center;background:#dcebdc;border:1px solid #aac4ad;border-radius:8px}
+.knowledge-source span{font-size:.8em}
+.knowledge-branches{display:flex;justify-content:space-around;line-height:20px;font-size:28px;color:#477959}
+.knowledge-outputs{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.knowledge-agent{color:#437142;font-weight:750;font-size:.8em}
+.knowledge-field{display:grid;gap:5px;padding:10px;background:#e7efe5;border-top:1px solid #cadbc9;border-radius:4px;font-size:.8em;animation:window-enter .45s .55s both}
+.knowledge-field:nth-of-type(3){animation-delay:.8s}
+.knowledge-field:nth-of-type(4){animation-delay:1.05s}
+.knowledge-note{font-size:.75em;color:#547158;line-height:1.3}
+.report-page{position:relative;margin:0 auto;width:86%;display:grid;gap:10px;background:#fcfdf8;border:1px solid #baceb7;padding:20px 14px 12px;box-shadow:3px 4px 0 #d5e2d1;animation:window-enter .6s .6s both}
+.report-page>strong{font-size:1em}
+.report-page>span:not(.pdf-mark){font-size:.75em}
+.pdf-mark{position:absolute;top:5px;right:7px;color:#4c783f;font-size:9px;font-weight:800}
+.report-section{display:grid;gap:5px;font-size:.65em}
+.report-section i{height:4px;background:#d7e4d2;border-radius:3px}
+.report-section i:last-child{width:75%}
+@media(max-height:750px) and (min-width:721px){
+.knowledge-product{font-size:12px;gap:5px}
+.knowledge-benefit{padding:8px 12px;margin-bottom:4px}
+.knowledge-field{padding:8px}
+.report-page{padding:18px 10px 10px;gap:8px}
+.knowledge-outputs .mock-body{gap:8px;padding:11px}
+}
+@media(prefers-reduced-motion:reduce){.knowledge-field,.report-page{animation:none}}
+
+.problem-product{display:grid;gap:8px;color:#214b38;font-size:clamp(12px,1.1vw,18px)}
+.problem-benefit{justify-self:start;max-width:85%;margin-left:4%;display:grid;gap:4px;padding:11px 15px;background:#edf6d8;border:1.5px solid #577a3e;border-radius:12px;box-shadow:0 5px 18px #153b2d25}
+.problem-benefit span{font-size:.85em}
+.problem-workspace{display:grid;grid-template-columns:1.15fr 1fr}
+.cluster-list{padding:12px;border-right:1px solid #c7d9cc;display:grid;align-content:start;gap:3px}
+.cluster-toolbar{padding:5px 0 9px;font-size:.85em}
+.cluster-row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;padding:9px 7px;border-bottom:1px solid #d4e2d7;font-size:.75em}
+.cluster-head{color:#526c57}
+.cluster-row.selected{background:#d9ebcb;border-left:3px solid #629346;border-radius:4px}
+.problem-sample{font-size:.65em;color:#6c816e;padding-top:6px}
+.cluster-conversation{padding:14px;display:grid;align-content:start;gap:10px;background:#f7fbf6}
+.cluster-conversation>strong{font-size:.85em}
+.cluster-question{background:#e2eecf;padding:9px;border-radius:9px 9px 0 9px;font-size:.8em;animation:window-enter .5s .5s both}
+.cluster-answer{display:grid;gap:7px;border:1px solid #bfd3bd;background:#e5efe3;padding:10px;border-radius:0 9px 9px 9px;font-size:.8em;animation:window-enter .55s 1s both}
+.problem-detail-link{text-align:center;color:#315e3f;font-size:25px;line-height:20px}
+.cluster-detail{animation-delay:1.5s}
+.problem-detail-tabs{display:flex;gap:12px;padding:9px 12px;border-bottom:1px solid #bfd1c2;background:#e7efe5;font-size:.7em}
+.problem-detail-tabs strong{border-bottom:2px solid #60874b}
+.problem-detail-columns{display:grid;grid-template-columns:1fr 1fr;padding:12px;gap:14px}
+.problem-whys,.problem-summary{display:grid;gap:9px;font-size:.8em;align-content:start}
+.problem-whys>div{display:grid;gap:5px;background:#e7efe5;border:1px solid #cddcc9;border-radius:6px;padding:9px}
+.problem-whys small{font-size:.75em;letter-spacing:0;color:#4a7855}
+.problem-summary{border-left:1px solid #c4d8c5;padding-left:12px}
+.problem-create{justify-self:end;background:#315c45;color:#f4fbe9;padding:8px 10px;border-radius:6px}
+@media(max-height:750px) and (min-width:721px){
+.problem-product{font-size:12px;gap:5px}
+.problem-benefit{padding:8px 12px}
+.cluster-list,.cluster-conversation{padding:9px}
+.cluster-row{padding:7px}
+.problem-detail-columns{padding:9px}
+.problem-whys>div{padding:7px}
+}
+@media(prefers-reduced-motion:reduce){.cluster-question,.cluster-answer,.cluster-detail{animation:none}}
+
+.optimizer-product{display:grid;gap:12px;color:#214b38;font-size:clamp(12px,1.1vw,18px)}
+.optimizer-benefit{justify-self:start;max-width:84%;margin-left:4%;padding:11px 15px;background:#edf6d8;border:1.5px solid #577a3e;border-radius:12px;display:grid;gap:4px;box-shadow:0 5px 18px #153b2d25}
+.optimizer-benefit span{font-size:.85em}
+.optimizer-toolbar{display:flex;gap:15px;align-items:center;font-size:.8em}
+.optimizer-toolbar>span{padding:7px 10px;border:1px solid #b4cdb7;border-radius:5px;background:#f9fcf7}
+.optimizer-toolbar>b{color:#5c8051}
+.optimizer-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.optimizer-tile{display:grid;align-content:start;gap:7px;padding:12px;background:#f7fbf5;border:1px solid #c8d9c8;border-radius:7px}
+.optimizer-tile>strong{font-size:clamp(22px,2.6vw,40px);line-height:1}
+.optimizer-tile>span,.optimizer-tile small{font-size:.7em;color:#54735a;letter-spacing:0;font-weight:400}
+.optimizer-tile em{font-size:.33em;font-style:normal}
+.optimizer-donut{display:grid;place-items:center;justify-self:center;width:95px;height:95px;border-radius:50%;background:conic-gradient(#72964b 0 66.67%,#b6d88d 66.67% 100%);margin:6px 0;animation:window-enter .8s .3s both}
+.optimizer-donut b{display:grid;place-items:center;background:#f7fbf5;width:64px;height:64px;border-radius:50%;font-size:.9em}
+.optimizer-stacked{display:flex;height:20px;margin:35px 0 9px;animation:optimizer-grow .7s .4s both;transform-origin:left}
+.optimizer-stacked i:first-child{width:66.67%;background:#72964b}
+.optimizer-stacked i:last-child{width:33.33%;background:#b6d88d}
+.optimizer-counts{display:flex;justify-content:space-around;gap:8px;margin-top:12px;border-bottom:1px solid #bcd0b9;padding-bottom:4px}
+.optimizer-counts>div{display:grid;justify-items:center;gap:5px;font-size:.65em}
+.optimizer-counts i{height:72px;width:24px;background:#72964b;animation:optimizer-grow-y .7s .55s both;transform-origin:bottom}
+.optimizer-counts>div:last-child i{background:#b6d88d}
+.optimizer-bottom{display:grid;grid-template-columns:.8fr 1.2fr;gap:14px}
+.optimizer-recommendations,.optimizer-opportunities{display:grid;gap:8px;align-content:start;font-size:.85em}
+.optimizer-rec{display:grid;gap:5px;padding:10px;background:#e7efe4;border:1px solid #cadac4;border-radius:6px}
+.optimizer-rec span{font-size:.75em}
+.optimizer-rec.active{background:#dcecc9;border-left:3px solid #6c944f}
+.optimizer-tabs{display:flex;gap:10px;font-size:.75em;padding-bottom:7px;border-bottom:1px solid #c8d9c4}
+.optimizer-tabs b{color:#446c36}
+.optimizer-opportunity{display:grid;gap:8px;padding:10px;background:#f5f9f1;border:1px solid #bfd4b8;border-radius:6px;animation:window-enter .55s .8s both}
+.optimizer-opportunity>span,.optimizer-evidence,.optimizer-curator{font-size:.8em;line-height:1.3}
+.optimizer-evidence{color:#53714c}
+.optimizer-curator{background:#dcefc7;border-radius:5px;padding:7px;font-weight:700}
+@keyframes optimizer-grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes optimizer-grow-y{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@media(max-height:750px) and (min-width:721px){
+.optimizer-product{font-size:12px;gap:8px}
+.optimizer-tile{padding:9px;gap:5px}
+.optimizer-donut{height:75px;width:75px}
+.optimizer-donut b{height:50px;width:50px}
+.optimizer-stacked{margin-top:27px}
+.optimizer-benefit{padding:8px 12px}
+.optimizer-opportunity{gap:6px}
+}
+@media(prefers-reduced-motion:reduce){.optimizer-donut,.optimizer-stacked,.optimizer-counts i,.optimizer-opportunity{animation:none}}
+
+.outcomes-product{display:grid;gap:12px;color:#214b38;font-size:clamp(12px,1.1vw,18px)}
+.outcomes-benefit{justify-self:start;max-width:85%;margin-left:4%;padding:11px 15px;background:#edf6d8;border:1.5px solid #577a3e;border-radius:12px;display:grid;gap:4px;box-shadow:0 5px 18px #153b2d25}
+.outcomes-benefit span{font-size:.85em}
+.outcomes-filters{display:flex;gap:10px;align-items:center}
+.outcomes-filters>strong{margin-right:auto}
+.outcomes-filters>span{font-size:.75em;padding:6px 8px;border:1px solid #baceb9;border-radius:4px}
+.outcomes-workspace{display:grid;grid-template-columns:1.2fr 1fr;gap:12px}
+.outcomes-performance{display:grid;gap:12px}
+.outcomes-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+.outcomes-metrics>div{display:grid;gap:8px;padding:10px 8px;border:1px solid #cbdcc7;border-radius:7px;background:#f8fbf5}
+.outcomes-metrics span{font-size:.65em}
+.outcomes-metrics strong{font-size:clamp(17px,2vw,30px);letter-spacing:-.045em;white-space:nowrap}
+.outcomes-metrics small{font-size:.55em;letter-spacing:0;color:#64805b}
+.outcomes-leaderboard,.outcomes-insights{padding:12px;background:#f7fbf4;border:1px solid #c7dac2;border-radius:8px;display:grid;align-content:start;gap:10px}
+.outcomes-tabs{display:flex;gap:6px;flex-wrap:wrap;font-size:.6em}
+.outcomes-tabs>*{padding:5px;background:#e5eedf;border-radius:4px}
+.outcomes-tabs b{background:#46744c;color:#f3f9ed}
+.outcomes-agent{display:grid;grid-template-columns:1fr auto;gap:5px;padding:6px 0;border-bottom:1px solid #d6e4d0;font-size:.7em}
+.outcomes-agent i{grid-column:1/-1;height:7px;background:linear-gradient(90deg,#6e9f5d var(--agent-share),#e0eadd var(--agent-share));border-radius:4px;animation:optimizer-grow .75s .35s both;transform-origin:left}
+.outcomes-agent small{font-size:.8em;color:#6c8264;letter-spacing:0}
+.outcomes-insights>strong{font-size:.95em}
+.outcomes-insights>span{font-size:.7em;color:#65805c}
+.outcomes-insights>div{border:1px solid #c1d6bb;border-radius:7px;padding:11px;background:#e9f2e1;animation:window-enter .5s .6s both}
+.outcomes-insights>div:nth-of-type(2){animation-delay:.9s}
+.outcomes-insights>div:nth-of-type(3){animation-delay:1.2s}
+.outcomes-insights b{font-size:.8em}
+.outcomes-insights p{font-size:.75em;line-height:1.35;color:#4d6943;margin:6px 0 0}
+@media(max-height:750px) and (min-width:721px){
+.outcomes-product{font-size:12px;gap:8px}
+.outcomes-benefit{padding:8px 12px}
+.outcomes-leaderboard,.outcomes-insights{padding:9px;gap:7px}
+.outcomes-metrics>div{padding:8px 6px}
+.outcomes-insights>div{padding:9px}
+}
+@media(prefers-reduced-motion:reduce){.outcomes-agent i,.outcomes-insights>div{animation:none}}
+
+.stage .geometry-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
+.stage>canvas:not(.geometry-canvas){position:relative;z-index:1;background:transparent}
+.product-slide .stage .geometry-canvas{opacity:0!important}
+</style>
+<header><span class="brand"><img src="helix-arena.png" alt="Helix Arena"></span><div class="header-actions"><button id="next-zone">Siguiente zona →</button><button id="network-toggle" aria-pressed="false">Mostrar red del campus</button><button id="present">Modo escenario</button><button id="full">Pantalla completa</button></div></header>
+<main><aside>
+<nav aria-label="Capítulos"></nav>
+<article aria-live="polite"><h1 id="title"></h1><p id="description"></p></article>
+
+<div class="section"><button id="roof" aria-pressed="false">Abrir cubiertas</button><button id="failure" hidden></button></div>
+<p id="status" role="status"></p>
+<div id="network-detail" class="section" hidden>
+  <small>TOPOLOGÍA SIMULADA</small>
+  <p><b>Troncal</b> · fibra entre el núcleo y los routers de zona.</p>
+  <p><b>Acceso</b> · switches para equipos cableados y AP para Wi‑Fi.</p>
+  <p><b>Estadio</b> · marcador IP, audio IP y Wi‑Fi de grada.</p>
+  <p><b>Operaciones</b> · consola de telemetría de AtletaPro.</p>
+</div>
+</aside><div class="stage">
+<div id="cue" hidden aria-live="polite"><div id="cue-card">
+  <small id="cue-phase"></small><h2 id="cue-title"></h2>
+  <p id="cue-agent"></p><p id="cue-value"></p>
+<div id="helixgpt-capabilities" hidden>
+  <strong>✦ HelixGPT</strong>
+  <span><b>Ask HelixGPT</b> · Resumir e investigar la situación.</span>
+  <span><b>Log Insights</b> · Analizar patrones y errores en logs.</span>
+  <span><b>Best Action Recommendation</b> · Proponer acciones para resolverla.</span>
+</div>
+<p id="cue-action"></p>
+</div></div>
+<div id="sketch-slot" hidden></div>
+<div id="stage-controls" hidden>
+  <button id="prev-step">← Anterior</button><span id="step-count"></span>
+  <button id="next-step">Siguiente →</button>
+</div><canvas aria-label="Maqueta tridimensional de Helix Arena"></canvas><div id="tour-label" aria-live="off">Helix Arena · Centro de alto rendimiento</div><div class="zoom"><button id="out" aria-label="Alejar">−</button><label for="zoom-level">Zoom <output id="zoom-value" for="zoom-level">100%</output></label><input id="zoom-level" type="range" min="65" max="700" step="1" value="100"><button id="in" aria-label="Acercar">+</button></div></div></main>
+<footer><span>ARRASTRA PARA GIRAR · MAYÚS + ARRASTRA PARA DESPLAZAR · RUEDA PARA ACERCAR</span><span>MAQUETA CONCEPTUAL / SIMULACIÓN</span></footer>
+<template id="sketch-dashboards">
+<div class="dashboard-annotated">
+  <div class="dashboard-benefit"><strong>Una vista para cada equipo</strong><span>Combina información de Helix en dashboards personalizados para operaciones, servicio y negocio.</span></div>
+  <div class="dashboard-benefit-link" aria-hidden="true"></div>
+<section class="mock-window dashboard-product">
+  <header><strong>BMC Helix · Dashboards</strong><span>Actualización · 5 s</span></header>
+  <div class="mock-body">
+    <strong>Helix Arena · AtletaPro</strong>
+    <div class="dashboard-subtitle">Del router al impacto · Datos ilustrativos</div>
+    <div class="dashboard-stats">
+      <div><span>Pasarela principal</span><strong>ACCESIBLE</strong></div>
+      <div><span>Apdex de pagos</span><strong>1,00</strong></div>
+      <div><span>Errores de pago</span><strong>0,0 %</strong></div>
+      <div><span>Conversión</span><strong>100 %</strong></div>
+    </div>
+    <div class="technical-charts">
+      <div class="dash-chart"><strong>Tráfico HTTPS</strong><span>14 Mb/s</span><svg viewBox="0 0 300 95" aria-label="Tráfico HTTPS estable"><path class="chart-fill" d="M0 95V39L30 38L60 40L90 37L120 39L150 35L180 38L210 36L240 39L270 36L300 38V95Z"/><path class="chart-line" d="M0 39L30 38L60 40L90 37L120 39L150 35L180 38L210 36L240 39L270 36L300 38"/></svg></div>
+      <div class="dash-chart"><strong>Router · CPU</strong><span>32 %</span><svg viewBox="0 0 300 95" aria-label="Uso de CPU estable"><path class="threshold" d="M0 20H300"/><path class="chart-fill" d="M0 95V65L30 63L60 66L90 64L120 66L150 64L180 65L210 63L240 65L270 64L300 65V95Z"/><path class="chart-line" d="M0 65L30 63L60 66L90 64L120 66L150 64L180 65L210 63L240 65L270 64L300 65"/></svg></div>
+      <div class="dash-chart"><strong>Router · Memoria</strong><span>54 %</span><svg viewBox="0 0 300 95" aria-label="Uso de memoria estable"><path class="threshold" d="M0 15H300"/><path class="chart-fill" d="M0 95V50L50 48L100 51L150 49L200 50L250 48L300 50V95Z"/><path class="chart-line" d="M0 50L50 48L100 51L150 49L200 50L250 48L300 50"/></svg></div>
+    </div>
+    <div class="business-charts">
+      <div class="dash-chart"><strong>Plazas para reservas</strong><span>Pistas y entrenamiento personal</span><svg viewBox="0 0 400 115" aria-label="Disponibilidad de reservas"><path class="chart-fill" d="M0 115V42L40 48L80 57L120 65L160 70L200 75L201 25L240 35L280 43L320 54L360 61L400 66V115Z"/><path class="chart-line" d="M0 42L40 48L80 57L120 65L160 70L200 75L201 25L240 35L280 43L320 54L360 61L400 66"/><path class="chart-line lime" d="M0 28L40 33L80 40L120 46L160 52L200 59L201 8L240 16L280 25L320 34L360 38L400 44"/></svg></div>
+      <div class="dash-chart"><strong>Ingresos e impacto económico</strong><span>Ingresos obtenidos y potencialmente perdidos</span><svg viewBox="0 0 400 115" aria-label="Seguimiento de ingresos"><path class="chart-fill" d="M0 115V30L80 28L120 27L160 25L200 25L240 23L280 22L320 19L360 18L400 16V115Z"/><path class="chart-line" d="M0 30L80 28L120 27L160 25L200 25L240 23L280 22L320 19L360 18L400 16"/><path class="chart-line coral" d="M0 100H400"/></svg></div>
+    </div>
+    <div class="dashboard-footer"><span class="live-dot"></span>Visibilidad técnica + experiencia del atleta + valor de negocio</div>
+  </div>
+</section>
+</div>
+</template>
+<template id="sketch-aiops">
+<div class="aiops-product">
+  <div class="annotated-monitor">
+  <section class="mock-window monitor">
+    <header><strong>BMC Helix · Service Monitoring</strong><span aria-hidden="true">•••</span></header>
+    <div class="product-tabs">Overview <b>Services</b> Situations · Risks · Predictions</div>
+    <div class="mock-body">
+      <strong>Servicio · AtletaPro</strong>
+      <div class="product-kpis"><span>Salud <b>En riesgo</b></span><span>Eventos <b>Correlacionados</b></span><span>Situaciones <b>1</b></span></div>
+      <div class="timeline-panel"><span class="panel-label">Health Timeline · 03:00</span><div class="timeline"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+      <div class="ci-topology" data-callout-target="discovery">
+        <span class="panel-label">CI Topology</span>
+        <svg viewBox="0 0 780 200" role="img" aria-label="El router BB-R1-SPBR afecta al núcleo, las aplicaciones y el servicio AtletaPro">
+          <g fill="none" stroke="#9fbdac" stroke-width="2">
+            <path d="M150 100H220 M340 100C370 100 365 35 400 35 M340 100H400 M340 100C370 100 365 165 400 165 M510 35C545 35 535 100 560 100 M510 100H560 M510 165C545 165 535 100 560 100 M665 100H690"/>
+          </g>
+          <g fill="#e1ece4" stroke="#9ebaa8">
+            <rect x="15" y="76" width="135" height="48" rx="7"/><rect x="220" y="76" width="120" height="48" rx="7"/>
+            <rect x="400" y="13" width="110" height="44" rx="7"/><rect x="400" y="78" width="110" height="44" rx="7"/><rect x="400" y="143" width="110" height="44" rx="7"/>
+            <rect x="560" y="76" width="105" height="48" rx="7"/><rect x="690" y="76" width="86" height="48" rx="7"/>
+          </g>
+          <g font-family="system-ui" font-size="12" fill="#224d38" text-anchor="middle">
+            <text x="82" y="105">BB-R1-SPBR</text><text x="280" y="105">HA-CORE-01</text>
+            <text x="455" y="40">HA-ACC-MED</text><text x="455" y="105">HA-ACC-DEP</text><text x="455" y="170">HA-ACC-APP</text>
+            <text x="612" y="105">HA-APP-01</text><text x="733" y="105">AtletaPro</text>
+          </g>
+          <g fill="#c96553"><circle cx="144" cy="78" r="8"/></g>
+          <circle cx="768" cy="78" r="8" fill="#d6a24d"/>
+          <g fill="#2b7452"><circle cx="334" cy="78" r="7"/><circle cx="504" cy="15" r="7"/><circle cx="504" cy="80" r="7"/><circle cx="504" cy="145" r="7"/></g>
+        </svg>
+      </div>
+      <div class="situation-target"><strong data-callout-target="situations">Situaciones</strong><span>1 situación correlacionada</span><strong data-callout-target="automation">Automatizaciones disponibles</strong></div>
+    </div>
+  </section>
+  <div class="value-callout callout-discovery" data-callout="discovery"><strong>Topología de Discovery</strong><span>Contexto e impacto del servicio</span></div>
+  <div class="value-callout callout-situations" data-callout="situations"><strong>Menos ruido</strong><span>Eventos agrupados en una situación</span></div>
+  <div class="value-callout callout-automation" data-callout="automation"><strong>Actuar desde la situación</strong><span>Automatizaciones disponibles</span></div>
+  <svg class="callout-lines" viewBox="0 0 1000 600" preserveAspectRatio="none" aria-hidden="true">
+  </svg>
+  </div>
+  <div class="situation-link" aria-hidden="true"><span></span><b>▼</b></div>
+  <section class="mock-window situation-window" style="--delay:.65s">
+    <header><strong>BMC Helix · Situaciones</strong><span>AtletaPro</span></header>
+    <div class="situation-content">
+      <div class="situation-summary">
+        <strong>AtletaPro · Router sin servicio</strong>
+        <div class="situation-badges"><span>CRÍTICA</span><span>BB-R1-SPBR</span></div>
+        <span class="panel-label">CI Topology · Impacto en el servicio</span>
+        <svg viewBox="0 0 420 95" role="img" aria-label="BB-R1-SPBR impacta en AtletaPro a través del núcleo">
+          <path d="M120 48H160 M270 48H310" fill="none" stroke="#bc594e" stroke-width="2" stroke-dasharray="5 4"/>
+          <g fill="#e0ece2" stroke="#9ebaa8">
+            <rect x="3" y="24" width="117" height="48" rx="7"/>
+            <rect x="160" y="24" width="110" height="48" rx="7"/>
+            <rect x="310" y="24" width="107" height="48" rx="7"/>
+          </g>
+          <g fill="#244d38" font-family="system-ui" font-size="13" text-anchor="middle">
+            <text x="62" y="53">BB-R1-SPBR</text><text x="215" y="53">HA-CORE-01</text><text x="363" y="53">AtletaPro</text>
+          </g>
+          <circle cx="112" cy="25" r="7" fill="#c96553"/>
+          <circle cx="262" cy="25" r="7" fill="#2b7452"/>
+          <circle cx="408" cy="25" r="7" fill="#d6a24d"/>
+        </svg>
+        <div class="best-action">
+          <strong>Best Action Recommendation</strong>
+          <span>Actualizar el firmware del router → aplicar QoS.</span>
+          <small>Revisar la propuesta antes de ejecutar el cambio.</small>
+        </div>
+      </div>
+      <div class="root-cause">
+        <strong>✦ Root Cause Finder</strong>
+        <span class="panel-label">Investigación de la situación</span>
+        <div class="analysis-tools">
+          <span style="--tool-delay:.9s"><b>Log Tool</b><br>Analizar errores del router y del servicio.</span>
+          <span style="--tool-delay:1.2s"><b>Change Tool</b><br>Contrastar cambios recientes con el inicio del fallo.</span>
+        </div>
+        <div class="recommendation"><strong>Análisis y evidencias</strong><span>Explica la situación y fundamenta la recomendación.</span></div>
+      </div>
+    </div>
+  </section>
+
+</div>
+</template>
+<template id="sketch-teams">
+<div class="teams-product">
+  <div class="teams-benefit"><strong>Contexto de Incidencias y Situaciones directamente desde Teams</strong></div>
+  <div class="teams-benefit-line" aria-hidden="true"></div>
+  <section class="mock-window">
+    <header><strong>Microsoft Teams</strong><span>War room</span></header>
+    <div class="teams-layout">
+      <div class="teams-sidebar"><strong>Helix Arena</strong><span>Canales</span><b>War room · AtletaPro</b><span>Equipo de respuesta</span></div>
+      <div class="teams-channel">
+        <div class="teams-channel-title"><strong>War room · AtletaPro</strong><span>Conversación sobre la incidencia</span></div>
+        <div class="teams-message user-message">
+          <div class="teams-avatar">OP</div>
+          <div><strong>Operador</strong><p>@OpsWarmer, resúmeme la incidencia.</p></div>
+        </div>
+        <div class="teams-message bot-message">
+          <div class="teams-avatar bot-avatar">✦</div>
+          <div><strong>OpsWarmer <small>AGENTE</small></strong>
+            <div class="teams-response">
+              <b>Resumen de la incidencia</b>
+              <p>BB-R1-SPBR ha dejado de funcionar y afecta a AtletaPro. El equipo de red está investigando el fallo.</p>
+            </div>
+          </div>
+        </div>
+        <div class="teams-message situation-question">
+          <div class="teams-avatar">OP</div>
+          <div><strong>Operador</strong><p>Resúmeme la situación asociada.</p></div>
+        </div>
+        <div class="teams-message situation-answer">
+          <div class="teams-avatar bot-avatar">✦</div>
+          <div><strong>OpsWarmer <small>AGENTE</small></strong>
+            <div class="teams-response">
+              <b>Resumen de la situación</b>
+              <p>AIOps correlaciona las señales de red y servicio. El fallo de BB-R1-SPBR impacta en AtletaPro a través de sus dependencias.</p>
+              <svg class="teams-topology" viewBox="0 0 470 85" role="img" aria-label="Topología de la situación, desde BB-R1-SPBR hasta AtletaPro">
+                <path d="M110 43H130 M230 43H250 M350 43H370" fill="none" stroke="#b76554" stroke-width="2" stroke-dasharray="5 4"/>
+                <g fill="#f3f8ef" stroke="#a5bda8">
+                  <rect x="2" y="20" width="108" height="46" rx="6"/>
+                  <rect x="130" y="20" width="100" height="46" rx="6"/>
+                  <rect x="250" y="20" width="100" height="46" rx="6"/>
+                  <rect x="370" y="20" width="98" height="46" rx="6"/>
+                </g>
+                <g fill="#244d38" font-family="system-ui" font-size="12" text-anchor="middle">
+                  <text x="56" y="47">BB-R1-SPBR</text><text x="180" y="47">HA-CORE-01</text>
+                  <text x="300" y="47">HA-APP-01</text><text x="419" y="47">AtletaPro</text>
+                </g>
+                <circle cx="102" cy="22" r="6" fill="#c96553"/>
+                <circle cx="222" cy="22" r="6" fill="#2b7452"/>
+                <circle cx="342" cy="22" r="6" fill="#2b7452"/>
+                <circle cx="460" cy="22" r="6" fill="#d6a24d"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div class="teams-compose" aria-hidden="true">Escribir un mensaje al equipo…</div>
+      </div>
+    </div>
+  </section>
+</div>
+</template>
+<template id="sketch-change">
+<div class="change-product">
+  <div class="change-benefit"><strong>Decidir con más contexto y menos revisión manual</strong><span>Change Coordinator detecta documentación incompleta, evalúa el riesgo y propone qué completar antes de aprobar.</span></div>
+  <div class="change-benefit-line" aria-hidden="true"></div>
+  <section class="mock-window">
+    <header><strong>BMC Helix · ITSM</strong><span>Gestión de cambios</span></header>
+    <div class="mock-body">
+      <div class="change-heading"><strong>Actualizar firmware · BB-R1-SPBR</strong><span class="risk-pill">Riesgo 2</span></div>
+      <span class="change-status">Solicitud de autorización · Servicio AtletaPro</span>
+      <div class="change-progress"><i></i><span>Preparación</span><i></i><strong>Autorización</strong><i></i><span>Ejecución</span></div>
+      <div class="coordinator-banner">
+        <strong>✦ Change Coordinator · Activado</strong>
+        <span>Validación · Documentación incompleta</span>
+      </div>
+      <div class="change-columns">
+        <div class="change-context">
+          <strong>Objetivo del cambio</strong>
+          <div class="flow"><span>Actualizar firmware</span><b>→</b><span>Aplicar QoS</span></div>
+          <span>Recuperar el router y proteger AtletaPro.</span>
+          <div class="change-activity"><strong>Actividad del agente</strong><span>✓ Validación iniciada</span><span>✓ Riesgo evaluado</span><span>! Plan de pruebas pendiente</span></div>
+        </div>
+        <section class="validation-panel">
+          <strong>Change Coordinator · Validación</strong>
+          <div class="validation-tabs"><b>Preparación</b><span>Evaluación de riesgo</span></div>
+          <div class="validation-row"><span>✓</span>Alcance y elementos de configuración</div>
+          <div class="validation-row"><span>✓</span>Ventana del cambio</div>
+          <div class="validation-row"><span>✓</span>Justificación de negocio</div>
+          <div class="validation-row"><span>✓</span>Plan de reversión</div>
+          <div class="validation-row missing"><span>!</span>Plan de pruebas ausente</div>
+          <div class="change-recommendation"><strong>Recomendación</strong><span>Añadir casos de prueba, resultados esperados y criterios de aceptación.</span></div>
+        </section>
+      </div>
+    </div>
+  </section>
+</div>
+</template>
+<template id="sketch-knowledge">
+<div class="knowledge-product">
+  <div class="knowledge-benefit"><strong>Del ticket al conocimiento y al informe</strong><span>Reutiliza el contexto de la incidencia y reduce la documentación manual.</span></div>
+  <div class="knowledge-source"><strong>ITSM · Incidencia mayor resuelta</strong><span>AtletaPro · BB-R1-SPBR · Firmware actualizado y QoS aplicado</span></div>
+  <div class="knowledge-branches" aria-hidden="true"><span>↙</span><span>↘</span></div>
+  <div class="knowledge-outputs">
+    <section class="mock-window knowledge-article">
+      <header><strong>ITSM · Crear conocimiento</strong><span>Borrador</span></header>
+      <div class="mock-body">
+        <div class="knowledge-agent">✦ Knowledge Curator</div>
+        <strong>Recuperación del router de AtletaPro</strong>
+        <div class="knowledge-field"><b>Problema</b><span>Caída del router BB-R1-SPBR.</span></div>
+        <div class="knowledge-field"><b>Entorno</b><span>AtletaPro · Red del campus.</span></div>
+        <div class="knowledge-field"><b>Resolución</b><span>Actualizar el firmware y después aplicar QoS.</span></div>
+        <span class="knowledge-note">Generar desde el ticket → revisar → publicar</span>
+      </div>
+    </section>
+    <section class="mock-window knowledge-report">
+      <header><strong>Major Incident Report</strong><span>MIR</span></header>
+      <div class="mock-body">
+        <div class="knowledge-agent">✦ ITSM agent · HelixGPT</div>
+        <span class="knowledge-note">Generación automática al resolver la incidencia mayor</span>
+        <div class="report-page">
+          <span class="pdf-mark">PDF</span>
+          <strong>Major Incident Report</strong>
+          <span>AtletaPro · BB-R1-SPBR</span>
+          <div class="report-section"><b>Resumen ejecutivo</b><i></i><i></i></div>
+          <div class="report-section"><b>Impacto y cronología</b><i></i><i></i></div>
+          <div class="report-section"><b>Causa, resolución y recomendaciones</b><i></i><i></i></div>
+        </div>
+        <span class="knowledge-note">Revisar y editar → descargar PDF</span>
+      </div>
+    </section>
+  </div>
+</div>
+</template>
+<template id="sketch-problem">
+<div class="problem-product">
+  <div class="problem-benefit"><strong>Investigar patrones, prevenir recurrencias</strong><span>Consulta los clústeres y profundiza en el contexto del problema generado por HelixGPT.</span></div>
+  <section class="mock-window">
+    <header><strong>BMC Helix · Problem Solver</strong><span>Clusters · Manage Jobs</span></header>
+    <div class="problem-workspace">
+      <div class="cluster-list">
+        <div class="cluster-toolbar">Clústeres de incidencias · AtletaPro</div>
+        <div class="cluster-row cluster-head"><b>Problem Statement</b><b>Estado</b></div>
+        <div class="cluster-row selected"><strong>Errores recurrentes en AtletaPro</strong><span>Candidato</span></div>
+        <div class="cluster-row"><span>Microcortes del router</span><span>Candidato</span></div>
+        <div class="cluster-row"><span>Interrupciones de sincronización</span><span>Candidato</span></div>
+        <div class="cluster-row"><span>Picos de latencia del servicio</span><span>Candidato</span></div>
+        <span class="problem-sample">Escenario ilustrativo · Evidencias por validar</span>
+      </div>
+      <div class="cluster-conversation">
+        <strong>Converse with Clusters</strong>
+        <div class="cluster-question">Resúmeme el clúster de AtletaPro.</div>
+        <div class="cluster-answer"><strong>✦ HelixGPT</strong><span>El clúster agrupa incidencias de errores recurrentes y pérdida de conectividad que afectan a AtletaPro.</span><span>Revisa los incidentes y sus evidencias para confirmar el origen común.</span></div>
+      </div>
+    </div>
+  </section>
+  <div class="problem-detail-link" aria-hidden="true">↓</div>
+  <section class="mock-window cluster-detail">
+    <header><strong>Cluster Details · AtletaPro</strong><span>Candidato a problema</span></header>
+    <div class="problem-detail-tabs"><span>Overview</span><strong>Root Cause Analysis</strong><span>Resolution</span><span>Related Incidents</span></div>
+    <div class="problem-detail-columns">
+      <div class="problem-whys">
+        <strong>Five Whys · Evidencias</strong>
+        <div><b>¿Por qué se degrada AtletaPro?</b><span>Las incidencias registran errores y pérdida de conectividad.</span><small>Evidencia · Incidentes relacionados</small></div>
+        <div><b>¿Qué componente comparten?</b><span>Revisar la dependencia de BB-R1-SPBR y la cronología de fallos.</span><small>Evidencia · Contexto del clúster</small></div>
+      </div>
+      <div class="problem-summary">
+        <strong>Root Cause Summary</strong>
+        <span>HelixGPT sintetiza el patrón y el contexto disponible.</span>
+        <strong>Causa y resolución</strong>
+        <span>Contrastar la caída del router con sus registros de firmware y QoS antes de confirmar la causa.</span>
+        <span class="problem-create">Validar → Crear problema</span>
+      </div>
+    </div>
+  </section>
+</div>
+</template>
+<template id="sketch-optimizer">
+<div class="optimizer-product">
+  <div class="optimizer-benefit"><strong>Convierte demanda no satisfecha en mejoras del catálogo</strong><span>Prioriza oportunidades por impacto y ahorro potencial de tiempo y coste.</span></div>
+  <section class="mock-window">
+    <header><strong>BMC Helix · Service Optimizer</strong><span>Datos ilustrativos</span></header>
+    <div class="mock-body">
+      <div class="optimizer-toolbar"><span>Employee Navigator ▾</span><b>✓ View graphs</b></div>
+      <div class="optimizer-metrics">
+        <div class="optimizer-tile"><strong>720 €</strong><span>Ahorro potencial de coste</span>
+          <div class="optimizer-donut"><b>720 €</b></div>
+          <small>Servicios ausentes · Servicios a mejorar</small>
+        </div>
+        <div class="optimizer-tile"><strong>18 h</strong><span>Ahorro potencial de tiempo</span>
+          <div class="optimizer-stacked"><i></i><i></i></div>
+          <small>Crear servicios · 12 h</small><small>Mejorar servicios · 6 h</small>
+        </div>
+        <div class="optimizer-tile"><strong>2 <em>recomendaciones</em></strong><span>2 oportunidades</span>
+          <div class="optimizer-counts"><div><i></i><span>Ausentes</span></div><div><i></i><span>A mejorar</span></div></div>
+        </div>
+      </div>
+      <div class="optimizer-bottom">
+        <div class="optimizer-recommendations">
+          <strong>Recommendations</strong>
+          <div class="optimizer-rec active"><b>Servicios ausentes</b><span>480 € · 12 h · Impacto 8/10</span></div>
+          <div class="optimizer-rec"><b>Servicios a mejorar</b><span>240 € · 6 h · Impacto 6/10</span></div>
+        </div>
+        <div class="optimizer-opportunities">
+          <strong>Opportunities</strong>
+          <div class="optimizer-tabs"><b>New · 1</b><span>Resolved · 0</span><span>Dismissed · 0</span></div>
+          <div class="optimizer-opportunity">
+            <strong>Alta de acceso a AtletaPro</strong>
+            <span>Los atletas solicitan acceso, pero falta un servicio de catálogo para completar la petición.</span>
+            <div class="optimizer-evidence">Conversaciones de soporte → validar la necesidad</div>
+            <div class="optimizer-curator">✦ Catalog Curator → Crear o actualizar el servicio</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+</template>
+<template id="sketch-outcomes">
+<div class="outcomes-product">
+  <div class="outcomes-benefit"><strong>Del uso de IA al valor de negocio</strong><span>Compara la aportación de los agentes y detecta dónde ampliar su impacto.</span></div>
+  <section class="mock-window">
+    <header><strong>BMC Helix · Agent Outcomes</strong><span>Datos de ejemplo de la captura</span></header>
+    <div class="mock-body">
+      <div class="outcomes-filters"><strong>Agent Outcomes</strong><span>All Agents ▾</span><span>1 Year ▾</span></div>
+      <div class="outcomes-workspace">
+        <div class="outcomes-performance">
+          <div class="outcomes-metrics">
+            <div><span>Additional Digital Capacity</span><strong>$528.56</strong><small>Capacidad digital modelada</small></div>
+            <div><span>Digital FTE Gained</span><strong>0.01 FTE</strong><small>Capacidad equivalente</small></div>
+            <div><span>AI Value Margin</span><strong>99.3 %</strong><small>Margen · $525.10</small></div>
+          </div>
+          <section class="outcomes-leaderboard">
+            <strong>Agent Leaderboard</strong>
+            <div class="outcomes-tabs"><b>Hours Saved</b><span>LLM Cost</span><span>Digital FTE</span><span>Digital Capacity</span></div>
+            <div class="outcomes-agent"><b>1 · Service Collaborator</b><span>15 h</span><i style="--agent-share:100%"></i><small>LLM Cost · $0.67</small></div>
+            <div class="outcomes-agent"><b>2 · Employee Navigator</b><span>9 h</span><i style="--agent-share:60%"></i><small>LLM Cost · $2.79</small></div>
+            <div class="outcomes-agent"><b>3 · Capacity Optimizer</b><span>0 h</span><i style="--agent-share:0%"></i><small>LLM Cost · $0.00</small></div>
+            <div class="outcomes-agent"><b>4 · Change Risk Advisor</b><span>0 h</span><i style="--agent-share:0%"></i><small>LLM Cost · $0.00</small></div>
+          </section>
+        </div>
+        <section class="outcomes-insights">
+          <strong>Strategic Business Insights</strong>
+          <span>Análisis generado por IA con métricas y benchmarks</span>
+          <div><b>Eficiencia operativa</b><p>Compara costes y tiempos con los benchmarks configurados.</p></div>
+          <div><b>Experiencia del usuario</b><p>Identifica oportunidades de mejora en los resultados del servicio.</p></div>
+          <div><b>Evidencias para decidir</b><p>Revisa las métricas de soporte y el periodo de cada análisis.</p></div>
+        </section>
+      </div>
+    </div>
+  </section>
+</div>
+</template>
+<script src="arena.js?v=35"></script></html>
