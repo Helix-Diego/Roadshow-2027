@@ -648,16 +648,6 @@ function draw(time){
     if(face.edge){ctx.strokeStyle=face.edge;ctx.lineWidth=1;ctx.stroke();}
   }
   ctx.globalAlpha=1;
-  if(stageTransition?.recovering){
-    stageTransition.start ??= time;
-    if(time-stageTransition.start>=700){
-      failed=false;
-      document.body.classList.toggle('product-slide',true);
-      stageTransition.recovering=false;
-      stageTransition.start=time;
-      updateFailure();
-    }
-  }
   if(chapter===networkChapter) drawNetwork(t);
   else if(zone===1 || zoom>1.6) badge(scoreboard,'HELIX  2–1  VISITA  ·  67:24','#10251f');
   else if(zone) {
@@ -751,7 +741,7 @@ const demoSteps = [
   {title:'Validar antes de autorizar', capability:'Gestión de cambios', agent:'Change Coordinator', value:'El router necesita un firmware actualizado para poder aplicar QoS.', action:'Completar el plan de pruebas y solicitar autorización. Después, actualizar el firmware y aplicar QoS.', sketch:'change', zone:6, outage:true},
   {title:'Conservar lo aprendido', capability:'Gestión del conocimiento', agent:'Knowledge Curator · ITSM agent', value:'El contexto del ticket se convierte en conocimiento reutilizable y documentación de la incidencia mayor.', action:'Revisar el artículo y el Major Incident Report; descargar el informe en PDF.', sketch:'knowledge', zone:6},
   {title:'Prevenir la repetición', capability:'Gestión de problemas', agent:'Problem Solver', value:'Agrupa incidencias relacionadas y explora el problema con el contexto generado por HelixGPT.', action:'Preguntar por el clúster, revisar las evidencias y validar el candidato a problema.', sketch:'problem', zone:6},
-  {title:'Los atletas empiezan el día', capability:'BMC Helix Business Workflows · Digital Workplace', agent:'', value:'A las 08:00, AtletaPro funciona con normalidad.', action:'Mostrar las tareas de incorporación desde el portal del atleta.', zone:5},
+  {title:'Un onboarding, varios equipos', capability:'BMC Helix Business Workflows · Digital Workplace', agent:'Employee Navigator', value:'RR. HH., TI y operaciones coordinan la incorporación del atleta en un único flujo.', action:'Solicitar el onboarding, repartir tareas y seguir cada incorporación.', sketch:'onboarding', zone:5},
   {title:'Mejorar el catálogo', capability:'Service Optimizer', agent:'', value:'Las conversaciones con Employee Navigator revelan oportunidades para crear o mejorar servicios.', action:'Revisar las conversaciones y priorizar por impacto. Llevar la oportunidad a Catalog Curator.', sketch:'optimizer', zone:6},
   {title:'Medir el valor de los agentes', capability:'Agent Outcomes', agent:'', value:'Cuantifica la capacidad digital creada y el valor que aportan los agentes al negocio.', action:'Comparar resultados por agente y periodo.', sketch:'outcomes', zone:6},
 ];
@@ -864,14 +854,9 @@ function showStep(index){
   if(stageStep!==previous) stageTransition={from:stageMarkers[previous],to:stageMarkers[stageStep]};
   const step=stageSteps[stageStep];
   const demo=Boolean(step.capability);
-  document.body.classList.toggle('product-slide',['aiops','dashboards','change','teams','knowledge','problem','optimizer','outcomes'].includes(step.sketch));
+  document.body.classList.toggle('product-slide',['aiops','dashboards','change','teams','knowledge','problem','optimizer','outcomes','onboarding'].includes(step.sketch));
   document.querySelector('#helixgpt-capabilities').hidden=step.sketch!=='aiops';
-  const recovering=!reduced && stageSteps[previous].sketch==='change' && step.sketch==='knowledge';
-  if(recovering){
-    stageTransition.recovering=true;
-    document.body.classList.toggle('product-slide',false);
-  }
-  failed=Boolean(step.outage || recovering);
+  failed=Boolean(step.outage);
   select(demo && step.zone===6 ? networkChapter : 0);
   visit(0);
   cue.className=demo?'demo':'overview';
@@ -891,7 +876,6 @@ function showStep(index){
   sketchSlot.scrollTop=0;
   cue.scrollTop=0;
   sketchSlot.hidden=!step.sketch;
-  sketchSlot.classList.toggle('after-recovery',recovering);
   if(step.sketch){
     const template=document.querySelector('#sketch-'+step.sketch);
     sketchSlot.append(template.content.cloneNode(true));

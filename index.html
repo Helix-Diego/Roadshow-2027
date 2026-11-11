@@ -70,7 +70,7 @@ header #full{background:#19392e;color:#f3f9f3;border-color:#638476}
 @keyframes window-enter{from{opacity:0;transform:translateY(16px) scale(.97)}to{opacity:1;transform:none}}
 @media(prefers-reduced-motion:reduce){.mock-window{animation:none}}
 
-.after-recovery .mock-window{--delay:1.65s}
+
 .split-sketch,.metric-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
 .metric-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
 .metric-grid strong{display:block;font-size:1.35em;color:#215d45}
@@ -628,6 +628,74 @@ body:not(.presenting) .stage{min-height:0}
   .teams-response{padding:10px}
   .outcomes-metrics strong{white-space:normal}
 }
+
+.onboarding-product{display:grid;gap:10px;color:#214b38;font-size:clamp(12px,1.05vw,17px)}
+.onboarding-benefit{display:grid;gap:3px;justify-self:start;max-width:92%;padding:10px 14px;background:#edf6d8;border:1.5px solid #577a3e;border-radius:12px;box-shadow:0 5px 18px #153b2d25}
+.onboarding-benefit span{font-size:.85em}
+.onboarding-portal{display:grid;grid-template-columns:1fr 1fr;min-width:0}
+.onboarding-home{display:grid;align-content:start;gap:12px;padding:18px;background:radial-gradient(ellipse at 20% 15%,#365f45,#132f27);color:#f4faec}
+.onboarding-welcome{display:grid;gap:4px}
+.onboarding-welcome small{font:inherit;font-size:.75em;letter-spacing:.06em;color:#d2e7be}
+.onboarding-welcome strong{font-size:1.45em;line-height:1.1}
+.onboarding-search{padding:10px 12px;border:1px solid #8baf91;border-radius:6px;background:#f3f8ef;color:#426349;font-size:.8em}
+.onboarding-services{display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:.8em}
+.onboarding-services>div{display:grid;gap:4px;border:1px solid #709276;border-radius:7px;padding:10px;background:#ffffff0b}
+.onboarding-services>div:first-child{border-color:#c4e88d;background:#c4e88d1a}
+.onboarding-services span{font-size:.85em;color:#d2e2c7}
+.onboarding-request{display:flex;justify-content:space-between;align-items:center;gap:8px;background:#d8edb4;color:#244a30;padding:9px 10px;border-radius:6px;font-size:.8em;animation:window-enter .45s 1.1s both}
+.onboarding-chat{display:grid;align-content:start;gap:10px;padding:14px;background:#f3f8ef}
+.onboarding-chat>strong{color:#3c693f}
+.onboarding-question{justify-self:end;padding:9px 11px;max-width:94%;background:#dfebca;border-radius:10px 10px 0 10px;font-size:.85em;animation:window-enter .45s .2s both}
+.onboarding-answer{display:grid;gap:6px;border:1px solid #bad0b8;border-radius:0 10px 10px 10px;background:#e7f0e2;padding:10px 12px;font-size:.85em;animation:window-enter .5s .65s both}
+.onboarding-answer p{font:inherit;line-height:1.35;color:inherit}
+.onboarding-catalog{display:grid;gap:4px;padding:8px 10px;border:1px solid #9cb883;border-radius:6px;background:#f6faee}
+.onboarding-catalog span{font-size:.85em;color:#4e6a45}
+.onboarding-compose{padding:8px 10px;border:1px solid #bdcdb6;border-radius:6px;font-size:.75em;color:#71866b}
+.onboarding-connector{display:flex;align-items:center;justify-content:center;gap:10px;font-size:.75em;color:#4d7547}
+.onboarding-connector::before,.onboarding-connector::after{content:'';height:1px;background:#96b88b;flex:1}
+.onboarding-board-body{padding:10px 12px;display:grid;gap:10px}
+.onboarding-board-toolbar{display:flex;justify-content:space-between;gap:8px;font-size:.8em;flex-wrap:wrap}
+.onboarding-kanban{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.onboarding-column{display:grid;align-content:start;gap:8px;background:#e5ede0;border:1px solid #c6d7bf;border-radius:8px;padding:8px}
+.onboarding-column>strong{font-size:.8em;display:flex;justify-content:space-between;gap:5px}
+.onboarding-column>strong span{display:grid;place-items:center;width:18px;height:18px;border-radius:50%;background:#cbdcbb;font-size:.8em}
+.onboarding-person{display:grid;gap:6px;background:#fafcf6;border:1px solid #bccfb4;border-radius:7px;padding:9px;box-shadow:0 3px 6px #27472e0c;animation:window-enter .5s var(--onb-delay,.9s) both}
+.onboarding-person>small{font:inherit;font-size:.65em;letter-spacing:.04em;color:#6b8261}
+.onboarding-person>strong{font-size:.9em;line-height:1.15}
+.onboarding-person>span{font-size:.75em;color:#5d7853}
+.onboarding-person i{height:4px;background:linear-gradient(90deg,#709e52 var(--onb-progress),#e0ead8 var(--onb-progress));border-radius:3px}
+.onboarding-person em{font-size:.7em;font-style:normal;background:#e5f0d8;border-radius:4px;padding:4px 5px;color:#456b37}
+.onboarding-column:last-child .onboarding-person{border-color:#7eaa63;background:#edf6df}
+.onboarding-week{display:grid;gap:8px;border-top:1px solid #c3d4bb;padding-top:9px}
+.onboarding-week-heading{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:.85em}
+.onboarding-week-heading span{font-size:.85em;color:#5c7650}
+.onboarding-tasks{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}
+.onboarding-task{display:grid;gap:5px;align-content:start;padding:8px;border:1px solid #c3d7b8;border-radius:6px;background:#f2f7e9;font-size:.75em;animation:window-enter .45s var(--onb-delay,1.5s) both}
+.onboarding-task>span{color:#61824f;font-size:.9em}
+.onboarding-task>b{font-size:1.05em}
+.onboarding-task>em{font-size:.85em;font-style:normal;color:#5b714f}
+.onboarding-task.automatic{background:#dfefc9;border-color:#94b66f}
+.onboarding-demo-note{font-size:.65em;color:#6a805f}
+@media(max-width:1024px){
+ .onboarding-product{font-size:15px;gap:14px}
+ .onboarding-benefit{max-width:none;justify-self:stretch;padding:14px}
+ .onboarding-portal{grid-template-columns:minmax(0,1fr)}
+ .onboarding-home{padding:18px}
+ .onboarding-chat{padding:14px}
+ .onboarding-kanban,.onboarding-tasks{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .onboarding-board-body{padding:12px}
+ .onboarding-demo-note{font-size:11px}
+ .onboarding-column>strong{font-size:13px}
+ .onboarding-person>strong{font-size:15px}
+ .onboarding-person>span,.onboarding-person em,.onboarding-task{font-size:12px}
+}
+@media(max-width:420px){
+ .onboarding-kanban,.onboarding-tasks{grid-template-columns:minmax(0,1fr)}
+ .onboarding-services{grid-template-columns:minmax(0,1fr)}
+ .onboarding-person{gap:8px;padding:12px}
+ .onboarding-request{align-items:start;flex-direction:column}
+}
+@media(prefers-reduced-motion:reduce){.onboarding-request,.onboarding-question,.onboarding-answer,.onboarding-person,.onboarding-task{animation:none}}
 </style>
 <header><span class="brand"><img src="helix-arena.png" alt="Helix Arena"></span><div class="header-actions"><button id="next-zone">Siguiente zona →</button><button id="network-toggle" aria-pressed="false">Mostrar red del campus</button><button id="present">Modo escenario</button><button id="full">Pantalla completa</button></div></header>
 <main><aside>
@@ -1022,4 +1090,50 @@ body:not(.presenting) .stage{min-height:0}
   </section>
 </div>
 </template>
-<script src="arena.js?v=37"></script></html>
+
+<template id="sketch-onboarding">
+<div class="onboarding-product">
+  <div class="onboarding-benefit"><strong>Más allá de TI: unifica las líneas de negocio</strong><span>Un único onboarding combina autoservicio, automatizaciones y tareas para cada equipo.</span></div>
+  <section class="mock-window">
+    <header><strong>Helix Arena · Portal de autoservicio</strong><span>Mi actividad · Onboarding</span></header>
+    <div class="onboarding-portal">
+      <div class="onboarding-home">
+        <div class="onboarding-welcome"><small>VISTA DEL MANAGER</small><strong>Hola, Elena.<br>Prepara la llegada de tu atleta.</strong></div>
+        <div class="onboarding-search">⌕ ¿En qué puede ayudarte HelixGPT?</div>
+        <div class="onboarding-services"><div><b>↗ Onboarding de atleta</b><span>Una petición, varios equipos</span></div><div><b>Mi equipo</b><span>Solicitudes y seguimiento</span></div></div>
+        <div class="onboarding-request"><b>Petición de onboarding</b><span>Portal → Caso en BWF</span></div>
+      </div>
+      <div class="onboarding-chat">
+        <strong>✦ Employee Navigator</strong>
+        <div class="onboarding-question">¿Cómo solicito el onboarding de un atleta?</div>
+        <div class="onboarding-answer"><b>Employee Navigator</b><p>Selecciona «Onboarding de atleta». Indica el nombre, el responsable y la fecha de incorporación. Revisa los datos y envía la petición.</p><div class="onboarding-catalog"><b>Onboarding de atleta ↗</b><span>Kylian Mbappé · Responsable: Elena</span><span>Incorporación: próximo lunes</span></div></div>
+        <div class="onboarding-compose" aria-hidden="true">Pregunta a Employee Navigator… ↗</div>
+      </div>
+    </div>
+  </section>
+  <div class="onboarding-connector" aria-hidden="true"><strong>↓ BWF orquesta el proceso y asigna las tareas ↓</strong></div>
+  <section class="mock-window">
+    <header><strong>BMC Helix · Business Workflows</strong><span>RR. HH. · Onboarding</span></header>
+    <div class="onboarding-board-body">
+      <div class="onboarding-board-toolbar"><strong>Incorporaciones de atletas</strong><span>Vista conceptual · Kanban</span></div>
+      <div class="onboarding-kanban">
+        <div class="onboarding-column"><strong>Solicitado <span>1</span></strong><div class="onboarding-person" style="--onb-progress:10%;--onb-delay:1s"><small>ONB-0042</small><strong>Kylian Mbappé</strong><span>Delantero · Primer equipo</span><i></i><em>RR. HH. · Revisar el alta</em></div></div>
+        <div class="onboarding-column"><strong>En preparación <span>1</span></strong><div class="onboarding-person" style="--onb-progress:40%;--onb-delay:1.15s"><small>ONB-0040</small><strong>Jude Bellingham</strong><span>Centrocampista · Primer equipo</span><i></i><em>TI · Preparar accesos</em></div></div>
+        <div class="onboarding-column"><strong>Primera semana <span>1</span></strong><div class="onboarding-person" style="--onb-progress:70%;--onb-delay:1.3s"><small>ONB-0038</small><strong>Vini Jr.</strong><span>Extremo · Primer equipo</span><i></i><em>Operaciones · Entregar equipación</em></div></div>
+        <div class="onboarding-column"><strong>Completado <span>1</span></strong><div class="onboarding-person" style="--onb-progress:100%;--onb-delay:1.45s"><small>ONB-0035</small><strong>Thibaut Courtois</strong><span>Portero · Primer equipo</span><i></i><em>✓ Incorporación completada</em></div></div>
+      </div>
+      <div class="onboarding-week">
+        <div class="onboarding-week-heading"><strong>Portal del atleta · Mi primera semana</strong><span>Plan de Kylian Mbappé</span></div>
+        <div class="onboarding-tasks">
+          <div class="onboarding-task"><span>DÍA 1 · MI TAREA</span><b>Completar mi perfil</b><em>Asignada al atleta</em></div>
+          <div class="onboarding-task automatic" style="--onb-delay:1.65s"><span>DÍA 1 · AUTOMÁTICA</span><b>Crear acceso a AtletaPro</b><em>Flujo de TI · Sin asignación manual</em></div>
+          <div class="onboarding-task" style="--onb-delay:1.8s"><span>DÍA 2 · EQUIPO</span><b>Entregar equipación</b><em>Asignada a Operaciones</em></div>
+          <div class="onboarding-task" style="--onb-delay:1.95s"><span>DÍAS 3–5 · EQUIPOS</span><b>Visita y plan de bienvenida</b><em>RR. HH. + Equipo deportivo</em></div>
+        </div>
+      </div>
+      <span class="onboarding-demo-note">Ejemplo ficticio de onboarding · Guiño al Real Madrid</span>
+    </div>
+  </section>
+</div>
+</template>
+<script src="arena.js?v=38"></script></html>
