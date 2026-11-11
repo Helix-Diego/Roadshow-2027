@@ -356,34 +356,46 @@ function athlete(x,z,y,shirt,stride=0){
 const tourStops=[
   {zone:0,zoom:.76,rotation:-.95},
   {zone:1,zoom:2.35,rotation:-.66},
-  {zone:4,zoom:3.0,rotation:-.28},
   {zone:2,zoom:3.65,rotation:.18},
   {zone:3,zoom:3.65,rotation:.38},
-  {zone:5,zoom:4.4,rotation:-.23},
+  {zone:4,zoom:3.0,rotation:-.28},
   {zone:6,zoom:4.1,rotation:-.42},
+  {zone:5,zoom:4.4,rotation:-.23},
   {zone:0,zoom:.76,rotation:-.95},
 ];
+const tourIntro=5000, tourTravel=3200, tourPause=2500;
+const tourLeg=tourTravel+tourPause;
+const tourDuration=tourIntro+(tourStops.length-1)*tourLeg;
 let tourStart=null;
 let tourLastTime=0;
+let tourStep=0;
 document.querySelector('#next-zone').onclick=()=>{
-  tourZoomMultiplier=1;
   if(presenting || chapter!==0) return;
-  const elapsed=tourStart===null?0:(tourLastTime-tourStart)/1000;
-  const next=(Math.floor(Math.max(0,elapsed-5)/7)+1)%7;
-  tourStart=tourLastTime-(5+next*7+3.5)*1000;
+  tourZoomMultiplier=1;
+  const next=tourStep>=tourStops.length-1?1:tourStep+1;
+  if(reduced){
+    tourStep=next;
+    visit(tourStops[next].zone);
+    targetZoom=tourStops[next].zoom;
+    offset=tourStops[next].rotation-scenes[0][2];
+    tourLabel.textContent=zones[zone][0];
+    return;
+  }
+  tourStart=tourLastTime-(tourIntro+(next-1)*tourLeg);
 };
 
 const tourLabel=document.querySelector('#tour-label');
 function tourCamera(time){
   tourLastTime=time;
   tourStart ??= time;
-  const clock=((time-tourStart)/1000)%54;
-  const moving=Math.max(0,clock-5);
-  const segment=Math.min(6,Math.floor(moving/7));
-  const phase=(moving%7)/7;
+  const clock=((time-tourStart)%tourDuration+tourDuration)%tourDuration;
+  const moving=Math.max(0,clock-tourIntro);
+  const segment=Math.min(tourStops.length-2,Math.floor(moving/tourLeg));
+  const phase=clock<tourIntro?0:Math.min(1,(moving%tourLeg)/tourTravel);
   const weight=phase*phase*(3-2*phase);
   const from=tourStops[segment],to=tourStops[segment+1];
   const mix=(a,b)=>a+(b-a)*weight;
+  tourStep=clock<tourIntro?0:segment+1;
   zone=phase<.45?from.zone:to.zone;
   targetZoom=Math.max(.65,Math.min(7,mix(from.zoom,to.zoom)*tourZoomMultiplier));
   panX=panY=0;
@@ -786,6 +798,33 @@ function drawStagePulse(time){
   ctx.restore();
 }
 
+function fitSketch(){
+  const slot=document.querySelector('#sketch-slot');
+  const content=slot.firstElementChild;
+  if(slot.hidden || !content) return;
+  if(window.matchMedia('(max-width:1024px)').matches){
+    if(content.style.zoom) content.style.zoom='';
+    return;
+  }
+  const style=getComputedStyle(slot);
+  const available=slot.clientHeight-parseFloat(style.paddingTop)-parseFloat(style.paddingBottom)-4;
+  if(available<=0) return;
+  content.style.zoom='1';
+  if(content.scrollHeight<=available) return;
+  // Find the largest readable scale that fits the whole sketch on a presentation screen.
+  let low=.6,high=1;
+  for(let i=0;i<8;i++){
+    const middle=(low+high)/2;
+    content.style.zoom=String(middle);
+    if(content.scrollHeight*middle<=available) low=middle;
+    else high=middle;
+  }
+  content.style.zoom=String(low);
+}
+function layoutSketch(){
+  fitSketch();
+  alignValueCallouts();
+}
 function alignValueCallouts(){
   const container=document.querySelector('#sketch-slot .annotated-monitor');
   if(!container) return;
@@ -797,7 +836,7 @@ function alignValueCallouts(){
     const target=container.querySelector('[data-callout-target="'+box.dataset.callout+'"]');
     const boxBounds=box.getBoundingClientRect(),targetBounds=target.getBoundingClientRect();
     const upper=box.dataset.callout==='discovery';
-    const mobile=window.matchMedia('(max-width:720px)').matches;
+    const mobile=window.matchMedia('(max-width:1024px)').matches;
     const x=boxBounds.left-bounds.left+boxBounds.width/2;
     const y=(upper?boxBounds.bottom:boxBounds.top)-bounds.top;
     const tx=targetBounds.left-bounds.left+targetBounds.width*(upper?.28:.5);
@@ -815,12 +854,12 @@ function alignValueCallouts(){
   }
 }
 if(typeof ResizeObserver!=='undefined'){
-  new ResizeObserver(alignValueCallouts).observe(document.querySelector('#sketch-slot'));
+  new ResizeObserver(layoutSketch).observe(document.querySelector('#sketch-slot'));
 }
 
 function showStep(index){
   const previous=stageStep;
-  if(presenting && window.matchMedia('(max-width:720px)').matches) window.scrollTo({top:0,behavior:'instant'});
+  if(presenting && window.matchMedia('(max-width:1024px)').matches) window.scrollTo({top:0,behavior:'instant'});
   stageStep = Math.max(0, Math.min(stageSteps.length-1,index));
   if(stageStep!==previous) stageTransition={from:stageMarkers[previous],to:stageMarkers[stageStep]};
   const step=stageSteps[stageStep];
@@ -837,6 +876,7 @@ function showStep(index){
   visit(0);
   cue.className=demo?'demo':'overview';
   cue.hidden=false;
+  tourLabel.hidden=true;
   document.querySelector('#cue-phase').textContent=step.capability || 'Visita al centro';
   document.querySelector('#cue-title').textContent=step.title;
   document.querySelector('#cue-value').textContent=step.value;
@@ -848,6 +888,8 @@ function showStep(index){
   action.textContent=step.action?'Acción · '+step.action:'';
   const sketchSlot=document.querySelector('#sketch-slot');
   sketchSlot.replaceChildren();
+  sketchSlot.scrollTop=0;
+  cue.scrollTop=0;
   sketchSlot.hidden=!step.sketch;
   sketchSlot.classList.toggle('after-recovery',recovering);
   if(step.sketch){
@@ -858,7 +900,7 @@ function showStep(index){
       topology.setAttribute('role','region');
       topology.setAttribute('aria-label','Topología del servicio AtletaPro');
     }
-    requestAnimationFrame(alignValueCallouts);
+    requestAnimationFrame(layoutSketch);
   }
   previousStep.disabled=stageStep===0;
   nextStep.disabled=stageStep===stageSteps.length-1;
@@ -877,6 +919,7 @@ present.onclick=()=>{
   present.textContent=presenting?'Salir del escenario':'Modo escenario';
   stageControls.hidden=!presenting;
   cue.hidden=!presenting;
+  tourLabel.hidden=presenting;
   document.querySelector('#sketch-slot').hidden=true;
   stageTransition=null;
   if(presenting){
