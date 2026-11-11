@@ -363,7 +363,7 @@ const tourStops=[
   {zone:5,zoom:4.4,rotation:-.23},
   {zone:0,zoom:.76,rotation:-.95},
 ];
-const tourIntro=5000, tourTravel=3200, tourPause=2500;
+const tourIntro=5000, tourTravel=1800, tourPause=1000;
 const tourLeg=tourTravel+tourPause;
 const tourDuration=tourIntro+(tourStops.length-1)*tourLeg;
 let tourStart=null;
@@ -418,8 +418,8 @@ function draw(time){
   if(canvas.width!==pixelsWide || canvas.height!==pixelsHigh){canvas.width=pixelsWide;canvas.height=pixelsHigh;}
   ctx.setTransform(ratio,0,0,ratio,0,0);
   ctx.clearRect(0,0,width,height);
-  const ease=reduced?1:.045;
   const automatic=!presenting && chapter===0 && !reduced;
+  const ease=reduced?1:automatic?.075:.045;
   const camera=automatic?tourCamera(time):null;
   tourLabel.hidden=presenting || chapter===networkChapter;
   const residenceView=zone===5 && chapter!==networkChapter;
