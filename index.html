@@ -497,6 +497,86 @@ body:not(.presenting) aside,body:not(.presenting) footer,body:not(.presenting) .
 .stage .geometry-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
 .stage>canvas:not(.geometry-canvas){position:relative;z-index:1;background:transparent}
 .product-slide .stage .geometry-canvas{opacity:0!important}
+
+/* Mobile keeps every slide and its content in a readable, scrollable layout. */
+@media(max-width:720px){
+  html{scroll-padding-bottom:90px}
+  body{overflow-x:hidden}
+  body>header{display:grid;grid-template-columns:1fr;padding:12px 14px;gap:12px;letter-spacing:0}
+  .brand{padding:0}.brand img{width:125px}
+  .header-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%}
+  .header-actions button{min-height:44px;padding:9px 8px;font-size:12px}
+  body:not(.presenting) main{height:calc(100svh - 160px);min-height:380px}
+  body:not(.presenting) .stage{height:100%;min-height:0}
+  #tour-label:not([hidden]){left:12px;right:12px;bottom:16px;width:fit-content;max-width:calc(100% - 24px);padding:10px 14px;font-size:18px}
+  .presenting main{height:auto;min-height:0;overflow:visible}
+  .presenting .stage,.presenting .stage:has(#cue:not([hidden])){display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows: minmax(280px,52svh) auto auto;height:auto;min-height:0;padding-bottom:96px;align-items:start}
+  .presenting .stage>canvas{grid-area:1/1;height:100%;width:100%;min-height:0}
+  .presenting .stage .geometry-canvas{height:max(280px,52svh)}
+  #cue:not([hidden]){grid-area:2/1;max-height:none;overflow:visible;padding:12px}
+  #cue-card{width:100%;padding:20px;border-radius:16px}
+  #cue-card h2{font-size:30px;line-height:1.05}
+  #cue-card small{font-size:12px}
+  #cue-card p,#cue-card #cue-agent{font-size:16px;line-height:1.4}
+  #helixgpt-capabilities span{font-size:14px}
+  .presenting.product-slide .stage:has(#cue:not([hidden])){grid-template-rows:auto auto}
+  .product-slide .stage>canvas{display:none}
+  .product-slide #cue:not([hidden]){grid-area:1/1}
+  #sketch-slot:not([hidden]),.product-slide #sketch-slot:not([hidden]){grid-area:3/1;align-self:start;width:100%;max-height:none;overflow:visible;margin:0;padding:12px;pointer-events:auto;min-width:0}
+  .product-slide #sketch-slot:not([hidden]){grid-area:2/1}
+  #stage-controls:not([hidden]){position:fixed;bottom:0;left:0;transform:none;width:100%;max-width:none;flex-wrap:nowrap;gap:10px;border-radius:14px 14px 0 0;padding:10px 12px calc(10px + env(safe-area-inset-bottom));box-shadow:0 -4px 20px #10282024;z-index:10}
+  #stage-controls button{min-height:44px;flex:1;padding:10px;font-size:13px}
+  #step-count{white-space:nowrap;font-size:12px}
+  .mock-window{min-width:0;box-shadow:0 6px 20px #10251f20;border-radius:12px}
+  .mock-window header{padding:12px;gap:8px;font-size:13px;flex-wrap:wrap}
+  .mock-body,.aiops-product .mock-body,.dashboard-product .mock-body{padding:12px;gap:12px}
+  .aiops-product,.change-product,.teams-product,.knowledge-product,.problem-product,.optimizer-product,.outcomes-product,.dashboard-product{font-size:15px;min-width:0}
+  .sketch-stack,.split-sketch,.situation-content,.change-columns,.knowledge-outputs,.problem-workspace,.problem-detail-columns,.optimizer-bottom,.outcomes-workspace{grid-template-columns:minmax(0,1fr)}
+  .dashboard-stats,.technical-charts,.business-charts,.optimizer-metrics,.outcomes-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .technical-charts .dash-chart:last-child,.optimizer-metrics .optimizer-tile:last-child,.outcomes-metrics>div:last-child{grid-column:1/-1}
+  .dashboard-stats span,.dash-chart>strong{font-size:12px}
+  .dashboard-stats strong{font-size:22px}
+  .dash-chart>span,.dashboard-subtitle,.dashboard-footer{font-size:12px}
+  .dash-chart svg{max-height:none;min-height:75px}
+  .dashboard-annotated,.change-product,.teams-product{display:grid;gap:14px;padding-top:0}
+  .dashboard-benefit,.change-benefit,.teams-benefit,.knowledge-benefit,.problem-benefit,.optimizer-benefit,.outcomes-benefit{position:relative;inset:auto;width:100%;max-width:none;margin:0;padding:14px;font-size:14px;justify-self:stretch}
+  .dashboard-benefit-link,.change-benefit-line,.teams-benefit-line{position:relative;inset:auto;height:20px;margin:-14px 0 -14px 28px}
+  .annotated-monitor{display:grid;gap:16px;padding:0 0 0 18px;min-width:0}
+  .annotated-monitor .monitor{grid-area:2/1;min-width:0}
+  .value-callout{position:relative;inset:auto;width:100%;max-width:none;font-size:14px;padding:12px;animation:none}
+  .callout-discovery{grid-area:1/1}.callout-situations{grid-area:3/1}.callout-automation{grid-area:4/1}
+  .callout-lines{z-index:1}
+  .product-tabs{word-spacing:2px;font-size:12px;line-height:1.7}
+  .product-kpis span{font-size:12px}
+  .ci-topology{overflow-x:auto;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
+  .aiops-product .ci-topology svg{width:680px;height:175px;max-width:none;max-height:none}
+  .situation-target{display:grid;gap:8px;font-size:12px}
+  .situation-content{padding:12px;gap:14px}
+  .situation-summary svg{max-height:none;min-height:85px}
+  .root-cause,.best-action{font-size:14px;padding:12px}
+  .change-heading{align-items:start;flex-wrap:wrap}
+  .change-heading>strong{font-size:20px}
+  .change-progress,.validation-tabs,.problem-detail-tabs,.outcomes-filters,.optimizer-toolbar{flex-wrap:wrap;line-height:1.5}
+  .change-context,.validation-panel{font-size:14px}
+  .teams-layout{grid-template-columns:minmax(0,1fr)}
+  .teams-sidebar{display:flex;gap:12px;flex-wrap:wrap;border-bottom:1px solid #c7d9cc;padding:12px;font-size:12px}
+  .teams-channel{min-width:0;padding:12px;gap:16px}
+  .teams-message p,.teams-response{font-size:14px;line-height:1.5}
+  .teams-topology{max-height:none;min-height:70px}
+  .knowledge-outputs{gap:16px}.knowledge-field,.knowledge-note{font-size:13px}
+  .report-page{width:100%;padding:22px 16px;font-size:16px}
+  .cluster-list{border-right:0;border-bottom:1px solid #c7d9cc}
+  .cluster-row,.cluster-question,.cluster-answer,.problem-whys,.problem-summary{font-size:13px}
+  .problem-summary{border-left:0;border-top:1px solid #c4d8c5;padding:12px 0 0}
+  .optimizer-tile>span,.optimizer-tile small{font-size:12px}
+  .optimizer-recommendations,.optimizer-opportunities{font-size:15px}
+  .optimizer-rec span,.optimizer-opportunity>span,.optimizer-evidence,.optimizer-curator{font-size:13px}
+  .outcomes-metrics span,.outcomes-metrics small,.outcomes-agent,.outcomes-tabs,.outcomes-insights>span,.outcomes-insights b,.outcomes-insights p{font-size:12px}
+  .outcomes-metrics strong{font-size:24px}
+  .outcomes-filters{display:flex;gap:8px}
+  .outcomes-filters>strong{flex-basis:100%}
+  .outcomes-filters>span{font-size:12px}
+}
 </style>
 <header><span class="brand"><img src="helix-arena.png" alt="Helix Arena"></span><div class="header-actions"><button id="next-zone">Siguiente zona →</button><button id="network-toggle" aria-pressed="false">Mostrar red del campus</button><button id="present">Modo escenario</button><button id="full">Pantalla completa</button></div></header>
 <main><aside>
@@ -891,4 +971,4 @@ body:not(.presenting) aside,body:not(.presenting) footer,body:not(.presenting) .
   </section>
 </div>
 </template>
-<script src="arena.js?v=35"></script></html>
+<script src="arena.js?v=36"></script></html>

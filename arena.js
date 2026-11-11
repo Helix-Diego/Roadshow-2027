@@ -154,7 +154,9 @@ roof.onclick = () => {
   roof.setAttribute('aria-pressed',cutaway);
   roof.textContent = cutaway ? 'Cerrar cubiertas' : 'Abrir cubiertas';
 };
+let tourZoomMultiplier=1;
 function magnify(factor){
+  if(!presenting && chapter===0 && !reduced) tourZoomMultiplier=Math.max(.5,Math.min(3,tourZoomMultiplier*factor));
   targetZoom = Math.max(.65,Math.min(7,targetZoom*factor));
   syncZoom();
 }
@@ -192,20 +194,42 @@ window.addEventListener('keydown', event => {
   if(presenting) showStep(stageStep+direction);
   else select((chapter+direction+scenes.length)%scenes.length);
 });
+const activePointers = new Map();
+let pinchDistance = null;
+function pointerDistance(){
+  const [a,b]=[...activePointers.values()];
+  return Math.hypot(a[0]-b[0],a[1]-b[1]);
+}
 canvas.onpointerdown = event => {
+  activePointers.set(event.pointerId,[event.clientX,event.clientY]);
   drag = [event.clientX,event.clientY];
+  if(activePointers.size===2) pinchDistance=pointerDistance();
   canvas.setPointerCapture(event.pointerId);
 };
 canvas.onpointermove = event => {
-  if(drag === null) return;
+  if(!activePointers.has(event.pointerId)) return;
+  activePointers.set(event.pointerId,[event.clientX,event.clientY]);
   zoomAnchor = null;
-  if(event.shiftKey){
-    panX += event.clientX-drag[0];
-    panY += event.clientY-drag[1];
-  } else offset += (event.clientX-drag[0])*.008;
+  if(activePointers.size===2){
+    const distance=pointerDistance();
+    if(pinchDistance>0) magnify(distance/pinchDistance);
+    pinchDistance=distance;
+  } else if(drag){
+    if(event.shiftKey){
+      panX += event.clientX-drag[0];
+      panY += event.clientY-drag[1];
+    } else offset += (event.clientX-drag[0])*.008;
+  }
   drag = [event.clientX,event.clientY];
 };
-canvas.onlostpointercapture = () => { drag = null; };
+function releasePointer(event){
+  activePointers.delete(event.pointerId);
+  pinchDistance=null;
+  drag=activePointers.size ? [...activePointers.values()][0] : null;
+}
+canvas.onpointerup=releasePointer;
+canvas.onpointercancel=releasePointer;
+canvas.onlostpointercapture=releasePointer;
 function project([x,y,z]) {
   x -= focus;
   z -= focusZ;
@@ -342,6 +366,7 @@ const tourStops=[
 let tourStart=null;
 let tourLastTime=0;
 document.querySelector('#next-zone').onclick=()=>{
+  tourZoomMultiplier=1;
   if(presenting || chapter!==0) return;
   const elapsed=tourStart===null?0:(tourLastTime-tourStart)/1000;
   const next=(Math.floor(Math.max(0,elapsed-5)/7)+1)%7;
@@ -360,7 +385,7 @@ function tourCamera(time){
   const from=tourStops[segment],to=tourStops[segment+1];
   const mix=(a,b)=>a+(b-a)*weight;
   zone=phase<.45?from.zone:to.zone;
-  targetZoom=mix(from.zoom,to.zoom);
+  targetZoom=Math.max(.65,Math.min(7,mix(from.zoom,to.zoom)*tourZoomMultiplier));
   panX=panY=0;
   zoomAnchor=null;
   tourLabel.textContent=zone===0?'Helix Arena · Centro de alto rendimiento':zones[zone][0];
@@ -375,6 +400,7 @@ function draw(time){
   const t=reduced?0:time/1000;
   const bounds=canvas.getBoundingClientRect();
   width=bounds.width; height=bounds.height;
+  if(width<=0 || height<=0){requestAnimationFrame(draw);return;}
   const ratio=Math.min(devicePixelRatio,2);
   const pixelsWide=Math.round(width*ratio), pixelsHigh=Math.round(height*ratio);
   if(canvas.width!==pixelsWide || canvas.height!==pixelsHigh){canvas.width=pixelsWide;canvas.height=pixelsHigh;}
@@ -771,16 +797,19 @@ function alignValueCallouts(){
     const target=container.querySelector('[data-callout-target="'+box.dataset.callout+'"]');
     const boxBounds=box.getBoundingClientRect(),targetBounds=target.getBoundingClientRect();
     const upper=box.dataset.callout==='discovery';
+    const mobile=window.matchMedia('(max-width:720px)').matches;
     const x=boxBounds.left-bounds.left+boxBounds.width/2;
     const y=(upper?boxBounds.bottom:boxBounds.top)-bounds.top;
     const tx=targetBounds.left-bounds.left+targetBounds.width*(upper?.28:.5);
     const ty=(upper?targetBounds.top:targetBounds.bottom)-bounds.top;
     const middle=(y+ty)/2;
     const path=document.createElementNS('http://www.w3.org/2000/svg','path');
-    path.setAttribute('d','M'+x+' '+y+' C'+x+' '+middle+' '+tx+' '+middle+' '+tx+' '+ty);
+    path.setAttribute('d',mobile
+      ? 'M'+(boxBounds.left-bounds.left)+' '+(boxBounds.top-bounds.top+boxBounds.height/2)+' H6 V'+(targetBounds.top-bounds.top+targetBounds.height/2)+' H'+(targetBounds.left-bounds.left)
+      : 'M'+x+' '+y+' C'+x+' '+middle+' '+tx+' '+middle+' '+tx+' '+ty);
     const dot=document.createElementNS('http://www.w3.org/2000/svg','circle');
-    dot.setAttribute('cx',tx);
-    dot.setAttribute('cy',ty);
+    dot.setAttribute('cx',mobile?targetBounds.left-bounds.left:tx);
+    dot.setAttribute('cy',mobile?targetBounds.top-bounds.top+targetBounds.height/2:ty);
     dot.setAttribute('r',4);
     svg.append(path,dot);
   }
@@ -791,6 +820,7 @@ if(typeof ResizeObserver!=='undefined'){
 
 function showStep(index){
   const previous=stageStep;
+  if(presenting && window.matchMedia('(max-width:720px)').matches) window.scrollTo({top:0,behavior:'instant'});
   stageStep = Math.max(0, Math.min(stageSteps.length-1,index));
   if(stageStep!==previous) stageTransition={from:stageMarkers[previous],to:stageMarkers[stageStep]};
   const step=stageSteps[stageStep];
@@ -823,6 +853,11 @@ function showStep(index){
   if(step.sketch){
     const template=document.querySelector('#sketch-'+step.sketch);
     sketchSlot.append(template.content.cloneNode(true));
+    for(const topology of sketchSlot.querySelectorAll('.ci-topology')){
+      topology.tabIndex=0;
+      topology.setAttribute('role','region');
+      topology.setAttribute('aria-label','Topología del servicio AtletaPro');
+    }
     requestAnimationFrame(alignValueCallouts);
   }
   previousStep.disabled=stageStep===0;
