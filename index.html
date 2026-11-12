@@ -1025,6 +1025,19 @@ body:not(.presenting) .stage{min-height:0}
 @media(max-width:1024px){.workflow-panels:not(.is-expanded){max-width:none}.single-bpmn .single-activity{flex:1;width:auto;padding:23px 7px;min-height:100px}.single-bpmn-start,.single-bpmn-end{flex-basis:30px;width:30px;height:30px}.single-bpmn-edge{flex-basis:10px}.single-bpmn-start{border-width:2px}.single-bpmn-end{border-width:4px}}
 @media(prefers-reduced-motion:reduce){.workflow-panels.is-expanded :is(.workflow-after,.workflow-shift){animation:none}}
 
+
+/* Avatar dimensions follow the grid column, independently of projection text scaling. */
+.teams-product{--teams-avatar-size:clamp(34px,2.1vw,42px)}
+.teams-message{grid-template-columns:var(--teams-avatar-size) minmax(0,1fr);gap:12px}
+.teams-avatar{width:var(--teams-avatar-size);height:var(--teams-avatar-size);min-width:var(--teams-avatar-size);padding:0;display:grid;place-items:center;font-size:calc(var(--teams-avatar-size)*.38);line-height:1;white-space:nowrap;letter-spacing:0;flex-shrink:0}
+.teams-avatar.bot-avatar{font-size:calc(var(--teams-avatar-size)*.55)}
+.cab-board.is-expanded .cab-copilot{animation:cab-customization-enter .85s .12s cubic-bezier(.22,1,.36,1) both}
+.cab-board.is-expanded :is(#cab-teams,.cab-calendar-view,.cab-a2a-label){animation:cab-capability-enter .7s .22s cubic-bezier(.22,1,.36,1) both}
+@keyframes cab-customization-enter{from{opacity:0;transform:translateX(65px) scale(.94)}to{opacity:1;transform:none}}
+@keyframes cab-capability-enter{from{opacity:0;transform:translateY(20px) scale(.97)}to{opacity:1;transform:none}}
+@media(max-width:1024px){.teams-product{--teams-avatar-size:36px}.teams-message{gap:10px}}
+@media(prefers-reduced-motion:reduce){.cab-board.is-expanded :is(.cab-copilot,#cab-teams,.cab-calendar-view,.cab-a2a-label){animation:none}}
+
 </style>
 <header><span class="brand"><img src="helix-arena.png" alt="Helix Arena"></span><div class="header-actions"><button id="next-zone">Siguiente zona →</button><button id="network-toggle" aria-pressed="false">Mostrar red del campus</button><button id="present">Modo escenario</button><button id="full">Pantalla completa</button></div></header>
 <main><div class="stage">
@@ -1535,4 +1548,4 @@ body:not(.presenting) .stage{min-height:0}
  </div>
 </div>
 </template>
-<script src="arena.js?v=55"></script></html>
+<script src="arena.js?v=56"></script></html>

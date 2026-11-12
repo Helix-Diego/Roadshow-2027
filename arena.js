@@ -742,6 +742,7 @@ select(0);
 requestAnimationFrame(draw);
 
 const demoSteps = [
+  {title:'Acto I', value:'', zone:0, closing:true},
   {title:'Visibilidad del servicio', capability:'BMC Helix Dashboards', agent:'', value:'A las 03:00, AtletaPro sigue en verde. Aparece una señal de riesgo.', action:'Conectar la salud técnica con la experiencia del atleta y el impacto de negocio.', sketch:'dashboards', zone:6},
   {title:'Localizar el fallo de red', capability:'BMC Helix Network Management', agent:'', value:'El router BB-R1-SPBR deja de funcionar e impacta en el servicio AtletaPro.', action:'Seguir la ruta afectada y comprobar la latencia por salto.', zone:6, outage:true},
   {title:'De los eventos al cambio', capability:'BMC Helix AIOps + HelixGPT', agent:'', value:'La topología aporta contexto. La correlación concentra el ruido en una situación.', action:'Revisar la situación y la recomendación de Root Cause Finder.', sketch:'aiops', zone:6, outage:true},
@@ -766,8 +767,9 @@ const nextStep = document.querySelector('#next-step');
 let presenting = false;
 let stageStep = 0;
 let stageTransition = null;
-const stageAngles = [-.58,-.74,-.40,-.48,-.61,-.46,-.55,-.24,-.52,-.58,-.58,-.58,-.58,-.58];
+const stageAngles = [-.58,-.58,-.74,-.40,-.48,-.61,-.46,-.55,-.24,-.52,-.58,-.58,-.58,-.58,-.58];
 const stageMarkers = [
+  [0,1,0],
   [.2,1.3,12.3], [-.5,.85,10.4], [-3.5,1.85,9.5],
   [.2,1.3,12.3], [.2,1.3,12.3], [-.5,.85,10.4], [-3.5,1.85,9.5],
   [-16.35,.8,10.45], [.2,1.3,12.3], [.2,1.3,12.3], [0,1,0], [0,1,0], [0,1,0], [0,1,0],
@@ -803,6 +805,7 @@ function drawStagePulse(time){
 function promoteProjectionType(content){
   if(!content || content.classList.contains('architecture-product')) return;
   const elements=[...content.querySelectorAll('strong,b,span,p,small,em,div,li,code')].filter(element=>
+    !element.classList.contains('teams-avatar') &&
     [...element.childNodes].some(node=>node.nodeType===Node.TEXT_NODE && node.textContent.trim()));
   for(const element of elements){
     if(element.dataset.projectionFont!==undefined){element.style.fontSize=element.dataset.projectionFont;delete element.dataset.projectionFont;}
@@ -963,7 +966,9 @@ function showStep(index){
   document.body.classList.toggle('part-two-slide',Boolean(step.closing));
   const diagram=['architecture','messaging','workflow'].includes(step.sketch);
   document.body.classList.toggle('architecture-slide',diagram);
-  document.querySelector('#part-two-title').hidden=!step.closing;
+  const actTitle=document.querySelector('#part-two-title');
+  actTitle.hidden=!step.closing;
+  if(step.closing) actTitle.textContent=step.title;
   document.body.classList.toggle('product-slide',['aiops','dashboards','change','teams','knowledge','problem','optimizer','outcomes','onboarding','architecture'].includes(step.sketch));
   document.querySelector('#helixgpt-capabilities').hidden=step.sketch!=='aiops';
   failed=Boolean(step.outage);
@@ -999,7 +1004,10 @@ function showStep(index){
     if(expandA2A){
       const diagramBoard=sketchSlot.querySelector('.cab-board');
       const subtitle=sketchSlot.querySelector('#arch-subtitle');
+      const workspace=diagramBoard.querySelector('.cab-workspace');
       expandA2A.onclick=()=>{
+        workspace.getAnimations().forEach(animation=>animation.cancel());
+        const origin=workspace.getBoundingClientRect();
         const expanded=diagramBoard.classList.toggle('is-expanded');
         expandA2A.setAttribute('aria-expanded',String(expanded));
         expandA2A.textContent=expanded?'← Volver a la aplicación de caja':'✦ Mostrar customización →';
@@ -1007,7 +1015,15 @@ function showStep(index){
         if(subtitle) subtitle.textContent=expanded
           ?'HAE amplía la aplicación. MCP agenda el CAB en Teams. A2A conecta al especialista de seguridad con el mismo supervisor.'
           :'CAB Workspace · Una aplicación de caja, un supervisor y tres agentes especializados.';
-        requestAnimationFrame(layoutSketch);
+        layoutSketch();
+        const destination=workspace.getBoundingClientRect();
+        const presentationScale=parseFloat(sketchSlot.firstElementChild.style.zoom)||1;
+        if(!reduced && !window.matchMedia('(max-width:1024px)').matches && destination.width && destination.height){
+          workspace.animate([
+            {transformOrigin:'0 0',transform:`translate(${(origin.left-destination.left)/presentationScale}px,${(origin.top-destination.top)/presentationScale}px) scale(${origin.width/destination.width},${origin.height/destination.height})`},
+            {transformOrigin:'0 0',transform:'none'}
+          ],{duration:850,easing:'cubic-bezier(.22,1,.36,1)'});
+        }
       };
     }
     const expandWorkflow=sketchSlot.querySelector('#expand-workflow');
