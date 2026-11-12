@@ -849,6 +849,50 @@ body:not(.presenting) .stage{min-height:0}
  .arch-diagram.is-expanded .arch-bridge{grid-auto-flow:column;align-items:center;justify-content:center;padding:4px 0}
  .arch-bridge i{width:42px;height:2px}
 }
+
+/* Slide 12: the application remains the boundary; custom capabilities unfold around its agent. */
+.cab-board{position:relative;height:550px;width:100%;isolation:isolate}
+.cab-workspace,.cab-copilot{position:absolute;top:0;bottom:0;left:0;width:100%;border:1.5px solid #8aa48c;border-radius:24px;background:linear-gradient(150deg,#f9fbf5,#e5eee1);transition:width .85s cubic-bezier(.22,1,.36,1);}
+.cab-copilot{left:auto;right:0;width:33%;background:linear-gradient(150deg,#fffaf2,#f3e8d7);border:1.5px dashed #bd874b}
+.cab-section-heading{position:absolute;top:18px;left:20px;right:20px;display:flex;justify-content:space-between;gap:12px;align-items:start}
+.cab-section-heading .arch-badge{color:#fff}.cab-section-heading>div{display:grid;gap:4px}.cab-section-heading strong{font-size:22px;letter-spacing:-.025em}.cab-section-heading span:not(.arch-badge){font-size:12px;color:#57745d}
+.cab-node{position:absolute;z-index:2;width:28%;transition:left .85s cubic-bezier(.22,1,.36,1),width .85s cubic-bezier(.22,1,.36,1),top .85s cubic-bezier(.22,1,.36,1);}
+.cab-node-face{display:grid;gap:5px;min-width:0;padding:16px;border:1px solid #a1b887;border-radius:16px;background:#e7efcf;box-shadow:0 10px 24px #20452f15;animation:orbit-float 6s ease-in-out infinite;}
+.cab-node strong{font-size:17px;line-height:1.2;letter-spacing:-.02em}.cab-node span{font-size:12px;line-height:1.4;color:#587148}.cab-node small{font:700 9px system-ui;letter-spacing:.08em;color:#597246}
+.cab-main-agent .cab-node-face{background:#173f30;color:#fff;border-color:#61876c;padding:20px;min-height:130px;align-content:center}
+.cab-main-agent strong{font-size:25px}.cab-main-agent span{color:#d1e2c7}
+#cab-supervisor{left:29%;top:105px;width:42%}
+#cab-summary{left:4%;top:330px}#cab-collision{left:36%;top:330px}#cab-followup{left:68%;top:330px}
+#cab-collision .cab-node-face{animation-delay:-2s}#cab-followup .cab-node-face{animation-delay:-4s}
+.cab-extension{opacity:0;visibility:hidden;pointer-events:none;transform:translateY(20px) scale(.96);transition:opacity .6s ease,transform .85s cubic-bezier(.22,1,.36,1),visibility .6s;}
+.cab-board.is-expanded .cab-extension{opacity:1;visibility:visible;pointer-events:auto;transform:none;transition-delay:.15s}
+.cab-board.is-expanded .cab-workspace{width:60%}
+.cab-board.is-expanded #cab-supervisor{left:20%;width:60%}
+.cab-board.is-expanded :is(#cab-summary,#cab-collision,#cab-followup){top:285px}
+.cab-board.is-expanded .cab-subagent strong{font-size:14px}
+.cab-board.is-expanded .cab-subagent .cab-node-face{padding:12px;min-height:102px}
+#cab-calendar,#cab-teams{top:430px;width:43%}#cab-calendar{left:4%}#cab-teams{left:53%}
+.cab-extension .cab-node-face{background:#fcf1df;border:1px solid #cda269}.cab-extension small{color:#956025}.cab-extension span{color:#765c36}
+.cab-copilot .cab-main-agent .cab-node-face{background:#173f30;border:1.5px solid #cda269}.cab-copilot .cab-main-agent span{color:#d1e2c7}
+#cab-security{top:105px;left:8%;width:84%}#cab-knowledge,#cab-analysis,#cab-outlook{left:15%;width:77%}#cab-knowledge{top:280px}#cab-analysis{top:370px}#cab-outlook{top:460px}
+.cab-copilot .cab-node-face{padding:12px}.cab-copilot .cab-main-agent .cab-node-face{padding:18px}.cab-copilot .cab-node strong{font-size:16px}.cab-copilot .cab-main-agent strong{font-size:23px}
+.cab-lines{position:absolute;inset:0;width:100%;height:100%;z-index:1;overflow:visible;pointer-events:none}
+.cab-lines path{fill:none;stroke:#719365;stroke-width:2;vector-effect:non-scaling-stroke;stroke-linecap:round}
+.cab-lines .cab-custom-line{stroke:#ad783b;stroke-dasharray:6 5;opacity:0;transition:opacity .7s ease}.cab-board.is-expanded .cab-custom-line{opacity:1}
+.cab-lines .cab-a2a-line{stroke:#245b42;stroke-width:3;stroke-dasharray:9 6;animation:cab-flow 15s linear infinite}
+.cab-a2a-label{position:absolute;z-index:3;left:60.5%;top:163px;width:6%;display:grid;justify-items:center;gap:4px;padding:8px 0;border-radius:10px;background:#f0f4e8;border:1px solid #aac09f;text-align:center}.cab-a2a-label strong{font-size:20px}.cab-a2a-label span{font-size:9px;line-height:1.2}
+@keyframes cab-flow{to{stroke-dashoffset:-150}}
+@media(max-width:1024px){
+ .cab-board{height:auto;display:grid;gap:24px;padding:0 6px}.cab-workspace,.cab-copilot,.cab-board.is-expanded .cab-workspace{position:relative;inset:auto;width:100%;height:auto;padding:18px;display:grid;grid-template-columns:1fr;gap:24px}
+ .cab-section-heading{position:relative;inset:auto}.cab-section-heading strong{font-size:20px}
+ .cab-board :is(#cab-supervisor,#cab-summary,#cab-collision,#cab-followup,#cab-calendar,#cab-teams,#cab-security,#cab-knowledge,#cab-analysis,#cab-outlook),.cab-board.is-expanded :is(#cab-supervisor,#cab-summary,#cab-collision,#cab-followup){position:relative;inset:auto;width:100%}
+ .cab-node-face{padding:16px!important;min-height:0!important}.cab-main-agent strong{font-size:24px}.cab-board.is-expanded .cab-subagent strong{font-size:17px}
+ .cab-extension{display:none}.cab-board.is-expanded .cab-extension{display:grid;animation:a2a-mobile-enter .6s ease both}
+ .cab-a2a-label{position:relative;inset:auto;justify-self:center;width:160px;padding:10px}.cab-a2a-label span{font-size:12px}
+ .cab-copilot .cab-node strong{font-size:17px}.cab-copilot .cab-main-agent strong{font-size:24px}
+}
+@media(prefers-reduced-motion:reduce){.cab-node-face,.cab-lines .cab-a2a-line{animation:none}.cab-extension,.cab-workspace,.cab-node{transition:none}}
+
 </style>
 <header><span class="brand"><img src="helix-arena.png" alt="Helix Arena"></span><div class="header-actions"><button id="next-zone">Siguiente zona →</button><button id="network-toggle" aria-pressed="false">Mostrar red del campus</button><button id="present">Modo escenario</button><button id="full">Pantalla completa</button></div></header>
 <main><div class="stage">
@@ -1275,47 +1319,35 @@ body:not(.presenting) .stage{min-height:0}
 </template>
 
 <template id="sketch-architecture">
-<div class="architecture-product">
+<div class="architecture-product cab-architecture">
  <div class="architecture-heading">
   <h2>A2A y MCP</h2>
-  <p id="arch-subtitle">El CAB Supervisor vive dentro de CAB Workspace. HAE construyó ahí el calendario de cambios.</p>
-  <button id="expand-a2a" type="button" class="a2a-expand-btn" aria-expanded="false">✦ Mostrar customización A2A →</button>
+  <p id="arch-subtitle">CAB Workspace · Una aplicación de caja, un supervisor y tres agentes especializados.</p>
+  <button id="expand-a2a" type="button" class="a2a-expand-btn" aria-expanded="false" aria-controls="cab-architecture-board">✦ Mostrar customización →</button>
  </div>
- <div class="arch-diagram">
-  <section class="arch-pane">
-   <header class="arch-pane-head">
-    <div><strong>CAB Workspace</strong><span>Aplicación BMC Helix. El agente de caja y el calendario de HAE están dentro.</span></div>
-    <span class="arch-badge">De caja</span>
-   </header>
-   <div class="arch-grid">
-    <article class="arch-card arch-card-agent arch-span">
-     <div class="arch-brand"><span class="helix-logo"><img src="bmc-helix.png?v=2" alt="BMC Helix"></span><span class="arch-badge">De caja</span></div>
-     <strong>CAB Supervisor Agent</strong><span>Agente nativo, dentro de la aplicación. Orquesta a los agentes del CAB.</span>
-    </article>
-    <div class="arch-grid arch-grid-3 arch-span">
-     <article class="arch-card"><small>AGENTE · DE CAJA</small><strong>CAB Approval Summary Agent</strong><span>Resume el cambio para la aprobación</span></article>
-     <article class="arch-card"><small>AGENTE · DE CAJA</small><strong>CAB Change Collision</strong><span>Detecta colisiones entre cambios</span></article>
-     <article class="arch-card"><small>AGENTE · DE CAJA</small><strong>CAB Follow Up Agent</strong><span>Da seguimiento después del CAB</span></article>
-    </div>
-    <article class="arch-card arch-card-custom"><small>CONEXIÓN MCP · CUSTOM</small><strong>Microsoft Teams</strong><span>Crear la reunión CAB</span></article>
-    <article class="arch-card arch-card-custom"><small>APLICACIÓN · HAE</small><strong>Calendario de cambios</strong><span>Vista construida con HAE dentro de CAB Workspace</span></article>
-   </div>
+ <div class="cab-board" id="cab-architecture-board">
+  <svg class="cab-lines" aria-hidden="true">
+   <path data-from="cab-supervisor" data-to="cab-summary"/><path data-from="cab-supervisor" data-to="cab-collision"/><path data-from="cab-supervisor" data-to="cab-followup"/>
+   <path class="cab-custom-line" data-from="cab-supervisor" data-to="cab-teams"/><path class="cab-custom-line" data-from="cab-calendar" data-to="cab-teams"/>
+   <path class="cab-custom-line cab-a2a-line" data-from="cab-supervisor" data-to="cab-security"/>
+   <path class="cab-custom-line" data-from="cab-security" data-to="cab-knowledge"/><path class="cab-custom-line" data-from="cab-security" data-to="cab-analysis"/><path class="cab-custom-line" data-from="cab-security" data-to="cab-outlook"/>
+  </svg>
+  <section class="cab-workspace">
+   <div class="cab-section-heading"><div><strong>CAB Workspace</strong><span>BMC Helix · Aplicación de caja</span></div><span class="arch-badge">De caja</span></div>
+   <article id="cab-supervisor" class="cab-node cab-main-agent"><div class="cab-node-face"><div class="arch-brand"><span class="helix-logo"><img src="bmc-helix.png?v=2" alt="BMC Helix"></span></div><strong>CAB Supervisor Agent</strong><span>Orquesta el análisis y la preparación del CAB</span></div></article>
+   <article id="cab-summary" class="cab-node cab-subagent"><div class="cab-node-face"><small>SUBAGENTE · DE CAJA</small><strong>CAB Approval Summary Agent</strong><span>Resumen para aprobar el cambio</span></div></article>
+   <article id="cab-collision" class="cab-node cab-subagent"><div class="cab-node-face"><small>SUBAGENTE · DE CAJA</small><strong>CAB Change Collision</strong><span>Detecta colisiones entre cambios</span></div></article>
+   <article id="cab-followup" class="cab-node cab-subagent"><div class="cab-node-face"><small>SUBAGENTE · DE CAJA</small><strong>CAB Follow Up Agent</strong><span>Seguimiento después del CAB</span></div></article>
+   <article id="cab-calendar" class="cab-node cab-extension"><div class="cab-node-face"><small>HAE · HELIX AGENTIC CODING</small><strong>Calendario de cambios</strong><span>Vista moderna para planificar cambios y concertar reuniones CAB</span></div></article>
+   <article id="cab-teams" class="cab-node cab-extension"><div class="cab-node-face"><small>TOOL MCP · CUSTOM</small><strong>Microsoft Teams</strong><span>Crear la reunión CAB desde el calendario, con el mismo supervisor</span></div></article>
   </section>
-  <div class="arch-bridge" aria-hidden="true"><i></i><strong>A2A</strong><small>Copilot → Helix</small><i></i></div>
-  <section class="arch-pane arch-pane-custom">
-   <header class="arch-pane-head">
-    <div><strong>Customización A2A</strong><span>Otro agente, conectado al supervisor sin sacarlo de CAB Workspace.</span></div>
-    <span class="arch-badge arch-badge-custom">Custom</span>
-   </header>
-   <article class="arch-card arch-card-agent arch-card-agent-custom">
-    <div class="arch-brand"><span class="copilot-logo"><img src="m365-copilot.png?v=2" alt="Microsoft 365 Copilot"></span><span class="arch-badge arch-badge-custom">Custom</span></div>
-    <strong>CAB Security Reviewer</strong><span>Copilot Studio · Seguridad y organización</span>
-   </article>
-   <div class="arch-grid">
-    <article class="arch-card"><small>CONOCIMIENTO</small><strong>Seguridad y políticas</strong><span>AtletaPro · controles internos</span></article>
-    <article class="arch-card"><small>TOOLS · AMPLIABLE</small><strong>Análisis de seguridad</strong><span>Vulnerabilidades y configuración</span></article>
-    <article class="arch-card arch-span"><small>TOOL · OUTLOOK</small><strong>Calendarios de la organización</strong><span>Disponibilidad y huecos para el CAB</span></article>
-   </div>
+  <div class="cab-a2a-label cab-extension"><strong>A2A</strong><span>Consulta del cambio</span></div>
+  <section class="cab-copilot cab-extension" aria-hidden="true">
+   <div class="cab-section-heading"><div><strong>Copilot Studio</strong><span>Agente especialista conectado a Helix</span></div><span class="arch-badge arch-badge-custom">Custom</span></div>
+   <article id="cab-security" class="cab-node cab-main-agent"><div class="cab-node-face"><div class="arch-brand"><span class="copilot-logo"><img src="m365-copilot.png?v=2" alt="Microsoft 365 Copilot"></span></div><strong>CAB Security Reviewer</strong><span>Consulta el cambio al CAB Supervisor por A2A</span></div></article>
+   <article id="cab-knowledge" class="cab-node"><div class="cab-node-face"><small>CONOCIMIENTO INGESTADO</small><strong>Políticas de seguridad</strong><span>Normativa y contexto de la organización</span></div></article>
+   <article id="cab-analysis" class="cab-node"><div class="cab-node-face"><small>TOOLS · SEGURIDAD</small><strong>Análisis de seguridad</strong><span>Evalúa riesgos y controles del cambio</span></div></article>
+   <article id="cab-outlook" class="cab-node"><div class="cab-node-face"><small>TOOL · OUTLOOK</small><strong>Consultar calendarios</strong><span>Disponibilidad de los participantes del CAB</span></div></article>
   </section>
  </div>
 </div>
@@ -1349,4 +1381,4 @@ body:not(.presenting) .stage{min-height:0}
  </div>
 </div>
 </template>
-<script src="arena.js?v=47"></script></html>
+<script src="arena.js?v=48"></script></html>

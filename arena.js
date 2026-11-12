@@ -828,6 +828,40 @@ function layoutSketch(){
   alignArchitectureEdges();
 }
 function alignArchitectureEdges(){
+  const cab=document.querySelector('#sketch-slot .cab-board');
+  if(cab){
+    const bounds=cab.getBoundingClientRect(),svg=cab.querySelector('.cab-lines');
+    svg.setAttribute('viewBox',`0 0 ${bounds.width} ${bounds.height}`);
+    const mobile=window.matchMedia('(max-width:1024px)').matches;
+    for(const path of svg.querySelectorAll('path[data-from]')){
+      const from=cab.querySelector('#'+path.dataset.from+' .cab-node-face').getBoundingClientRect();
+      const to=cab.querySelector('#'+path.dataset.to+' .cab-node-face').getBoundingClientRect();
+      if(!from.width || !to.width) continue;
+      let x1,y1,x2,y2,d;
+      if(mobile){
+        x1=from.left-bounds.left;y1=from.top+from.height/2-bounds.top;
+        x2=to.left-bounds.left;y2=to.top+to.height/2-bounds.top;
+        d=`M${x1},${y1} C0,${y1} 0,${y2} ${x2},${y2}`;
+      }else if(path.dataset.to==='cab-teams' && path.dataset.from==='cab-supervisor'){
+        x1=from.right-bounds.left;y1=from.top+from.height/2-bounds.top;
+        x2=to.right-bounds.left;y2=to.top+to.height/2-bounds.top;
+        const side=cab.querySelector('.cab-workspace').getBoundingClientRect().right-bounds.left-8;
+        d=`M${x1},${y1} C${side},${y1} ${side},${y2} ${x2},${y2}`;
+      }else if(path.classList.contains('cab-a2a-line') || path.dataset.from==='cab-calendar'){
+        x1=from.right-bounds.left;y1=from.top+from.height/2-bounds.top;
+        x2=to.left-bounds.left;y2=to.top+to.height/2-bounds.top;
+        const mid=(x1+x2)/2;
+        d=`M${x1},${y1} C${mid},${y1-18} ${mid},${y2+18} ${x2},${y2}`;
+      }else{
+        x1=from.left+from.width/2-bounds.left;y1=from.bottom-bounds.top;
+        x2=to.left+to.width/2-bounds.left;y2=to.top-bounds.top;
+        if(path.dataset.from==='cab-security'){x1=from.left-bounds.left+12;x2=to.left-bounds.left;const side=x1-16;d=`M${x1},${y1} C${side},${y1+25} ${side},${y2+20} ${x2},${y2+20}`;}
+        else{const mid=(y1+y2)/2;d=`M${x1},${y1} C${x1},${mid} ${x2},${mid} ${x2},${y2}`;}
+      }
+      path.setAttribute('d',d);
+    }
+    return;
+  }
   const board=document.querySelector('#sketch-slot .orbit-board');
   if(!board) return;
   const bounds=board.getBoundingClientRect();
@@ -942,15 +976,17 @@ function showStep(index){
     }
     const expandA2A=sketchSlot.querySelector('#expand-a2a');
     if(expandA2A){
-      const diagramBoard=sketchSlot.querySelector('.arch-diagram');
+      const diagramBoard=sketchSlot.querySelector('.cab-board');
       const subtitle=sketchSlot.querySelector('#arch-subtitle');
       expandA2A.onclick=()=>{
         const expanded=diagramBoard.classList.toggle('is-expanded');
         expandA2A.setAttribute('aria-expanded',String(expanded));
-        expandA2A.textContent=expanded?'← Vista de la aplicación':'✦ Mostrar customización A2A →';
+        expandA2A.textContent=expanded?'← Volver a la aplicación de caja':'✦ Mostrar customización →';
+        diagramBoard.querySelector('.cab-copilot').setAttribute('aria-hidden',String(!expanded));
         if(subtitle) subtitle.textContent=expanded
-          ?'La customización A2A conecta un agente de Copilot Studio con el supervisor, que sigue dentro de CAB Workspace.'
-          :'El CAB Supervisor vive dentro de CAB Workspace. HAE construyó ahí el calendario de cambios.';
+          ?'HAE amplía la aplicación. MCP agenda el CAB en Teams. A2A conecta al especialista de seguridad con el mismo supervisor.'
+          :'CAB Workspace · Una aplicación de caja, un supervisor y tres agentes especializados.';
+        requestAnimationFrame(layoutSketch);
       };
     }
     requestAnimationFrame(layoutSketch);
