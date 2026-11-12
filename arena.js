@@ -830,18 +830,18 @@ function alignArchitectureEdges(){
   const rect=id=>board.querySelector('#'+id+' .orbit-card').getBoundingClientRect();
   for(const path of svg.querySelectorAll('path[data-from]')){
     const from=rect(path.dataset.from),to=rect(path.dataset.to);
+    if(!from.width || !to.width) continue;
     let x1,y1,x2,y2,d;
     if(path.classList.contains('orbit-a2a')){
       if(mobile){
         x1=from.right-bounds.left;y1=from.top+from.height/2-bounds.top;
         x2=to.right-bounds.left;y2=to.top+to.height/2-bounds.top;
         const side=bounds.width-2;
-        d=`M${x1},${y1} C${side},${y1} ${side},${y2} ${x2},${y2}`;
+        d=`M${x1},${y1} L${side},${y1} L${side},${y2} L${x2},${y2}`;
       }else{
         x1=from.left-bounds.left;y1=from.top+from.height/2-bounds.top;
         x2=to.right-bounds.left;y2=to.top+to.height/2-bounds.top;
-        const middle=(x1+x2)/2;
-        d=`M${x1},${y1} C${middle},${y1-30} ${middle},${y2+30} ${x2},${y2}`;
+        d=`M${x1},${y1} L${x2},${y2}`;
       }
     }else if(mobile){
       const left=to.left+to.width/2<bounds.left+bounds.width/2;
@@ -931,6 +931,20 @@ function showStep(index){
       topology.tabIndex=0;
       topology.setAttribute('role','region');
       topology.setAttribute('aria-label','Topología del servicio AtletaPro');
+    }
+    const expandA2A=sketchSlot.querySelector('#expand-a2a');
+    if(expandA2A){
+      const board=sketchSlot.querySelector('.orbit-board');
+      const subtitle=sketchSlot.querySelector('#arch-subtitle');
+      expandA2A.onclick=()=>{
+        const expanded=board.classList.toggle('a2a-expanded');
+        expandA2A.setAttribute('aria-expanded',String(expanded));
+        expandA2A.textContent=expanded?'← Vista inicial':'✦ Expandir con A2A →';
+        if(subtitle) subtitle.textContent=expanded
+          ?'Dos agentes, sus herramientas y una conexión compartida.'
+          :'Agente supervisor de cambios en BMC Helix y sus herramientas.';
+        requestAnimationFrame(layoutSketch);
+      };
     }
     requestAnimationFrame(layoutSketch);
   }
