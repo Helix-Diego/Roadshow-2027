@@ -755,6 +755,7 @@ const demoSteps = [
   {title:'Acto II', value:'', zone:0, closing:true},
   {title:'A2A y MCP', value:'', sketch:'architecture', zone:0},
   {title:'Mensajería conversacional', value:'', sketch:'messaging', zone:0},
+  {title:'De workflows a una actividad', value:'', sketch:'workflow', zone:0},
 ];
 const stageSteps = demoSteps;
 const present = document.querySelector('#present');
@@ -765,11 +766,11 @@ const nextStep = document.querySelector('#next-step');
 let presenting = false;
 let stageStep = 0;
 let stageTransition = null;
-const stageAngles = [-.58,-.74,-.40,-.48,-.61,-.46,-.55,-.24,-.52,-.58,-.58,-.58,-.58];
+const stageAngles = [-.58,-.74,-.40,-.48,-.61,-.46,-.55,-.24,-.52,-.58,-.58,-.58,-.58,-.58];
 const stageMarkers = [
   [.2,1.3,12.3], [-.5,.85,10.4], [-3.5,1.85,9.5],
   [.2,1.3,12.3], [.2,1.3,12.3], [-.5,.85,10.4], [-3.5,1.85,9.5],
-  [-16.35,.8,10.45], [.2,1.3,12.3], [.2,1.3,12.3], [0,1,0], [0,1,0], [0,1,0],
+  [-16.35,.8,10.45], [.2,1.3,12.3], [.2,1.3,12.3], [0,1,0], [0,1,0], [0,1,0], [0,1,0],
 ];
 
 function drawStagePulse(time){
@@ -940,7 +941,7 @@ function showStep(index){
   const step=stageSteps[stageStep];
   const demo=Boolean(step.capability);
   document.body.classList.toggle('part-two-slide',Boolean(step.closing));
-  const diagram=step.sketch==='architecture' || step.sketch==='messaging';
+  const diagram=['architecture','messaging','workflow'].includes(step.sketch);
   document.body.classList.toggle('architecture-slide',diagram);
   document.querySelector('#part-two-title').hidden=!step.closing;
   document.body.classList.toggle('product-slide',['aiops','dashboards','change','teams','knowledge','problem','optimizer','outcomes','onboarding','architecture'].includes(step.sketch));
