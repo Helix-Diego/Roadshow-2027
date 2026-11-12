@@ -14,6 +14,7 @@ const zones = [
 ];
 let zone = 0, targetZoom = 1, focusZ = 0, cutaway = false, failed = false;
 let panX = 0, panY = 0, zoomAnchor = null;
+let roadshowManualZoom=false;
 const canvas = document.querySelector('canvas');
 const ctx = canvas.getContext('2d');
 // Use a depth buffer for the building geometry so walls and equipment
@@ -164,6 +165,7 @@ function select(index) {
 }
 function visit(index){
   zone = index;
+  if(index===0) roadshowManualZoom=false;
   offset = 0;
   targetZoom = zones[index][3];
   panX = panY = 0;
@@ -171,6 +173,10 @@ function visit(index){
 }
 let tourZoomMultiplier=1;
 function magnify(factor){
+  if(!presenting && chapter===0){
+    if(factor>1) roadshowManualZoom=true;
+    else if(targetZoom*factor<=1.05) roadshowManualZoom=false;
+  }
   if(!presenting && chapter===0 && !reduced) tourZoomMultiplier=Math.max(.5,Math.min(3,tourZoomMultiplier*factor));
   targetZoom = Math.max(.65,Math.min(7,targetZoom*factor));
 }
@@ -392,6 +398,14 @@ document.querySelector('#next-zone').onclick=()=>{
 };
 
 const tourLabel=document.querySelector('#tour-label');
+const roadshowTitle=document.querySelector('#roadshow-title');
+let roadshowVisible=false;
+function setRoadshowTitle(visible){
+  if(visible===roadshowVisible) return;
+  roadshowVisible=visible;
+  roadshowTitle.classList.toggle('is-visible',visible);
+  roadshowTitle.setAttribute('aria-hidden',String(!visible));
+}
 function tourCamera(time){
   tourLastTime=time;
   tourStart ??= time;
@@ -403,12 +417,15 @@ function tourCamera(time){
   const from=tourStops[segment],to=tourStops[segment+1];
   const mix=(a,b)=>a+(b-a)*weight;
   tourStep=clock<tourIntro?0:segment+1;
+  const overview=clock<tourIntro || (segment===tourStops.length-2 && phase>=.98);
+  if(segment===tourStops.length-2 && phase>=.98) roadshowManualZoom=false;
   zone=phase<.45?from.zone:to.zone;
   targetZoom=Math.max(.65,Math.min(7,mix(from.zoom,to.zoom)*tourZoomMultiplier));
   panX=panY=0;
   zoomAnchor=null;
   tourLabel.textContent=zone===0?'Helix Arena · Centro de alto rendimiento':zones[zone][0];
   return {
+    overview,
     x:mix(zones[from.zone][1],zones[to.zone][1]),
     z:mix(zones[from.zone][2],zones[to.zone][2]),
     rotation:mix(from.rotation,to.rotation),
@@ -445,6 +462,7 @@ function draw(time){
   lift+=((cutaway || chapter===networkChapter ? 9 : opening*9)-lift)*ease;
   focus+=((camera?camera.x:zones[zone][1])-focus)*ease;
   focusZ+=((camera?camera.z:zones[zone][2])-focusZ)*ease;
+  setRoadshowTitle(!presenting && chapter===0 && zone===0 && zoom<=1.05 && targetZoom<=1.05 && !roadshowManualZoom && (!automatic || camera.overview));
   scale=Math.min(width/(width<660?56:65),height/31)*zoom;
   faces=[];
   for(let i=-20;!gl && i<=20;i+=2){

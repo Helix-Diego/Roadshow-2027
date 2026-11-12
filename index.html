@@ -1038,6 +1038,15 @@ body:not(.presenting) .stage{min-height:0}
 @media(max-width:1024px){.teams-product{--teams-avatar-size:36px}.teams-message{gap:10px}}
 @media(prefers-reduced-motion:reduce){.cab-board.is-expanded :is(.cab-copilot,#cab-teams,.cab-calendar-view,.cab-a2a-label){animation:none}}
 
+
+/* The tour title sits behind the campus, like the Act I / Act II curtains. */
+#roadshow-title{position:absolute;z-index:0;left:2%;top:7%;width:96%;margin:0;text-align:center;white-space:nowrap;font-family:Baskerville,"Palatino Linotype",Georgia,serif;font-size:clamp(66px,11.5vw,220px);font-weight:500;font-style:italic;line-height:1.1;padding-bottom:.16em;letter-spacing:-.055em;color:#315641;opacity:0;transform:translateY(12px);pointer-events:none;transition:opacity .55s ease,transform .8s cubic-bezier(.22,1,.36,1)}
+#roadshow-title.is-visible{opacity:.78;transform:none}
+body:not(.presenting) .stage{isolation:isolate}body:not(.presenting) .stage .geometry-canvas{z-index:1}body:not(.presenting) .stage>canvas:not(.geometry-canvas){position:relative;z-index:2}body:not(.presenting) #tour-label{z-index:3}
+.presenting #roadshow-title,.network #roadshow-title{display:none}
+@media(max-width:1024px){#roadshow-title{top:9%;font-size:clamp(40px,10.8vw,110px)}}
+@media(prefers-reduced-motion:reduce){#roadshow-title{transition:none}}
+
 </style>
 <header><span class="brand"><img src="helix-arena.png" alt="Helix Arena"></span><div class="header-actions"><button id="next-zone">Siguiente zona →</button><button id="network-toggle" aria-pressed="false">Mostrar red del campus</button><button id="present">Modo escenario</button><button id="full">Pantalla completa</button></div></header>
 <main><div class="stage">
@@ -1054,6 +1063,7 @@ body:not(.presenting) .stage{min-height:0}
 </div></div>
 <div id="sketch-slot" hidden></div>
 <h2 id="part-two-title" hidden>Acto II</h2>
+<h2 id="roadshow-title" aria-hidden="true">Madrid Roadshow</h2>
 <div id="stage-controls" hidden>
   <button id="prev-step">← Anterior</button><span id="step-count"></span>
   <button id="next-step">Siguiente →</button>
@@ -1548,4 +1558,4 @@ body:not(.presenting) .stage{min-height:0}
  </div>
 </div>
 </template>
-<script src="arena.js?v=56"></script></html>
+<script src="arena.js?v=57"></script></html>
