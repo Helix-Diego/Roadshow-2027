@@ -800,10 +800,27 @@ function drawStagePulse(time){
   ctx.restore();
 }
 
+function promoteProjectionType(content){
+  if(!content || content.classList.contains('architecture-product')) return;
+  const elements=[...content.querySelectorAll('strong,b,span,p,small,em,div,li,code')].filter(element=>
+    [...element.childNodes].some(node=>node.nodeType===Node.TEXT_NODE && node.textContent.trim()));
+  for(const element of elements){
+    if(element.dataset.projectionFont!==undefined){element.style.fontSize=element.dataset.projectionFont;delete element.dataset.projectionFont;}
+  }
+  if(window.matchMedia('(max-width:1024px)').matches) return;
+  const floor=Math.max(16,Math.min(22,innerWidth*.0108));
+  const sizes=elements.map(element=>({element,size:parseFloat(getComputedStyle(element).fontSize)}));
+  for(const {element,size} of sizes){
+    element.dataset.projectionFont=element.style.fontSize;
+    const label=element.matches('small') || element.classList.contains('pdf-mark');
+    element.style.fontSize=Math.max(size*1.18,floor*(label ? .82 : 1))+'px';
+  }
+}
 function fitSketch(){
   const slot=document.querySelector('#sketch-slot');
   const content=slot.firstElementChild;
   if(slot.hidden || !content) return;
+  promoteProjectionType(content);
   if(window.matchMedia('(max-width:1024px)').matches){
     if(content.style.zoom) content.style.zoom='';
     return;
@@ -911,7 +928,7 @@ function alignValueCallouts(){
   for(const box of container.querySelectorAll('[data-callout]')){
     const target=container.querySelector('[data-callout-target="'+box.dataset.callout+'"]');
     const boxBounds=box.getBoundingClientRect(),targetBounds=target.getBoundingClientRect();
-    const upper=box.dataset.callout==='discovery';
+    const upper=boxBounds.bottom<=targetBounds.top;
     const mobile=window.matchMedia('(max-width:1024px)').matches;
     const x=boxBounds.left-bounds.left+boxBounds.width/2;
     const y=(upper?boxBounds.bottom:boxBounds.top)-bounds.top;
@@ -919,12 +936,15 @@ function alignValueCallouts(){
     const ty=(upper?targetBounds.top:targetBounds.bottom)-bounds.top;
     const middle=(y+ty)/2;
     const path=document.createElementNS('http://www.w3.org/2000/svg','path');
-    path.setAttribute('d',mobile
+    const discoveryRoute=!mobile && box.dataset.callout==='discovery' && !upper;
+    path.setAttribute('d',discoveryRoute
+      ? `M${boxBounds.left-bounds.left+14} ${y} C${boxBounds.left-bounds.left+14} ${y-16} 4 ${y-16} 4 ${targetBounds.top-bounds.top+targetBounds.height/2} H${targetBounds.left-bounds.left+2}`
+      : mobile
       ? 'M'+(boxBounds.left-bounds.left)+' '+(boxBounds.top-bounds.top+boxBounds.height/2)+' H6 V'+(targetBounds.top-bounds.top+targetBounds.height/2)+' H'+(targetBounds.left-bounds.left)
       : 'M'+x+' '+y+' C'+x+' '+middle+' '+tx+' '+middle+' '+tx+' '+ty);
     const dot=document.createElementNS('http://www.w3.org/2000/svg','circle');
-    dot.setAttribute('cx',mobile?targetBounds.left-bounds.left:tx);
-    dot.setAttribute('cy',mobile?targetBounds.top-bounds.top+targetBounds.height/2:ty);
+    dot.setAttribute('cx',discoveryRoute?targetBounds.left-bounds.left+2:mobile?targetBounds.left-bounds.left:tx);
+    dot.setAttribute('cy',discoveryRoute || mobile?targetBounds.top-bounds.top+targetBounds.height/2:ty);
     dot.setAttribute('r',4);
     svg.append(path,dot);
   }
