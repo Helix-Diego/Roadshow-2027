@@ -718,19 +718,33 @@ body:not(.presenting) .stage{min-height:0}
 .orbit-board{position:relative;height:clamp(460px,58vh,640px);width:100%;isolation:isolate}
 .orbit-lines{position:absolute;inset:0;width:100%;height:100%;overflow:visible;z-index:0;pointer-events:none}
 .orbit-lines path{fill:none;stroke:#96ac7b;stroke-width:2;stroke-linecap:round;vector-effect:non-scaling-stroke;transition:opacity .45s ease}
+.orbit-lines .orbit-custom{stroke:#c87b33;stroke-width:2.5;stroke-dasharray:6 5}
 .orbit-lines .orbit-a2a{stroke:#285e45;stroke-width:3;stroke-dasharray:8 6}
 .orbit-node{position:absolute;left:var(--x);top:var(--y);width:var(--w,20%);transform:translate(-50%,-50%) scale(1);z-index:1;transition:left .75s cubic-bezier(.22,1,.36,1),top .75s cubic-bezier(.22,1,.36,1),opacity .55s ease,transform .75s cubic-bezier(.22,1,.36,1)}
 .orbit-card{display:grid;gap:7px;padding:15px 17px;border-radius:16px;border:1px solid #a8bf85;background:#e6efcf;color:#29462e;box-shadow:0 10px 28px #2146291c;animation:orbit-float 6s var(--phase,0s) ease-in-out infinite}
 .orbit-card small{font:700 10px system-ui;letter-spacing:.1em;color:#607c44}
 .orbit-card strong{font-size:clamp(14px,1.25vw,19px);line-height:1.2;letter-spacing:-.02em}
 .orbit-card span{font-size:clamp(11px,.9vw,14px);line-height:1.3;color:#5a724b}
+.orbit-custom .orbit-card{background:#fbf3e6;border:1.5px dashed #c87b33;color:#4a3014}
+.orbit-custom .orbit-card small{color:#a85914}
+.orbit-custom .orbit-card span{color:#6f4f28}
 .orbit-agent .orbit-card{padding:26px 22px;min-height:135px;align-content:center;background:#173f30;border:1px solid #61876c;color:#f7fbea;box-shadow:0 16px 38px #163c2c2b}
+.orbit-agent-custom .orbit-card{border:1.5px dashed #e0a65b}
 .orbit-agent small{color:#c8e3a8}
 .orbit-agent strong{font-size:clamp(21px,2vw,30px);line-height:1.12}
 .orbit-agent span{color:#cee1c4;font-size:clamp(12px,1vw,15px)}
-.orbit-brand-row{display:flex;align-items:center;gap:9px}
+.orbit-brand-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.helix-logo{display:inline-flex;align-items:center;flex-shrink:0;padding:4px 8px;border-radius:7px;background:#f7fbf4;border:1px solid #b5d2ba;box-shadow:0 2px 8px #0a1f1633}
+.helix-logo img{display:block;height:16px;width:auto}
 .copilot-logo{display:grid;place-items:center;flex-shrink:0;width:30px;height:30px;border-radius:8px;background:#f7fbf4;border:1px solid #b5d2ba;box-shadow:0 2px 8px #0a1f1633}
 .copilot-logo svg{display:block;width:21px;height:21px}
+.orbit-badge{display:inline-flex;align-items:center;padding:2px 7px;border-radius:999px;font:700 9px system-ui;letter-spacing:.08em;text-transform:uppercase}
+.orbit-badge-ootb{background:#2d684f;color:#e7f9c9;border:1px solid #6fa583}
+.orbit-badge-custom{background:#f9e3be;color:#7a3e09;border:1px solid #d99346}
+.architecture-legend{display:flex;justify-content:center;gap:18px;flex-wrap:wrap;font-size:11px;color:#516856}
+.architecture-legend span{display:inline-flex;align-items:center;gap:7px}
+.architecture-legend i{display:inline-block;width:22px;height:0;border-top:2.5px solid #96ac7b}
+.architecture-legend .legend-custom i{border-top:2.5px dashed #c87b33}
 .orbit-link-label{position:absolute;left:50%;top:39%;transform:translate(-50%,-50%) scale(1);z-index:2;display:grid;justify-items:center;gap:4px;padding:7px 12px;background:#edf2e8;border:1px solid #b8c9ae;border-radius:12px;color:#2b5940;transition:opacity .45s .25s ease,transform .55s .2s cubic-bezier(.22,1,.36,1)}
 .orbit-link-label strong{font-size:22px;letter-spacing:.05em}.orbit-link-label span{font-size:10px}
 .orbit-board:not(.a2a-expanded) .orbit-link-label{opacity:0;pointer-events:none;transform:translate(-50%,-50%) scale(.72);transition-delay:0s}
@@ -1219,22 +1233,23 @@ body:not(.presenting) .stage{min-height:0}
  </div>
  <div class="orbit-board">
   <svg class="orbit-lines" aria-hidden="true"><defs><marker id="a2a-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" style="fill:#285e45;stroke:none"/></marker></defs>
-   <path data-from="node-helix" data-to="tool-summary"/><path data-from="node-helix" data-to="tool-risk"/><path data-from="node-helix" data-to="tool-conflicts"/><path data-from="node-helix" data-to="tool-teams"/>
+   <path data-from="node-helix" data-to="tool-summary"/><path data-from="node-helix" data-to="tool-risk"/><path data-from="node-helix" data-to="tool-conflicts"/><path class="orbit-custom" data-from="node-helix" data-to="tool-teams"/>
    <path data-agent="copilot" data-from="node-copilot" data-to="tool-knowledge"/><path data-agent="copilot" data-from="node-copilot" data-to="tool-security"/><path data-agent="copilot" data-from="node-copilot" data-to="tool-outlook"/>
    <path class="orbit-a2a" data-from="node-copilot" data-to="node-helix" marker-end="url(#a2a-arrow)"/>
   </svg>
-  <section id="node-helix" class="orbit-node orbit-agent" style="--x:27%;--y:50%;--w:28%"><div class="orbit-card"><small>BMC HELIX · HELIXGPT</small><strong>CAB Supervisor Agent</strong><span>Contexto y coordinación del cambio</span></div></section>
-  <div id="tool-summary" class="orbit-node" style="--x:10%;--y:13%;--w:19%;--phase:-1s"><div class="orbit-card"><small>TOOL</small><strong>Análisis de cambios</strong><span>Resumen para el CAB</span></div></div>
-  <div id="tool-risk" class="orbit-node" style="--x:34%;--y:13%;--w:20%;--phase:-2s"><div class="orbit-card"><small>TOOL</small><strong>Documentación y riesgo</strong><span>Preparación del cambio</span></div></div>
-  <div id="tool-conflicts" class="orbit-node" style="--x:10%;--y:86%;--w:19%;--phase:-3s"><div class="orbit-card"><small>TOOL</small><strong>Conflictos y seguimiento</strong><span>Ventanas y condiciones</span></div></div>
-  <div id="tool-teams" class="orbit-node" style="--x:35%;--y:86%;--w:22%;--phase:-4s"><div class="orbit-card"><small>CONEXIÓN MCP</small><strong>Microsoft Teams</strong><span>Crear la reunión CAB</span></div></div>
+  <section id="node-helix" class="orbit-node orbit-agent" style="--x:27%;--y:50%;--w:28%"><div class="orbit-card"><div class="orbit-brand-row"><span class="helix-logo"><img src="bmc-helix.png" alt="BMC Helix"></span><span class="orbit-badge orbit-badge-ootb">De caja</span></div><strong>CAB Supervisor Agent</strong><span>Agente nativo HelixGPT · Contexto y coordinación del cambio</span></div></section>
+  <div id="tool-summary" class="orbit-node" style="--x:10%;--y:13%;--w:19%;--phase:-1s"><div class="orbit-card"><small>TOOL · DE CAJA</small><strong>Análisis de cambios</strong><span>Resumen para el CAB</span></div></div>
+  <div id="tool-risk" class="orbit-node" style="--x:34%;--y:13%;--w:20%;--phase:-2s"><div class="orbit-card"><small>TOOL · DE CAJA</small><strong>Documentación y riesgo</strong><span>Preparación del cambio</span></div></div>
+  <div id="tool-conflicts" class="orbit-node" style="--x:10%;--y:86%;--w:19%;--phase:-3s"><div class="orbit-card"><small>TOOL · DE CAJA</small><strong>Conflictos y seguimiento</strong><span>Ventanas y condiciones</span></div></div>
+  <div id="tool-teams" class="orbit-node orbit-custom" style="--x:35%;--y:86%;--w:22%;--phase:-4s"><div class="orbit-card"><small>CONEXIÓN MCP · CUSTOM</small><strong>Microsoft Teams</strong><span>Integración custom · Crear la reunión CAB</span></div></div>
   <div class="orbit-link-label"><strong>A2A</strong><span>Copilot → Helix</span></div>
-  <section id="node-copilot" data-agent="copilot" class="orbit-node orbit-agent" style="--x:73%;--y:50%;--w:28%;--phase:0s"><div class="orbit-card"><div class="orbit-brand-row"><span class="copilot-logo" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><defs><linearGradient id="cp-a" x1="3" y1="5" x2="14" y2="19" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#37c2f0"/><stop offset="1" stop-color="#2a6ae8"/></linearGradient><linearGradient id="cp-b" x1="10" y1="5" x2="21" y2="19" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#43d18d"/><stop offset="1" stop-color="#198d6c"/></linearGradient><linearGradient id="cp-c" x1="6" y1="4" x2="18" y2="20" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#f57b61"/><stop offset="1" stop-color="#bf49d6"/></linearGradient></defs><path d="M13.6 4.7c-1-.7-2.4-.5-3.2.5L4.7 12.6c-1.1 1.4-.6 3.5 1.1 4.2l2.9 1.2c.9.4 2 .1 2.6-.7l3.2-4.2c.8-1 .6-2.5-.4-3.3l-.5-.1z" fill="url(#cp-a)"/><path d="M10.4 19.3c1 .7 2.4.5 3.2-.5l5.7-7.4c1.1-1.4.6-3.5-1.1-4.2L15.3 6c-.9-.4-2-.1-2.6.7l-3.2 4.2c-.8 1-.6 2.5.4 3.3l.5.1z" fill="url(#cp-b)"/><path d="M7.6 5.5c1.2-.6 2.7-.2 3.4 1l4.8 7.8c.8 1.3.2 3-1.2 3.6l-1.8.8c-1.1.5-2.4 0-3-1l-4-6.8c-.8-1.4-.2-3.2 1.2-3.8l.6-.6z" fill="url(#cp-c)" opacity=".88"/></svg></span><small>MICROSOFT COPILOT STUDIO</small></div><strong>CAB Security Reviewer</strong><span>Seguridad y contexto de la organización</span></div></section>
+  <section id="node-copilot" data-agent="copilot" class="orbit-node orbit-agent orbit-agent-custom" style="--x:73%;--y:50%;--w:28%;--phase:0s"><div class="orbit-card"><div class="orbit-brand-row"><span class="copilot-logo" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><defs><linearGradient id="cp-a" x1="3" y1="5" x2="14" y2="19" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#37c2f0"/><stop offset="1" stop-color="#2a6ae8"/></linearGradient><linearGradient id="cp-b" x1="10" y1="5" x2="21" y2="19" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#43d18d"/><stop offset="1" stop-color="#198d6c"/></linearGradient><linearGradient id="cp-c" x1="6" y1="4" x2="18" y2="20" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#f57b61"/><stop offset="1" stop-color="#bf49d6"/></linearGradient></defs><path d="M13.6 4.7c-1-.7-2.4-.5-3.2.5L4.7 12.6c-1.1 1.4-.6 3.5 1.1 4.2l2.9 1.2c.9.4 2 .1 2.6-.7l3.2-4.2c.8-1 .6-2.5-.4-3.3l-.5-.1z" fill="url(#cp-a)"/><path d="M10.4 19.3c1 .7 2.4.5 3.2-.5l5.7-7.4c1.1-1.4.6-3.5-1.1-4.2L15.3 6c-.9-.4-2-.1-2.6.7l-3.2 4.2c-.8 1-.6 2.5.4 3.3l.5.1z" fill="url(#cp-b)"/><path d="M7.6 5.5c1.2-.6 2.7-.2 3.4 1l4.8 7.8c.8 1.3.2 3-1.2 3.6l-1.8.8c-1.1.5-2.4 0-3-1l-4-6.8c-.8-1.4-.2-3.2 1.2-3.8l.6-.6z" fill="url(#cp-c)" opacity=".88"/></svg></span><small>COPILOT STUDIO</small><span class="orbit-badge orbit-badge-custom">Custom</span></div><strong>CAB Security Reviewer</strong><span>Agente custom en Copilot Studio · Seguridad y organización</span></div></section>
   <div id="tool-knowledge" data-agent="copilot" class="orbit-node" style="--x:65%;--y:13%;--w:21%;--phase:-3s"><div class="orbit-card"><small>CONOCIMIENTO</small><strong>Seguridad y políticas</strong><span>AtletaPro · controles internos</span></div></div>
   <div id="tool-security" data-agent="copilot" class="orbit-node" style="--x:90%;--y:13%;--w:19%;--phase:-4s"><div class="orbit-card"><small>TOOLS · AMPLIABLE</small><strong>Análisis de seguridad</strong><span>Vulnerabilidades y configuración</span></div></div>
   <div id="tool-outlook" data-agent="copilot" class="orbit-node" style="--x:78%;--y:86%;--w:27%;--phase:-1s"><div class="orbit-card"><small>TOOL · OUTLOOK</small><strong>Calendarios de la organización</strong><span>Disponibilidad y huecos para el CAB</span></div></div>
  </div>
+ <div class="architecture-legend" aria-label="Leyenda de componentes"><span><i></i>De caja (BMC Helix)</span><span class="legend-custom"><i></i>Custom (MCP Teams / Copilot Studio)</span></div>
  <div class="architecture-note">Arquitectura de la demo · MCP de Teams y ampliaciones de seguridad sujetos a validación.</div>
 </div>
 </template>
-<script src="arena.js?v=42"></script></html>
+<script src="arena.js?v=43"></script></html>
