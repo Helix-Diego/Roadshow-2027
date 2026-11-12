@@ -235,7 +235,7 @@ function project([x,y,z]) {
   z -= focusZ;
   const u = x*Math.cos(angle)-z*Math.sin(angle);
   const v = x*Math.sin(angle)+z*Math.cos(angle);
-  const centerY=presenting && stageSteps[stageStep]?.closing ? .64 : .51;
+  const centerY=presenting && stageSteps[stageStep]?.closing ? .68 : .51;
   return [width*.50+u*scale+panX,height*centerY+(v*tilt-y*Math.sqrt(1-tilt*tilt))*scale+panY,v*Math.sqrt(1-tilt*tilt)+y*tilt,y];
 }
 function poly(vertices, color, edge, layer = 1) {
@@ -410,6 +410,7 @@ function tourCamera(time){
 }
 
 function draw(time){
+  if(!reduced) alignArchitectureEdges();
   const t=reduced?0:time/1000;
   const bounds=canvas.getBoundingClientRect();
   width=bounds.width; height=bounds.height;
@@ -817,6 +818,46 @@ function fitSketch(){
 function layoutSketch(){
   fitSketch();
   alignValueCallouts();
+  alignArchitectureEdges();
+}
+function alignArchitectureEdges(){
+  const board=document.querySelector('#sketch-slot .orbit-board');
+  if(!board) return;
+  const bounds=board.getBoundingClientRect();
+  const svg=board.querySelector('.orbit-lines');
+  svg.setAttribute('viewBox','0 0 '+bounds.width+' '+bounds.height);
+  const mobile=window.matchMedia('(max-width:1024px)').matches;
+  const rect=id=>board.querySelector('#'+id+' .orbit-card').getBoundingClientRect();
+  for(const path of svg.querySelectorAll('path[data-from]')){
+    const from=rect(path.dataset.from),to=rect(path.dataset.to);
+    let x1,y1,x2,y2,d;
+    if(path.classList.contains('orbit-a2a')){
+      if(mobile){
+        x1=from.right-bounds.left;y1=from.top+from.height/2-bounds.top;
+        x2=to.right-bounds.left;y2=to.top+to.height/2-bounds.top;
+        const side=bounds.width-2;
+        d=`M${x1},${y1} C${side},${y1} ${side},${y2} ${x2},${y2}`;
+      }else{
+        x1=from.left-bounds.left;y1=from.top+from.height/2-bounds.top;
+        x2=to.right-bounds.left;y2=to.top+to.height/2-bounds.top;
+        const middle=(x1+x2)/2;
+        d=`M${x1},${y1} C${middle},${y1-30} ${middle},${y2+30} ${x2},${y2}`;
+      }
+    }else if(mobile){
+      const left=to.left+to.width/2<bounds.left+bounds.width/2;
+      const side=left?8:bounds.width-8;
+      x1=(left?from.left:from.right)-bounds.left;y1=from.top+from.height/2-bounds.top;
+      x2=(left?to.left:to.right)-bounds.left;y2=to.top+to.height/2-bounds.top;
+      d=`M${x1},${y1} C${side},${y1} ${side},${y2} ${x2},${y2}`;
+    }else{
+      const above=to.top<from.top;
+      x1=from.left+from.width/2-bounds.left;y1=(above?from.top:from.bottom)-bounds.top;
+      x2=to.left+to.width/2-bounds.left;y2=(above?to.bottom:to.top)-bounds.top;
+      const middle=(y1+y2)/2;
+      d=`M${x1},${y1} C${x1},${middle} ${x2},${middle} ${x2},${y2}`;
+    }
+    path.setAttribute('d',d);
+  }
 }
 function alignValueCallouts(){
   const container=document.querySelector('#sketch-slot .annotated-monitor');
@@ -867,7 +908,7 @@ function showStep(index){
   visit(0);
   cue.className=demo?'demo':'overview';
   cue.hidden=Boolean(step.closing || step.sketch==='architecture');
-  if(step.closing){targetZoom=1.23;cutaway=false;stageTransition=null;}
+  if(step.closing){zoom=targetZoom=1.12;angle=stageAngles[stageStep];focus=focusZ=offset=panX=panY=0;lift=0;tilt=.53;zoomAnchor=null;cutaway=false;stageTransition=null;}
   tourLabel.hidden=true;
   document.querySelector('#cue-phase').textContent=step.capability || 'Visita al centro';
   document.querySelector('#cue-title').textContent=step.title;
@@ -891,17 +932,6 @@ function showStep(index){
       topology.setAttribute('role','region');
       topology.setAttribute('aria-label','Topología del servicio AtletaPro');
     }
-    const expand=sketchSlot.querySelector('#expand-a2a');
-    if(expand) expand.onclick=()=>{
-      const diagram=sketchSlot.querySelector('.architecture-diagram');
-      const expanded=expand.getAttribute('aria-expanded')!=='true';
-      expand.setAttribute('aria-expanded',String(expanded));
-      diagram.classList.toggle('expanded',expanded);
-      sketchSlot.querySelector('#copilot-specialist').hidden=!expanded;
-      sketchSlot.querySelector('.architecture-a2a-label').hidden=!expanded;
-      expand.textContent=expanded?'← Contraer':'Ampliar con A2A →';
-      requestAnimationFrame(layoutSketch);
-    };
     requestAnimationFrame(layoutSketch);
   }
   previousStep.disabled=stageStep===0;

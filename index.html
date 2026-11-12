@@ -693,7 +693,7 @@ body:not(.presenting) .stage{min-height:0}
 
 /* A chapter curtain: the real campus geometry occludes the oversized title. */
 #part-two-title[hidden]{display:none}
-#part-two-title{position:absolute;z-index:0;left:-3%;top:12%;width:106%;margin:0;text-align:center;white-space:nowrap;font-family:Baskerville,"Palatino Linotype",Georgia,serif;font-size:clamp(110px,18vw,340px);font-weight:500;font-style:italic;line-height:1;padding-bottom:.18em;letter-spacing:-.055em;color:#315641;opacity:.78;mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent);pointer-events:none;animation:part-two-reveal 1.5s ease both}
+#part-two-title{position:absolute;z-index:0;left:-3%;top:10%;width:106%;margin:0;text-align:center;white-space:nowrap;font-family:Baskerville,"Palatino Linotype",Georgia,serif;font-size:clamp(110px,16.5vw,320px);font-weight:500;font-style:italic;line-height:1;padding-bottom:.18em;letter-spacing:-.055em;color:#315641;opacity:.78;mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent);pointer-events:none;animation:part-two-reveal 1.5s ease both}
 .part-two-slide .stage,.presenting.part-two-slide .stage{display:block;height:100%;min-height:0;padding:0;overflow:hidden;isolation:isolate;background:radial-gradient(ellipse at 50% 38%,#f5f8ef,#cfdccf)}
 .part-two-slide .stage .geometry-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:1;opacity:1!important}
 .part-two-slide .stage>canvas:not(.geometry-canvas){position:absolute;inset:0;width:100%;height:100%;z-index:2}
@@ -703,65 +703,53 @@ body:not(.presenting) .stage{min-height:0}
  body.part-two-slide{height:100dvh;min-height:0;display:grid;grid-template-rows:auto minmax(0,1fr)}
  .presenting.part-two-slide main{height:100%;min-height:0;overflow:hidden}
  .part-two-slide .stage .geometry-canvas{height:100%}
- #part-two-title{top:calc(64% - 40vw);font-size:clamp(56px,17vw,180px)}
+ #part-two-title{top:calc(68% - 36vw);font-size:clamp(56px,17vw,180px)}
 }
 @media(prefers-reduced-motion:reduce){#part-two-title{animation:none}}
 
-.architecture-product{display:grid;gap:24px;color:#204b38;padding:16px 8px;font-size:clamp(14px,1.2vw,20px)}
-.architecture-heading{text-align:center}
-.architecture-heading h2{font-size:clamp(36px,5vw,76px);letter-spacing:-.06em;line-height:1;margin:0 0 12px}
-.architecture-heading p{font-size:.85em;color:#5e7b68}
-.architecture-diagram{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:22px;max-width:950px;margin:auto;width:100%}
-.architecture-diagram.expanded{grid-template-columns:minmax(0,1fr) 110px minmax(0,1fr);max-width:none;gap:12px}
-.arch-platform{display:grid;gap:0;padding:20px;border:1px solid #9ebca8;border-radius:20px;background:#f3f8ee;box-shadow:0 18px 50px #163e2420}
-.arch-platform>header{padding:0 0 16px;background:none;color:#234d39;border:0;letter-spacing:0;font:700 1.05em system-ui;gap:10px;flex-wrap:wrap}
-.arch-platform>header span{font-size:.65em;color:#5b7d64;background:#e1ecd8;padding:5px 9px;border-radius:20px}
-.arch-agent{padding:20px;background:#214c3a;color:#f2f9e9;border:1px solid #638670;border-radius:14px;box-shadow:0 8px 18px #163e2418;display:grid;gap:6px;animation:architecture-float 6s ease-in-out infinite}
-.arch-agent strong{font-size:1.2em;line-height:1.15}
-.arch-agent span{font-size:.72em;color:#cde5ad}
-.arch-connector{height:24px;border-left:2px dashed #7a9a69;justify-self:center;position:relative}
-.arch-connector::after{content:'↓';position:absolute;bottom:-5px;left:-7px;font-size:16px;color:#52794c}
-.arch-tools{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
-.arch-tool{display:grid;gap:7px;padding:12px 10px;background:#e5efdc;border:1px solid #b2c8a2;border-radius:10px;font-size:.72em;line-height:1.3;animation:architecture-float 7s 1s ease-in-out infinite}
-.arch-tool b{font-size:1.08em}
-.arch-tool span{color:#5c7752}
-.arch-mcp{display:flex;justify-content:center;align-items:center;gap:10px;font-size:.7em;font-weight:750;padding:14px 0}
-.arch-mcp::before,.arch-mcp::after{content:'';height:1px;width:20%;border-top:2px dashed #779568}
-.arch-teams{display:grid;gap:5px;padding:14px;background:#daeaba;border:1px solid #94b369;border-radius:12px;text-align:center;animation:architecture-float 6s 2s ease-in-out infinite}
-.arch-teams strong{font-size:.9em}.arch-teams span{font-size:.7em;color:#537246}
-.architecture-bridge{display:grid;justify-items:center;gap:14px;min-width:0}
-#expand-a2a{border-radius:999px;background:#214c3a;color:#f3fae9;border:1px solid #6d8d67;min-height:44px;padding:12px 18px;white-space:nowrap;font-size:14px}
-.expanded #expand-a2a{font-size:12px;padding:10px 12px;background:#e7f0de;color:#315b3a}
-.architecture-a2a-label[hidden],#copilot-specialist[hidden]{display:none}
-.architecture-a2a-label{display:grid;text-align:center;gap:6px;width:100%;color:#3b6443;font-size:.65em}
-.architecture-a2a-label strong{font-size:1.7em}
-.architecture-a2a-label i{height:2px;border-top:2px dashed #5c8151;position:relative;margin:6px 0}
-.architecture-a2a-label i::before{content:'◀';position:absolute;left:-2px;top:-9px;font-style:normal}
-.architecture-a2a-label span{line-height:1.35}
-.arch-specialist .arch-agent{background:#45663c;animation-delay:-2s}
-.arch-context{display:grid;gap:8px}
-.arch-context>div{display:grid;grid-template-columns:30px minmax(0,1fr);gap:8px;align-items:center;padding:11px;background:#e5efdc;border:1px solid #b5cba8;border-radius:10px;font-size:.75em}
-.arch-context i{font-style:normal;font-size:20px;color:#668548;text-align:center}
-.arch-context section{display:grid;gap:3px}.arch-context span{font-size:.87em;color:#597550}
-.arch-flow{margin-top:14px;padding:10px;border-top:1px solid #b5cba8;font-size:.67em;line-height:1.5;color:#547448;text-align:center}
-.architecture-note{text-align:center;font-size:.64em;color:#73856a}
-@keyframes architecture-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
-.architecture-slide #sketch-slot:not([hidden]){width:96%;max-width:1500px;grid-area:1/1}
-.arch-specialist:not([hidden]){animation:window-enter .5s ease both}
+
+.architecture-product{display:grid;gap:12px;padding:12px 4px;color:#204b38}
+.architecture-heading{text-align:center;position:relative;z-index:2}
+.architecture-heading h2{font-size:clamp(36px,4.5vw,68px);line-height:1.12;letter-spacing:-.05em;margin:0 0 8px;color:#173f30;opacity:1;filter:none}
+.architecture-heading p{font-size:14px;color:#627d68}
+.orbit-board{position:relative;height:clamp(460px,58vh,640px);width:100%;isolation:isolate}
+.orbit-lines{position:absolute;inset:0;width:100%;height:100%;overflow:visible;z-index:0;pointer-events:none}
+.orbit-lines path{fill:none;stroke:#96ac7b;stroke-width:2;stroke-linecap:round;vector-effect:non-scaling-stroke}
+.orbit-lines .orbit-a2a{stroke:#285e45;stroke-width:3;stroke-dasharray:8 6}
+.orbit-node{position:absolute;left:var(--x);top:var(--y);width:var(--w,20%);transform:translate(-50%,-50%);z-index:1}
+.orbit-card{display:grid;gap:7px;padding:15px 17px;border-radius:16px;border:1px solid #a8bf85;background:#e6efcf;color:#29462e;box-shadow:0 10px 28px #2146291c;animation:orbit-float 6s var(--phase,0s) ease-in-out infinite}
+.orbit-card small{font:700 10px system-ui;letter-spacing:.1em;color:#607c44}
+.orbit-card strong{font-size:clamp(14px,1.25vw,19px);line-height:1.2;letter-spacing:-.02em}
+.orbit-card span{font-size:clamp(11px,.9vw,14px);line-height:1.3;color:#5a724b}
+.orbit-agent .orbit-card{padding:26px 22px;min-height:135px;align-content:center;background:#173f30;border:1px solid #61876c;color:#f7fbea;box-shadow:0 16px 38px #163c2c2b}
+.orbit-agent small{color:#c8e3a8}
+.orbit-agent strong{font-size:clamp(21px,2vw,30px);line-height:1.12}
+.orbit-agent span{color:#cee1c4;font-size:clamp(12px,1vw,15px)}
+.orbit-link-label{position:absolute;left:50%;top:39%;transform:translate(-50%,-50%);z-index:2;display:grid;justify-items:center;gap:4px;padding:7px 12px;background:#edf2e8;border:1px solid #b8c9ae;border-radius:12px;color:#2b5940}
+.orbit-link-label strong{font-size:22px;letter-spacing:.05em}.orbit-link-label span{font-size:10px}
+.architecture-note{text-align:center;font-size:11px;color:#74866d}
+.architecture-slide #sketch-slot:not([hidden]){width:97%;max-width:1600px;grid-area:1/1}
+.product-slide #part-two-title{display:none!important}
+.architecture-slide .stage canvas{display:none!important}
+@keyframes orbit-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
 @media(max-width:1024px){
  .architecture-slide .stage{grid-template-rows:auto!important}
- .architecture-product{font-size:16px;padding:12px 0;gap:20px}
- .architecture-diagram,.architecture-diagram.expanded{grid-template-columns:minmax(0,1fr);gap:18px}
- .arch-platform{padding:16px}.arch-agent{padding:16px}
- .architecture-bridge{gap:10px}.architecture-a2a-label{max-width:230px}
- .architecture-a2a-label i{display:none}
- .architecture-a2a-label strong::before{content:'↑ '}
- .arch-tools{grid-template-columns:minmax(0,1fr)}
- .arch-tool{grid-template-columns:1fr 1fr;align-items:center;font-size:13px;padding:10px 12px}
- .arch-context>div{font-size:14px}
+ .architecture-product{padding:10px 0;gap:16px}
+ .architecture-heading p{font-size:13px}
+ .orbit-board{height:auto;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px 12px;padding:12px 20px}
+ .orbit-node{position:relative;inset:auto;width:auto;transform:none}
+ .orbit-agent{grid-column:1/-1}
+ .orbit-card{height:100%;padding:13px 11px;border-radius:12px;gap:7px}
+ .orbit-card strong{font-size:14px}.orbit-card span{font-size:12px}
+ .orbit-agent .orbit-card{padding:23px 18px;min-height:120px}
+ .orbit-agent strong{font-size:26px}.orbit-agent span{font-size:13px}
+ .orbit-link-label{position:relative;inset:auto;transform:none;grid-column:1/-1;justify-self:center;margin:10px 0;padding:10px 18px}
+ #node-helix{order:0}#tool-summary{order:1}#tool-risk{order:2}#tool-conflicts{order:3}#tool-teams{order:4}
+ .orbit-link-label{order:5}#node-copilot{order:6}#tool-knowledge{order:7}#tool-security{order:8}#tool-outlook{order:9;grid-column:1/-1}
+ .orbit-card small{font-size:9px}
  .architecture-note{font-size:11px;padding:0 10px}
 }
-@media(prefers-reduced-motion:reduce){.arch-agent,.arch-tool,.arch-teams,.arch-specialist:not([hidden]){animation:none}}
+@media(prefers-reduced-motion:reduce){.orbit-card{animation:none}}
 </style>
 <header><span class="brand"><img src="helix-arena.png" alt="Helix Arena"></span><div class="header-actions"><button id="next-zone">Siguiente zona →</button><button id="network-toggle" aria-pressed="false">Mostrar red del campus</button><button id="present">Modo escenario</button><button id="full">Pantalla completa</button></div></header>
 <main><aside>
@@ -1203,33 +1191,25 @@ body:not(.presenting) .stage{min-height:0}
 
 <template id="sketch-architecture">
 <div class="architecture-product">
- <div class="architecture-heading"><h2>A2A y MCP</h2><p>Agentes que colaboran. Herramientas que ejecutan.</p></div>
- <div class="architecture-diagram">
-  <section class="arch-platform">
-   <header><strong>BMC Helix</strong><span>HelixGPT</span></header>
-   <div class="arch-agent"><strong>✦ CAB Supervisor Agent</strong><span>Contexto y coordinación del cambio</span></div>
-   <div class="arch-connector" aria-hidden="true"></div>
-   <div class="arch-tools"><div class="arch-tool"><b>Análisis de cambios</b><span>Resumen para el CAB</span></div><div class="arch-tool"><b>Documentación y riesgo</b><span>Preparación del cambio</span></div><div class="arch-tool"><b>Conflictos y seguimiento</b><span>Ventanas y condiciones</span></div></div>
-   <div class="arch-mcp">↓ MCP</div>
-   <div class="arch-teams"><strong>Microsoft Teams · Reunión CAB</strong><span>Agenda · asistentes · enlace de reunión</span></div>
-  </section>
-  <div class="architecture-bridge">
-   <div class="architecture-a2a-label" hidden><strong>A2A</strong><i aria-hidden="true"></i><span>Copilot consulta a Helix<br>Helix devuelve contexto</span></div>
-   <button id="expand-a2a" aria-expanded="false" aria-controls="copilot-specialist">Ampliar con A2A →</button>
-  </div>
-  <section class="arch-platform arch-specialist" id="copilot-specialist" hidden>
-   <header><strong>Microsoft Copilot Studio</strong><span>Agente especialista</span></header>
-   <div class="arch-agent"><strong>✦ CAB Security Reviewer</strong><span>Seguridad y contexto de la organización</span></div>
-   <div class="arch-connector" aria-hidden="true"></div>
-   <div class="arch-context">
-    <div><i aria-hidden="true">▤</i><section><b>Conocimiento de seguridad</b><span>AtletaPro · políticas · controles internos</span></section></div>
-    <div><i aria-hidden="true">◇</i><section><b>Tools de seguridad</b><span>Vulnerabilidades y configuración · ampliación prevista</span></section></div>
-    <div><i aria-hidden="true">▦</i><section><b>Outlook · Calendarios</b><span>Disponibilidad y huecos de los participantes</span></section></div>
-   </div>
-   <div class="arch-flow">1 · Analizar seguridad → 2 · Consultar calendario → 3 · Coordinar con Helix por A2A</div>
-  </section>
+ <div class="architecture-heading"><h2>A2A y MCP</h2><p>Dos agentes, sus herramientas y una conexión compartida.</p></div>
+ <div class="orbit-board">
+  <svg class="orbit-lines" aria-hidden="true"><defs><marker id="a2a-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" style="fill:#285e45;stroke:none"/></marker></defs>
+   <path data-from="node-helix" data-to="tool-summary"/><path data-from="node-helix" data-to="tool-risk"/><path data-from="node-helix" data-to="tool-conflicts"/><path data-from="node-helix" data-to="tool-teams"/>
+   <path data-from="node-copilot" data-to="tool-knowledge"/><path data-from="node-copilot" data-to="tool-security"/><path data-from="node-copilot" data-to="tool-outlook"/>
+   <path class="orbit-a2a" data-from="node-copilot" data-to="node-helix" marker-end="url(#a2a-arrow)"/>
+  </svg>
+  <section id="node-helix" class="orbit-node orbit-agent" style="--x:27%;--y:50%;--w:28%"><div class="orbit-card"><small>BMC HELIX · HELIXGPT</small><strong>CAB Supervisor Agent</strong><span>Contexto y coordinación del cambio</span></div></section>
+  <div id="tool-summary" class="orbit-node" style="--x:10%;--y:13%;--w:19%;--phase:-1s"><div class="orbit-card"><small>TOOL</small><strong>Análisis de cambios</strong><span>Resumen para el CAB</span></div></div>
+  <div id="tool-risk" class="orbit-node" style="--x:34%;--y:13%;--w:20%;--phase:-2s"><div class="orbit-card"><small>TOOL</small><strong>Documentación y riesgo</strong><span>Preparación del cambio</span></div></div>
+  <div id="tool-conflicts" class="orbit-node" style="--x:10%;--y:86%;--w:19%;--phase:-3s"><div class="orbit-card"><small>TOOL</small><strong>Conflictos y seguimiento</strong><span>Ventanas y condiciones</span></div></div>
+  <div id="tool-teams" class="orbit-node" style="--x:35%;--y:86%;--w:22%;--phase:-4s"><div class="orbit-card"><small>CONEXIÓN MCP</small><strong>Microsoft Teams</strong><span>Crear la reunión CAB</span></div></div>
+  <div class="orbit-link-label"><strong>A2A</strong><span>Copilot → Helix</span></div>
+  <section id="node-copilot" class="orbit-node orbit-agent" style="--x:73%;--y:50%;--w:28%;--phase:-2s"><div class="orbit-card"><small>MICROSOFT COPILOT STUDIO</small><strong>CAB Security Reviewer</strong><span>Seguridad y contexto de la organización</span></div></section>
+  <div id="tool-knowledge" class="orbit-node" style="--x:65%;--y:13%;--w:21%;--phase:-3s"><div class="orbit-card"><small>CONOCIMIENTO</small><strong>Seguridad y políticas</strong><span>AtletaPro · controles internos</span></div></div>
+  <div id="tool-security" class="orbit-node" style="--x:90%;--y:13%;--w:19%;--phase:-4s"><div class="orbit-card"><small>TOOLS · AMPLIABLE</small><strong>Análisis de seguridad</strong><span>Vulnerabilidades y configuración</span></div></div>
+  <div id="tool-outlook" class="orbit-node" style="--x:78%;--y:86%;--w:27%;--phase:-1s"><div class="orbit-card"><small>TOOL · OUTLOOK</small><strong>Calendarios de la organización</strong><span>Disponibilidad y huecos para el CAB</span></div></div>
  </div>
- <div class="architecture-note">Arquitectura de la demo · Convocatoria Teams de extremo a extremo pendiente de validar.</div>
+ <div class="architecture-note">Arquitectura de la demo · MCP de Teams y ampliaciones de seguridad sujetos a validación.</div>
 </div>
 </template>
-<script src="arena.js?v=41"></script></html>
+<script src="arena.js?v=42"></script></html>
