@@ -871,9 +871,9 @@ body:not(.presenting) .stage{min-height:0}
 .cab-board.is-expanded #cab-supervisor{left:17%;width:66%}
 .cab-board.is-expanded .cab-subagent strong{font-size:14px}.cab-board.is-expanded .cab-subagent .cab-node-face{padding:12px;min-height:90px}
 #cab-teams{left:25%;top:85px;width:50%}.cab-extension .cab-node-face{background:#fcf1df;border:1px solid #cda269}.cab-extension small{color:#956025}.cab-extension span{color:#765c36}
-.cab-calendar-view{position:absolute;left:3%;right:3%;bottom:16px;display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:center;padding:13px 16px;border-radius:12px;border:1px solid #cda269;background:#fffaf0;box-shadow:0 5px 16px #7351260c;z-index:2}
-.cab-view-copy{display:grid;gap:4px}.cab-view-copy small{font:700 9px system-ui;letter-spacing:.08em;color:#956025}.cab-view-copy strong{font-size:17px}.cab-view-copy span{font-size:11px;line-height:1.35;color:#765c36}
-.cab-calendar-sketch{border:1px solid #d6c3a4;border-radius:7px;overflow:hidden;background:#fffef8}.cab-calendar-sketch>div{display:grid;grid-template-columns:repeat(5,1fr)}.cab-calendar-sketch b{font:600 9px system-ui;text-align:center;padding:6px;background:#eee3cb}.cab-calendar-sketch i{height:33px;border-right:1px solid #ede3d3;display:grid;place-content:center;font:600 8px system-ui;font-style:normal}.cab-calendar-sketch .calendar-event{background:#e1ebc3;color:#385335;margin:7px 2px;border-radius:3px;height:19px}
+.cab-calendar-view{position:absolute;left:-1px;right:-1px;bottom:-1px;display:flex;align-items:center;min-height:86px;padding:20px 25px;border-radius:0 0 24px 24px;border:1px solid #a6b88f;border-top:0;background:linear-gradient(115deg,#dce9ce 0%,#e0e8c9 32%,#ebdfbd 66%,#f1cdab 100%);z-index:2}
+.cab-calendar-view:before{content:"";position:absolute;top:0;left:22px;right:22px;height:1px;background:linear-gradient(90deg,#7f9e6880,#bd854880)}
+.cab-view-copy{display:grid;gap:7px}.cab-view-copy small{font:700 9px system-ui;letter-spacing:.08em;color:#63734c}.cab-view-copy strong{font-size:20px;letter-spacing:-.02em;color:#264933}
 #cab-security{top:190px;left:15%;width:70%}#cab-knowledge{top:85px;left:24%;width:54%}#cab-analysis{top:370px;left:4%;width:43%}#cab-outlook{top:370px;left:53%;width:43%}
 .cab-copilot .cab-node-face{padding:15px}.cab-copilot .cab-main-agent .cab-node-face{background:#173f30;border:1.5px solid #cda269;padding:20px}.cab-copilot .cab-main-agent span{color:#d1e2c7}.cab-copilot .cab-node strong{font-size:17px}.cab-copilot .cab-main-agent strong{font-size:24px}
 .cab-lines{position:absolute;inset:0;width:100%;height:100%;z-index:1;overflow:visible;pointer-events:none}.cab-lines path{fill:none;stroke:#719365;stroke-width:2;vector-effect:non-scaling-stroke;stroke-linecap:round}
@@ -881,21 +881,24 @@ body:not(.presenting) .stage{min-height:0}
 .cab-lines .cab-a2a-line{stroke:#245b42;stroke-width:3;stroke-dasharray:9 6;animation:cab-flow 15s linear infinite}
 .cab-a2a-label{position:absolute;z-index:3;left:51.5%;top:232px;width:6%;display:grid;justify-items:center;gap:4px;padding:8px 0;border-radius:10px;background:#f0f4e8;border:1px solid #aac09f;text-align:center}.cab-a2a-label strong{font-size:20px}.cab-a2a-label span{font-size:9px;line-height:1.2}
 .message-board{height:535px}.message-workspace{background:linear-gradient(150deg,#f9fbf5,#e5eee1)}
-#message-agent{top:200px;left:35%;width:32%}#message-incident{top:120px;left:4%;width:25%}#message-user{top:345px;left:4%;width:25%}#message-send{top:200px;left:73%;width:23%}#message-delivery{top:375px;left:70%;width:26%}
+#message-agent{top:180px;left:35%;width:32%}#message-incident{top:115px;left:4%;width:25%}#message-user{top:300px;left:4%;width:25%}#message-send{top:180px;left:73%;width:23%}
+.message-foundation{position:absolute;bottom:18px;left:3%;right:3%;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:18px 22px;border-radius:16px;background:linear-gradient(115deg,#dce9ce,#e5e5c5 60%,#f1d6b8);border:1px solid #afbf96;z-index:2}
+.message-foundation>div:first-child{display:grid;gap:5px}.message-foundation small{font:700 9px system-ui;letter-spacing:.1em;color:#64734c}.message-foundation strong{font-size:20px;color:#264933;letter-spacing:-.025em}
+.message-components{display:flex;gap:14px}.message-components span{padding:12px 26px;background:#f8faef;border:1px solid #b4c39d;border-radius:10px;font-size:15px;font-weight:650;color:#3d5b3c;box-shadow:0 6px 15px #3053340b;animation:orbit-float 6s ease-in-out infinite}.message-components span:nth-child(2){animation-delay:-2s}.message-components span:nth-child(3){animation-delay:-4s}
 .message-tool .cab-node-face{background:#fcf1df;border-color:#cda269}.message-tool small{color:#956025}.message-tool span{color:#765c36}.message-channel{display:flex;align-items:center;gap:10px;margin-top:6px;font-size:12px;font-weight:700;color:#214b38}.message-channel span{color:#a8793b}
 @keyframes cab-flow{to{stroke-dashoffset:-150}}
 @media(max-width:1024px){
  .cab-board{height:auto;display:grid;gap:24px;padding:0 6px}.cab-workspace,.cab-copilot,.message-workspace,.cab-board.is-expanded .cab-workspace{position:relative;inset:auto;width:100%;height:auto;padding:18px;display:flex;flex-direction:column;gap:25px}
  .cab-section-heading{position:relative;inset:auto;flex-wrap:wrap}.cab-section-heading strong{font-size:20px}.cab-app-title{gap:8px}.cab-app-logo img{height:16px}
- .cab-board :is(#cab-supervisor,#cab-summary,#cab-collision,#cab-followup,#cab-teams,#cab-security,#cab-knowledge,#cab-analysis,#cab-outlook,#message-agent,#message-incident,#message-user,#message-send,#message-delivery),.cab-board.is-expanded :is(#cab-supervisor,#cab-summary,#cab-collision,#cab-followup,#cab-teams,#cab-security,#cab-knowledge,#cab-analysis,#cab-outlook){position:relative;inset:auto;width:100%;order:2}.cab-board #cab-teams{order:1}.cab-board .cab-subagent{order:3}
+ .cab-board :is(#cab-supervisor,#cab-summary,#cab-collision,#cab-followup,#cab-teams,#cab-security,#cab-knowledge,#cab-analysis,#cab-outlook,#message-agent,#message-incident,#message-user,#message-send),.cab-board.is-expanded :is(#cab-supervisor,#cab-summary,#cab-collision,#cab-followup,#cab-teams,#cab-security,#cab-knowledge,#cab-analysis,#cab-outlook){position:relative;inset:auto;width:100%;order:2}.cab-board #cab-teams{order:1}.cab-board .cab-subagent{order:3}
  .cab-node-face{padding:16px!important;min-height:0!important}.cab-main-agent strong{font-size:24px}.cab-board.is-expanded .cab-subagent strong{font-size:17px}
  .cab-extension{display:none}.cab-board.is-expanded .cab-extension{display:grid;animation:a2a-mobile-enter .6s ease both}
- .cab-calendar-view{position:relative;inset:auto;grid-template-columns:1fr;order:4;gap:12px}
+ .cab-calendar-view{position:relative;inset:auto;order:4;margin:0 -18px -18px;padding:22px 18px;min-height:90px}
  .cab-a2a-label{position:relative;inset:auto;justify-self:center;width:160px;padding:10px}.cab-a2a-label span{font-size:12px}
  .cab-copilot .cab-node strong{font-size:17px}.cab-copilot .cab-main-agent strong{font-size:24px}
- .message-board #message-agent{order:1}.message-board #message-delivery{order:3}
+ .message-board #message-agent{order:1}.message-foundation{position:relative;inset:auto;order:3;display:grid;padding:18px;gap:18px}.message-components{display:grid;grid-template-columns:1fr;gap:10px}.message-components span{padding:12px 16px}
 }
-@media(prefers-reduced-motion:reduce){.cab-node-face,.cab-lines .cab-a2a-line{animation:none}.cab-extension,.cab-workspace,.cab-node{transition:none}}
+@media(prefers-reduced-motion:reduce){.cab-node-face,.cab-lines .cab-a2a-line,.message-components span{animation:none}.cab-extension,.cab-workspace,.cab-node{transition:none}}
 
 </style>
 <header><span class="brand"><img src="helix-arena.png" alt="Helix Arena"></span><div class="header-actions"><button id="next-zone">Siguiente zona →</button><button id="network-toggle" aria-pressed="false">Mostrar red del campus</button><button id="present">Modo escenario</button><button id="full">Pantalla completa</button></div></header>
@@ -912,7 +915,7 @@ body:not(.presenting) .stage{min-height:0}
 <p id="cue-action"></p>
 </div></div>
 <div id="sketch-slot" hidden></div>
-<h2 id="part-two-title" hidden>Segunda parte</h2>
+<h2 id="part-two-title" hidden>Acto II</h2>
 <div id="stage-controls" hidden>
   <button id="prev-step">← Anterior</button><span id="step-count"></span>
   <button id="next-step">Siguiente →</button>
@@ -1337,15 +1340,14 @@ body:not(.presenting) .stage{min-height:0}
    <path class="cab-custom-line" data-from="cab-security" data-to="cab-knowledge"/><path class="cab-custom-line" data-from="cab-security" data-to="cab-analysis"/><path class="cab-custom-line" data-from="cab-security" data-to="cab-outlook"/>
   </svg>
   <section class="cab-workspace">
-   <div class="cab-section-heading"><div><div class="cab-app-title"><span class="cab-app-logo"><img src="bmc-helix.png?v=2" alt="BMC Helix"></span><strong>CAB Workspace</strong></div><span>Aplicación BMC Helix · De caja</span></div><span class="arch-badge">De caja</span></div>
+   <div class="cab-section-heading"><div><div class="cab-app-title"><strong>CAB Workspace</strong></div><span>Aplicación BMC Helix · De caja</span></div><span class="arch-badge">De caja</span></div>
    <article id="cab-supervisor" class="cab-node cab-main-agent"><div class="cab-node-face"><small>HELIXGPT · AGENTE SUPERVISOR</small><strong>CAB Supervisor Agent</strong><span>Orquesta el análisis y la preparación del CAB</span></div></article>
    <article id="cab-summary" class="cab-node cab-subagent"><div class="cab-node-face"><small>SUBAGENTE · DE CAJA</small><strong>CAB Approval Summary Agent</strong><span>Resumen para aprobar el cambio</span></div></article>
    <article id="cab-collision" class="cab-node cab-subagent"><div class="cab-node-face"><small>SUBAGENTE · DE CAJA</small><strong>CAB Change Collision</strong><span>Detecta colisiones entre cambios</span></div></article>
    <article id="cab-followup" class="cab-node cab-subagent"><div class="cab-node-face"><small>SUBAGENTE · DE CAJA</small><strong>CAB Follow Up Agent</strong><span>Seguimiento después del CAB</span></div></article>
    <article id="cab-teams" class="cab-node cab-extension"><div class="cab-node-face"><small>TOOL MCP · CUSTOM</small><strong>Microsoft Teams</strong><span>Crear reuniones CAB</span></div></article>
    <section class="cab-calendar-view cab-extension" aria-label="Vista adicional de CAB Workspace">
-    <div class="cab-view-copy"><small>VISTA ADICIONAL · HAE</small><strong>Calendario de cambios</strong><span>Planificar cambios y concertar el CAB desde CAB Workspace</span></div>
-    <div class="cab-calendar-sketch" aria-hidden="true"><div><b>L</b><b>M</b><b>X</b><b>J</b><b>V</b></div><div><i></i><i class="calendar-event">Cambio</i><i></i><i class="calendar-event">CAB</i><i></i></div></div>
+    <div class="cab-view-copy"><small>AMPLIACIÓN DE CAB WORKSPACE · HAE</small><strong>Calendario de cambios</strong></div>
    </section>
   </section>
   <div class="cab-a2a-label cab-extension"><strong>A2A</strong><span>Consulta del cambio</span></div>
@@ -1363,16 +1365,19 @@ body:not(.presenting) .stage{min-height:0}
 <div class="architecture-product messaging-architecture">
  <div class="architecture-heading"><h2>Mensajería conversacional</h2><p>Una aplicación en Helix. El agente reúne el contexto y envía la comunicación por el canal elegido.</p></div>
  <div class="cab-board message-board">
-  <svg class="cab-lines" aria-hidden="true"><path data-from="message-agent" data-to="message-incident"/><path data-from="message-agent" data-to="message-user"/><path data-from="message-agent" data-to="message-send"/><path data-from="message-send" data-to="message-delivery"/></svg>
+  <svg class="cab-lines" aria-hidden="true"><path data-from="message-agent" data-to="message-incident"/><path data-from="message-agent" data-to="message-user"/><path data-from="message-agent" data-to="message-send"/></svg>
   <section class="message-workspace">
-   <div class="cab-section-heading"><div><div class="cab-app-title"><span class="cab-app-logo"><img src="bmc-helix.png?v=2" alt="BMC Helix"></span><strong>Interfaz de mensajería</strong></div><span>Innovation Studio · Aplicación construida con Cursor y el SDK de Helix</span></div><span class="arch-badge arch-badge-custom">Cursor · SDK</span></div>
+   <div class="cab-section-heading"><div><div class="cab-app-title"><strong>Interfaz de mensajería</strong></div><span>Aplicación construida con HAE · Helix Agentic Coding</span></div><span class="arch-badge arch-badge-custom">HAE</span></div>
    <article id="message-agent" class="cab-node cab-main-agent"><div class="cab-node-face"><small>HELIXGPT</small><strong>Agente de comunicaciones</strong><span>Prepara y lanza el mensaje con contexto</span></div></article>
    <article id="message-incident" class="cab-node"><div class="cab-node-face"><small>TOOL · CONTEXTO</small><strong>Consultar la incidencia</strong><span>Número, servicio y detalle del aviso</span></div></article>
    <article id="message-user" class="cab-node"><div class="cab-node-face"><small>TOOL · DESTINATARIOS</small><strong>Usuarios y preferencias</strong><span>Personas, grupos, idioma, canal y consentimiento</span></div></article>
    <article id="message-send" class="cab-node message-tool"><div class="cab-node-face"><small>TOOL · TWILIO</small><strong>Enviar comunicación</strong><span>WhatsApp o correo, según la preferencia</span></div></article>
-   <article id="message-delivery" class="cab-node message-tool"><div class="cab-node-face"><small>RESULTADO</small><strong>Entrega y seguimiento</strong><span>Helix conserva el estado de cada destinatario</span><div class="message-channel">Twilio <span>→</span> WhatsApp</div></div></article>
+   <section class="message-foundation" aria-label="Componentes de Innovation Studio diseñados con HAE">
+    <div><small>DISEÑADO CON HAE</small><strong>Innovation Studio</strong></div>
+    <div class="message-components"><span>Procesos</span><span>Records</span><span>Vistas</span></div>
+   </section>
   </section>
  </div>
 </div>
 </template>
-<script src="arena.js?v=49"></script></html>
+<script src="arena.js?v=50"></script></html>

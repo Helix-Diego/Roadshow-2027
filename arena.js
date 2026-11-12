@@ -752,7 +752,7 @@ const demoSteps = [
   {title:'Un onboarding, varios equipos', capability:'BMC Helix Business Workflows · Digital Workplace', agent:'Employee Navigator', value:'RR. HH., TI y operaciones coordinan la incorporación del atleta en un único flujo.', action:'Solicitar el onboarding, repartir tareas y seguir cada incorporación.', sketch:'onboarding', zone:5},
   {title:'Mejorar el catálogo', capability:'Service Optimizer', agent:'', value:'Las conversaciones con Employee Navigator revelan oportunidades para crear o mejorar servicios.', action:'Revisar las conversaciones y priorizar por impacto. Llevar la oportunidad a Catalog Curator.', sketch:'optimizer', zone:6},
   {title:'Medir el valor de los agentes', capability:'Agent Outcomes', agent:'', value:'Cuantifica la capacidad digital creada y el valor que aportan los agentes al negocio.', action:'Comparar resultados por agente y periodo.', sketch:'outcomes', zone:6},
-  {title:'Segunda parte', value:'', zone:0, closing:true},
+  {title:'Acto II', value:'', zone:0, closing:true},
   {title:'A2A y MCP', value:'', sketch:'architecture', zone:0},
   {title:'Mensajería conversacional', value:'', sketch:'messaging', zone:0},
 ];
