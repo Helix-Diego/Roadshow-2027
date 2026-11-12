@@ -902,6 +902,32 @@ body:not(.presenting) .stage{min-height:0}
 }
 @media(prefers-reduced-motion:reduce){.cab-node-face,.cab-lines .cab-a2a-line,.message-components span{animation:none}.cab-extension,.cab-workspace,.cab-node{transition:none}}
 
+
+/* HAE owns the central view; integrations and agent applications surround it. */
+.hae-board{height:590px}
+.hae-board .cab-node-face{padding:18px;background:#e7efcf}
+.hae-board .hae-custom .cab-node-face{background:#fcf1df;border-color:#cda269}
+#message-view{left:30%;top:55px;width:40%;z-index:3}
+#message-itsm{left:1%;top:100px;width:23%}#message-email{left:1%;top:295px;width:23%}
+#message-twilio{left:76%;top:55px;width:23%}#message-helixgpt{left:76%;top:245px;width:23%}
+#message-processes{left:24%;top:460px;width:52%}
+.hae-board .hae-view .cab-node-face{padding:0!important;overflow:hidden;background:#173f30;color:#fff;border:1px solid #7d9f74;box-shadow:0 18px 45px #173f3030}
+.hae-window-bar{display:flex;align-items:center;gap:5px;padding:12px 18px;background:linear-gradient(105deg,#a9c48b,#c6d2a1 60%,#e9b780);color:#21452e}
+.hae-window-bar>span{flex:1;font:750 10px system-ui;letter-spacing:.08em;color:#21452e}.hae-window-bar i{width:5px;height:5px;border-radius:50%;background:#5d794b}
+.hae-window-body{display:grid;gap:8px;padding:22px}.hae-window-body>small{color:#c4dca5}.hae-window-body>strong{font-size:29px}.hae-window-body>span{color:#c6d9c3}
+.hae-ui-field{display:grid;gap:5px;min-width:0}.hae-ui-field b{font-size:10px;font-weight:500;color:#b5c9b2}.hae-ui-field>span{display:flex;justify-content:space-between;padding:9px 11px;border:1px solid #65856b;background:#28513d;border-radius:6px;color:#f3f7ed;font-size:11px}.hae-ui-field i{font-style:normal}
+.hae-ui-row{display:grid;grid-template-columns:1.2fr 1fr;gap:9px}.hae-ui-compose{display:grid;gap:7px;padding:12px;border:1px solid #65856b;border-radius:6px;background:#28513d}.hae-ui-compose span{font-size:11px;color:#d4e1ce}.hae-ui-compose i{height:4px;width:84%;border-radius:4px;background:#75947a}.hae-ui-compose i:last-child{width:61%}
+.hae-ui-action{justify-self:end;padding:9px 13px;border-radius:6px;background:#d6e9b2;color:#27462d;font-size:11px;font-weight:700}
+.hae-tools{display:grid;gap:6px;margin-top:8px}.hae-tools b{font-size:9px;letter-spacing:.1em;color:#9c6c32}.hae-tools span{font-size:11px;color:#6c542d;background:#fff9ec;border:1px solid #dcc5a2;border-radius:6px;padding:6px 8px}
+.hae-processes .cab-node-face{background:linear-gradient(110deg,#dce9ce,#e6e2c1 65%,#f1d5b4);border-color:#afbf96;gap:14px}
+.hae-process-heading{display:flex;justify-content:space-between;gap:18px;align-items:center}.hae-process-heading>div{display:grid;gap:6px}.hae-process-heading>span{max-width:180px;font-size:11px;color:#5e704b}.hae-custom-agents{display:flex;gap:12px}.hae-custom-agents span{flex:1;padding:10px 12px;background:#f7faed;border:1px solid #b2c39a;border-radius:9px;font-size:13px;font-weight:650;color:#3d5b3c}
+#message-email .cab-node-face{animation-delay:-2s}#message-twilio .cab-node-face{animation-delay:-4s}#message-helixgpt .cab-node-face{animation-delay:-1s}#message-processes .cab-node-face{animation-delay:-3s}
+@media(max-width:1024px){
+ .hae-board{height:auto;display:flex;flex-direction:column;gap:28px;padding:0 12px}
+ .hae-board :is(#message-view,#message-itsm,#message-email,#message-twilio,#message-helixgpt,#message-processes){position:relative;inset:auto;width:100%}
+ .hae-board #message-view{order:-1}.hae-window-body{padding:18px}.hae-window-body>strong{font-size:25px}.hae-ui-row{grid-template-columns:1fr}.hae-process-heading{display:grid;gap:9px}.hae-process-heading>span{max-width:none}.hae-custom-agents{flex-direction:column;gap:8px}
+}
+
 </style>
 <header><span class="brand"><img src="helix-arena.png" alt="Helix Arena"></span><div class="header-actions"><button id="next-zone">Siguiente zona →</button><button id="network-toggle" aria-pressed="false">Mostrar red del campus</button><button id="present">Modo escenario</button><button id="full">Pantalla completa</button></div></header>
 <main><div class="stage">
@@ -1365,21 +1391,24 @@ body:not(.presenting) .stage{min-height:0}
 </template>
 <template id="sketch-messaging">
 <div class="architecture-product messaging-architecture">
- <div class="architecture-heading"><h2>Mensajería conversacional</h2><p>Una aplicación en Helix. El agente reúne el contexto y envía la comunicación por el canal elegido.</p></div>
- <div class="cab-board message-board">
-  <svg class="cab-lines" aria-hidden="true"><path data-from="message-agent" data-to="message-incident"/><path data-from="message-agent" data-to="message-user"/><path data-from="message-agent" data-to="message-send"/></svg>
-  <section class="message-workspace">
-   <div class="cab-section-heading"><div><div class="cab-app-title"><strong>Interfaz de mensajería</strong></div><span>Aplicación construida con HAE · Helix Agentic Coding</span></div><span class="arch-badge arch-badge-custom">HAE</span></div>
-   <article id="message-agent" class="cab-node cab-main-agent"><div class="cab-node-face"><small>HELIXGPT</small><strong>Agente de comunicaciones</strong><span>Prepara y lanza el mensaje con contexto</span></div></article>
-   <article id="message-incident" class="cab-node"><div class="cab-node-face"><small>TOOL · CONTEXTO</small><strong>Consultar la incidencia</strong><span>Número, servicio y detalle del aviso</span></div></article>
-   <article id="message-user" class="cab-node"><div class="cab-node-face"><small>TOOL · DESTINATARIOS</small><strong>Usuarios y preferencias</strong><span>Personas, grupos, idioma, canal y consentimiento</span></div></article>
-   <article id="message-send" class="cab-node message-tool"><div class="cab-node-face"><small>TOOL · TWILIO</small><strong>Enviar comunicación</strong><span>WhatsApp o correo, según la preferencia</span></div></article>
-   <section class="message-foundation" aria-label="Componentes de Innovation Studio diseñados con HAE">
-    <div><small>DISEÑADO CON HAE</small><strong>Innovation Studio</strong></div>
-    <div class="message-components"><span>Procesos</span><span>Records</span><span>Vistas</span></div>
-   </section>
-  </section>
+ <div class="architecture-heading"><h2>Una aplicación creada con HAE</h2><p>La vista de mensajería conecta ITSM, comunicaciones y agentes personalizados en una sola experiencia.</p></div>
+ <div class="cab-board message-board hae-board">
+  <svg class="cab-lines" aria-hidden="true"><path data-from="message-view" data-to="message-itsm"/><path data-from="message-view" data-to="message-email"/><path data-from="message-view" data-to="message-twilio"/><path data-from="message-view" data-to="message-helixgpt"/><path data-from="message-view" data-to="message-processes"/></svg>
+  <article id="message-view" class="cab-node hae-view"><div class="cab-node-face">
+   <div class="hae-window-bar"><span>VISTA CONSTRUIDA CON HAE</span><i></i><i></i><i></i></div>
+   <div class="hae-window-body"><small>HELIX AGENTIC CODING</small><strong>Interfaz de mensajería</strong>
+    <div class="hae-ui-field"><b>Incidencia</b><span>AtletaPro · BB-R1-SPBR <i>⌄</i></span></div>
+    <div class="hae-ui-row"><div class="hae-ui-field"><b>Destinatarios</b><span>Equipo de operaciones</span></div><div class="hae-ui-field"><b>Canal</b><span>WhatsApp / Email</span></div></div>
+    <div class="hae-ui-compose"><span>Resumen y contexto del aviso</span><i></i><i></i></div>
+    <div class="hae-ui-action">Preparar comunicación →</div>
+   </div>
+  </div></article>
+  <article id="message-itsm" class="cab-node hae-integration"><div class="cab-node-face"><small>DATOS · ITSM</small><strong>Formularios de ITSM</strong><span>Obtiene las incidencias y su contexto</span></div></article>
+  <article id="message-email" class="cab-node hae-integration"><div class="cab-node-face"><small>COMUNICACIONES · HELIX</small><strong>Gestor de emails</strong><span>Envía correo desde la aplicación</span></div></article>
+  <article id="message-twilio" class="cab-node hae-integration hae-custom"><div class="cab-node-face"><small>PROCESOS · LLAMADAS API</small><strong>Twilio</strong><span>Procesos de Innovation Studio llaman a la API para enviar mensajes</span></div></article>
+  <article id="message-helixgpt" class="cab-node hae-integration hae-custom"><div class="cab-node-face"><small>APLICACIÓN · HELIXGPT</small><strong>Asistente de comunicaciones</strong><span>Ayuda a preparar y enviar el aviso</span><div class="hae-tools"><b>TOOLS</b><span>Consultar incidencias</span><span>Consultar usuarios y preferencias</span><span>Enviar comunicación</span></div></div></article>
+  <article id="message-processes" class="cab-node hae-processes"><div class="cab-node-face"><div class="hae-process-heading"><div><small>INNOVATION STUDIO · DISEÑADO CON HAE</small><strong>Procesos, records y vistas</strong></div><span>Los procesos invocan agentes customizados</span></div><div class="hae-custom-agents"><span>✦ Resumir cambios</span><span>✦ Resumir incidencias</span></div></div></article>
  </div>
 </div>
 </template>
-<script src="arena.js?v=51"></script></html>
+<script src="arena.js?v=52"></script></html>
