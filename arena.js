@@ -1010,6 +1010,28 @@ function showStep(index){
         requestAnimationFrame(layoutSketch);
       };
     }
+    const expandWorkflow=sketchSlot.querySelector('#expand-workflow');
+    if(expandWorkflow){
+      const panels=sketchSlot.querySelector('.workflow-panels');
+      const before=panels.querySelector('.workflow-before');
+      expandWorkflow.onclick=()=>{
+        const origin=before.getBoundingClientRect();
+        const expanded=panels.classList.toggle('is-expanded');
+        panels.querySelector('.workflow-after').hidden=!expanded;
+        panels.querySelector('.workflow-shift').hidden=!expanded;
+        expandWorkflow.setAttribute('aria-expanded',String(expanded));
+        expandWorkflow.textContent=expanded?'← Volver al workflow visual':'✦ Mostrar enfoque con HAE →';
+        layoutSketch();
+        const destination=before.getBoundingClientRect();
+        const presentationScale=parseFloat(sketchSlot.firstElementChild.style.zoom)||1;
+        if(!reduced && destination.width && destination.height){
+          before.animate([
+            {transformOrigin:'0 0',transform:`translate(${(origin.left-destination.left)/presentationScale}px,${(origin.top-destination.top)/presentationScale}px) scale(${origin.width/destination.width},${origin.height/destination.height})`},
+            {transformOrigin:'0 0',transform:'none'}
+          ],{duration:750,easing:'cubic-bezier(.22,1,.36,1)'});
+        }
+      };
+    }
     requestAnimationFrame(layoutSketch);
   }
   previousStep.disabled=stageStep===0;

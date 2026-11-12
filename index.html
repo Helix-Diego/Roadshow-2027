@@ -1010,6 +1010,21 @@ body:not(.presenting) .stage{min-height:0}
 @media(min-width:1025px){.situation-summary svg{max-height:120px}.situation-summary svg text{font-size:16px}}
 @media(max-width:1024px){.aiops-product .ci-topology svg{width:1100px;height:175px}}
 @media(min-width:1025px){#stage-controls:not([hidden]){bottom:8px}#stage-controls button{font-size:16px;padding:10px 15px}#step-count{font-size:16px}.header-actions button{font-size:14px}}
+
+/* Reveal the HAE comparison only when the presenter is ready. */
+.workflow-panels{width:100%;margin-inline:auto}
+.workflow-panels:not(.is-expanded){grid-template-columns:minmax(0,1fr);max-width:1120px}
+.workflow-panels :is(.workflow-after,.workflow-shift)[hidden]{display:none}
+.workflow-panels.is-expanded .workflow-after{animation:workflow-expand-in .75s cubic-bezier(.22,1,.36,1) both}
+.workflow-panels.is-expanded .workflow-shift{animation:workflow-arrow-in .6s .2s ease both}
+.single-bpmn .single-activity{flex:0 1 420px;width:65%;min-height:100px;padding:26px 14px}
+.single-bpmn-start,.single-bpmn-end{flex-basis:46px;width:46px;height:46px}.single-bpmn-start{border-width:3px}.single-bpmn-end{border-width:5px}.single-bpmn-edge{flex-basis:28px}
+@keyframes workflow-expand-in{from{opacity:0;transform:translateX(35px) scale(.95)}to{opacity:1;transform:none}}
+@keyframes workflow-arrow-in{from{opacity:0}to{opacity:1}}
+@media(min-width:1025px){.workflow-panels:not(.is-expanded) .bpmn-sketch{min-height:0;height:clamp(300px,43vh,470px)}.workflow-panels:not(.is-expanded) .workflow-panel{grid-template-rows:auto auto auto}.single-bpmn-start,.single-bpmn-end{flex-basis:48px;width:48px;height:48px}.single-bpmn-edge{flex-basis:30px}}
+@media(max-width:1024px){.workflow-panels:not(.is-expanded){max-width:none}.single-bpmn .single-activity{flex:1;width:auto;padding:23px 7px;min-height:100px}.single-bpmn-start,.single-bpmn-end{flex-basis:30px;width:30px;height:30px}.single-bpmn-edge{flex-basis:10px}.single-bpmn-start{border-width:2px}.single-bpmn-end{border-width:4px}}
+@media(prefers-reduced-motion:reduce){.workflow-panels.is-expanded :is(.workflow-after,.workflow-shift){animation:none}}
+
 </style>
 <header><span class="brand"><img src="helix-arena.png" alt="Helix Arena"></span><div class="header-actions"><button id="next-zone">Siguiente zona →</button><button id="network-toggle" aria-pressed="false">Mostrar red del campus</button><button id="present">Modo escenario</button><button id="full">Pantalla completa</button></div></header>
 <main><div class="stage">
@@ -1484,8 +1499,8 @@ body:not(.presenting) .stage{min-height:0}
 
 <template id="sketch-workflow">
 <div class="architecture-product workflow-comparison">
- <div class="architecture-heading"><h2>De workflows a una actividad</h2><p>La integración de comunicaciones con Twilio, construida de otra forma con HAE.</p></div>
- <div class="workflow-panels">
+ <div class="architecture-heading"><h2>De workflows a una actividad</h2><p>La integración de comunicaciones con Twilio, construida de otra forma con HAE.</p><button id="expand-workflow" type="button" class="a2a-expand-btn" aria-expanded="false" aria-controls="workflow-panels">✦ Mostrar enfoque con HAE →</button></div>
+ <div class="workflow-panels" id="workflow-panels">
   <section class="workflow-panel workflow-before">
    <div class="workflow-panel-title"><small>DISEÑO ACTIVIDAD A ACTIVIDAD</small><h3>Workflow visual</h3><span>Consultas, APIs, decisiones y actualizaciones</span></div>
    <svg class="bpmn-sketch" viewBox="0 0 620 370" role="img" aria-label="Workflow conceptual: consultar records, preparar el payload, invocar la API de Twilio, gestionar errores y actualizar records, con gateways y reintentos">
@@ -1506,8 +1521,8 @@ body:not(.presenting) .stage{min-height:0}
    </svg>
    <div class="workflow-tradeoffs"><div><strong>Mantenimiento</strong><span>Más piezas que revisar</span></div><div><strong>Escalado</strong><span>Más ramas y dependencias</span></div><div><strong>Time-to-market</strong><span>Más pasos de diseño</span></div></div>
   </section>
-  <div class="workflow-shift" aria-hidden="true">→</div>
-  <section class="workflow-panel workflow-after">
+  <div class="workflow-shift" aria-hidden="true" hidden>→</div>
+  <section class="workflow-panel workflow-after" hidden>
    <div class="workflow-panel-title"><small>CONSTRUIDO CON HAE</small><h3>Una única actividad</h3><span>La misma lógica, concentrada en un script</span></div>
    <div class="sdk-sketch">
     <div class="coding-assistants"><span>Claude Code</span><span>ChatGPT Codex</span><span>Cursor</span></div>
@@ -1520,4 +1535,4 @@ body:not(.presenting) .stage{min-height:0}
  </div>
 </div>
 </template>
-<script src="arena.js?v=54"></script></html>
+<script src="arena.js?v=55"></script></html>
