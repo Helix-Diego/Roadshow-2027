@@ -715,7 +715,7 @@ body:not(.presenting) .stage{min-height:0}
 .a2a-expand-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:999px;background:#173f30;color:#e7f7c9;border:1px solid #49755a;font:650 14px system-ui;box-shadow:0 8px 22px #163c2c26;transition:background-color .25s ease,color .25s ease,transform .2s ease}
 .a2a-expand-btn:hover{background:#215440;transform:translateY(-1px)}
 .a2a-expand-btn[aria-expanded="true"]{background:#e6efcf;color:#173f30;border-color:#96ac7b;box-shadow:0 4px 12px #163c2c14}
-.orbit-board{position:relative;height:clamp(460px,58vh,640px);width:100%;isolation:isolate}
+.orbit-board{position:relative;height:clamp(410px,53vh,590px);width:100%;isolation:isolate}
 .orbit-lines{position:absolute;inset:0;width:100%;height:100%;overflow:visible;z-index:0;pointer-events:none}
 .orbit-lines path{fill:none;stroke:#96ac7b;stroke-width:2;stroke-linecap:round;vector-effect:non-scaling-stroke;transition:opacity .45s ease}
 .orbit-lines .orbit-custom{stroke:#c87b33;stroke-width:2.5;stroke-dasharray:6 5}
@@ -739,10 +739,14 @@ body:not(.presenting) .stage{min-height:0}
 .copilot-logo img{display:block;width:28px;height:28px;object-fit:contain}
 .orbit-badge{display:inline-flex;align-items:center;padding:3px 9px;border-radius:999px;font:700 10.5px system-ui;letter-spacing:.08em;text-transform:uppercase}
 .orbit-badge-ootb,.orbit-badge-custom{background:#21523d;color:#ffffff;border:1px solid #88b99c}
-.architecture-legend{display:flex;justify-content:center;gap:18px;flex-wrap:wrap;font-size:11px;color:#516856}
-.architecture-legend span{display:inline-flex;align-items:center;gap:7px}
-.architecture-legend i{display:inline-block;width:22px;height:0;border-top:2.5px solid #96ac7b}
-.architecture-legend .legend-custom i{border-top:2.5px dashed #c87b33}
+.orbit-badge-vibe{background:#8c4b14;color:#ffffff;border:1px solid #d49452}
+.architecture-apps{display:grid;grid-template-columns:1fr auto 1.35fr;align-items:center;gap:12px;width:min(100%,1160px);margin:4px auto 0}
+.arch-app{display:grid;gap:6px;justify-items:start;padding:12px 16px;border-radius:14px;background:#e6efcf;border:1px solid #a8bf85;color:#214b38;box-shadow:0 8px 20px #21462914}
+.arch-app strong{display:block;font-size:clamp(14px,1.2vw,18px);line-height:1.2}
+.arch-app span:not(.orbit-badge){display:block;font-size:clamp(11px,.95vw,13.5px);line-height:1.3;color:#4a6747}
+.arch-app-vibe{background:#fbf3e6;border:1.5px dashed #c87b33;color:#4a3014}
+.arch-app-vibe span:not(.orbit-badge){color:#6f4f28}
+.arch-plus{display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:#173f30;color:#ffffff;font:700 18px system-ui;box-shadow:0 4px 12px #163c2c24}
 .orbit-link-label{position:absolute;left:50%;top:39%;transform:translate(-50%,-50%) scale(1);z-index:2;display:grid;justify-items:center;gap:4px;padding:7px 12px;background:#edf2e8;border:1px solid #b8c9ae;border-radius:12px;color:#2b5940;transition:opacity .45s .25s ease,transform .55s .2s cubic-bezier(.22,1,.36,1)}
 .orbit-link-label strong{font-size:22px;letter-spacing:.05em}.orbit-link-label span{font-size:10px}
 .orbit-board:not(.a2a-expanded) .orbit-link-label{opacity:0;pointer-events:none;transform:translate(-50%,-50%) scale(.72);transition-delay:0s}
@@ -757,7 +761,6 @@ body:not(.presenting) .stage{min-height:0}
  .orbit-board:not(.a2a-expanded) [data-agent="copilot"].orbit-node{left:50%;top:50%;opacity:0;pointer-events:none;transform:translate(-50%,-50%) scale(.68)}
  .orbit-board.a2a-expanded [data-agent="copilot"].orbit-node{transition-delay:.08s}
 }
-.architecture-note{text-align:center;font-size:11px;color:#74866d}
 .architecture-slide #sketch-slot:not([hidden]){width:97%;max-width:1600px;grid-area:1/1}
 .product-slide #part-two-title{display:none!important}
 .architecture-slide .stage canvas{display:none!important}
@@ -780,7 +783,8 @@ body:not(.presenting) .stage{min-height:0}
  #node-helix{order:0}#tool-summary{order:1}#tool-risk{order:2}#tool-conflicts{order:3}#tool-teams{order:4}
  .orbit-link-label{order:5}#node-copilot{order:6}#tool-knowledge{order:7}#tool-security{order:8}#tool-outlook{order:9;grid-column:1/-1}
  .orbit-card small{font-size:9px}
- .architecture-note{font-size:11px;padding:0 10px}
+ .architecture-apps{grid-template-columns:1fr;gap:8px;padding:0 10px}
+ .arch-plus{justify-self:center}
 }
 @media(prefers-reduced-motion:reduce){.orbit-card,.orbit-board.a2a-expanded [data-agent="copilot"].orbit-node,.orbit-board.a2a-expanded .orbit-link-label{animation:none}.orbit-node,.orbit-link-label,.orbit-lines path{transition:none}}
 </style>
@@ -1246,8 +1250,17 @@ body:not(.presenting) .stage{min-height:0}
   <div id="tool-security" data-agent="copilot" class="orbit-node" style="--x:90%;--y:13%;--w:19%;--phase:-4s"><div class="orbit-card"><small>TOOLS · AMPLIABLE</small><strong>Análisis de seguridad</strong><span>Vulnerabilidades y configuración</span></div></div>
   <div id="tool-outlook" data-agent="copilot" class="orbit-node" style="--x:78%;--y:86%;--w:27%;--phase:-1s"><div class="orbit-card"><small>TOOL · OUTLOOK</small><strong>Calendarios de la organización</strong><span>Disponibilidad y huecos para el CAB</span></div></div>
  </div>
- <div class="architecture-legend" aria-label="Leyenda de componentes"><span><i></i>De caja (BMC Helix)</span><span class="legend-custom"><i></i>Custom (MCP Teams / Copilot Studio)</span></div>
- <div class="architecture-note">Arquitectura de la demo · MCP de Teams y ampliaciones de seguridad sujetos a validación.</div>
+ <div class="architecture-apps">
+  <div class="arch-app">
+   <span class="orbit-badge orbit-badge-ootb">De caja</span>
+   <div><strong>CAB Workspace</strong><span>Aplicación estándar de BMC Helix para gestionar cambios</span></div>
+  </div>
+  <span class="arch-plus" aria-hidden="true">+</span>
+  <div class="arch-app arch-app-vibe">
+   <span class="orbit-badge orbit-badge-vibe">HAE · Vibe Coding</span>
+   <div><strong>Calendario de cambios · Reuniones Teams</strong><span>Vista construida usando HAE (Helix Agentic Coding = Vibe Coding) para cerrar reuniones de Teams de cambios</span></div>
+  </div>
+ </div>
 </div>
 </template>
-<script src="arena.js?v=42"></script></html>
+<script src="arena.js?v=43"></script></html>
