@@ -1,34 +1,21 @@
 <!doctype html><html lang="es"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Helix Arena · Centro de alto rendimiento</title>
 <style>
-*{box-sizing:border-box}body{margin:0;background:#edf0ed;color:#162822;font-family:system-ui,sans-serif}header,footer{display:flex;justify-content:space-between;align-items:center;padding:18px 4vw;border-bottom:1px solid #ccd4ce;font:600 12px monospace;letter-spacing:.13em}main{position:relative;height:calc(100svh - 118px);min-height:520px;overflow:hidden;background:radial-gradient(ellipse at 60% 45%,white,#e0e6e2)}canvas{width:100%;height:100%;display:block;touch-action:none;cursor:grab}article{position:absolute;top:5%;left:4vw;width:min(320px,85vw);pointer-events:none}small{font:700 12px monospace;letter-spacing:.18em;color:#287455}h1{font-size:clamp(34px,5vw,78px);line-height:.9;letter-spacing:-.08em;margin:14px 0}p{font-size:15px;line-height:1.45;margin:0;color:#30473c}nav{position:absolute;bottom:3%;left:4vw;right:4vw;display:flex;gap:7px;flex-wrap:wrap}button{font:600 13px system-ui;background:#f8faf8;border:1px solid #a7b9ae;color:#162822;border-radius:5px;padding:10px 13px;cursor:pointer}button[aria-pressed=true],#play{background:#133c2c;color:white}footer{border-top:1px solid #ccd4ce;border-bottom:0;padding-block:12px;gap:10px}@media(max-width:650px){footer span:last-child{display:none}main{min-height:620px}article{top:4%}}
+*{box-sizing:border-box}body{margin:0;background:#edf0ed;color:#162822;font-family:system-ui,sans-serif}header{display:flex;justify-content:space-between;align-items:center;padding:18px 4vw;border-bottom:1px solid #ccd4ce;font:600 12px monospace;letter-spacing:.13em}main{position:relative;height:calc(100svh - 118px);min-height:520px;overflow:hidden;background:radial-gradient(ellipse at 60% 45%,white,#e0e6e2)}canvas{width:100%;height:100%;display:block;touch-action:none;cursor:grab}article{position:absolute;top:5%;left:4vw;width:min(320px,85vw);pointer-events:none}small{font:700 12px monospace;letter-spacing:.18em;color:#287455}h1{font-size:clamp(34px,5vw,78px);line-height:.9;letter-spacing:-.08em;margin:14px 0}p{font-size:15px;line-height:1.45;margin:0;color:#30473c}nav{position:absolute;bottom:3%;left:4vw;right:4vw;display:flex;gap:7px;flex-wrap:wrap}button{font:600 13px system-ui;background:#f8faf8;border:1px solid #a7b9ae;color:#162822;border-radius:5px;padding:10px 13px;cursor:pointer}button[aria-pressed=true],#play{background:#133c2c;color:white}@media(max-width:650px){main{min-height:620px}}
 body.night main{background:radial-gradient(ellipse at 60% 50%,#355749,#101d19)}body.night article h1,body.night article p{color:#f5fbf6}body.night article small{color:#92e0bb}main{transition:background-color .3s}
 
-main{display:grid;grid-template-columns:300px 1fr;height:calc(100svh - 115px);min-height:560px}
-aside{padding:22px;background:#f7f9f7;border-right:1px solid #c6d3ca;z-index:1;overflow:auto}
-article,nav{position:static;width:auto;pointer-events:auto}
-article{margin:25px 0}h1{font-size:45px}nav button{flex:1;padding:9px 6px}
-.section{margin:18px 0}.section button,#zones button{margin:4px 3px 0 0}
+main{display:block;height:calc(100svh - 115px);min-height:560px}
 .stage{position:relative;min-width:0;min-height:0}
-.zoom{position:absolute;right:15px;bottom:15px;display:flex;gap:5px}
-.zoom button{font-size:20px;min-width:42px;padding:6px}
-#status{padding:10px;border-left:3px solid #2d8f70;background:#e7efe9;font-size:13px}
-#failure[aria-pressed=true]{background:#a71b2c;color:white}
 .network .stage{background:radial-gradient(ellipse at 50% 45%,#e6f0e9,#b9cec3)}
-@media(max-width:720px){main{display:flex;flex-direction:column;height:auto}aside{padding:14px}article{margin:12px 0}h1{font-size:34px}.stage{height:60svh;min-height:380px}.section{margin:10px 0}}
+@media(max-width:720px){main{height:auto}.stage{height:60svh;min-height:380px}}
 
 header{background:#10251f;border-bottom-color:#244437}
 header #full{background:#19392e;color:#f3f9f3;border-color:#638476}
 .brand{display:flex;align-items:center;background:#10251f;border-radius:6px;padding:0 8px}
 .brand img{width:140px;height:auto;display:block}
-.zoom{align-items:center;background:#f7f9f7;border:1px solid #a7b9ae;padding:7px;border-radius:8px}
-.zoom label{font-size:12px;font-weight:650}.zoom output{display:block;font-variant-numeric:tabular-nums}
-#zoom-level{width:clamp(80px,16vw,175px);accent-color:#287455}
-#network-detail p{font-size:12px;margin-top:8px}
 
 .header-actions{display:flex;gap:8px}
 .presenting main{display:block;height:calc(100svh - 80px);min-height:0}
-.presenting aside,.presenting footer,.presenting .zoom{display:none}
 .presenting .stage{height:100%;min-height:0}
  .presenting .stage{display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr);padding-bottom:72px}
 .presenting .stage:has(#cue:not([hidden])){grid-template-columns:minmax(0,1fr) minmax(270px,33%)}
@@ -183,7 +170,6 @@ header #full{background:#19392e;color:#f3f9f3;border-color:#638476}
 
 body:not(.presenting) main{display:block;height:calc(100svh - 80px);min-height:400px}
 body:not(.presenting) .stage{height:100%}
-body:not(.presenting) aside,body:not(.presenting) footer,body:not(.presenting) .zoom{display:none}
 #tour-label:not([hidden]){position:absolute;left:28px;bottom:28px;padding:14px 22px;border-radius:10px;background:#133c2cea;color:#f2ffe9;border:1px solid #82a287;font-size:clamp(18px,2vw,34px);font-weight:650;box-shadow:0 8px 30px #163e3228;pointer-events:none}
 .header-actions #network-toggle{background:#d5e8c2;border-color:#adc793;color:#173d2b}
 .presenting #network-toggle,.presenting #next-zone{display:none}
@@ -752,14 +738,40 @@ body:not(.presenting) .stage{min-height:0}
 .orbit-board:not(.a2a-expanded) .orbit-link-label{opacity:0;pointer-events:none;transform:translate(-50%,-50%) scale(.72);transition-delay:0s}
 .orbit-board:not(.a2a-expanded) .orbit-lines .orbit-a2a,.orbit-board:not(.a2a-expanded) .orbit-lines [data-agent="copilot"]{opacity:0}
 .orbit-board.a2a-expanded .orbit-lines .orbit-a2a,.orbit-board.a2a-expanded .orbit-lines [data-agent="copilot"]{transition-delay:.2s}
+.orbit-lines{z-index:1}
+.cab-shell{display:none}
+.cab-layer{position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px;border:1.5px solid #7d9b84;border-radius:24px;background:linear-gradient(180deg,#f8fbf6,#e5f0e6);box-shadow:inset 0 0 0 1px #ffffff9c}
+.cab-shell-head{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:12px;position:relative;z-index:4}
+.cab-shell-head div{display:grid;gap:2px}
+.cab-shell-head strong{font-size:clamp(16px,1.4vw,22px);letter-spacing:-.03em;color:#173f30}
+.cab-shell-head span:not(.orbit-badge){font-size:12px;color:#4d6b58;line-height:1.3}
+.cab-layer .orbit-agent,.cab-layer #tool-calendar{grid-column:1/-1}
+.orbit-vibe .orbit-card{background:#fbf3e6;border:1.5px dashed #c87b33;color:#4a3014}
+.orbit-vibe .orbit-card small{color:#a85914}
+.orbit-vibe .orbit-card span{color:#6f4f28}
 @media(min-width:1025px){
- .orbit-board:not(.a2a-expanded) #node-helix{left:50%;top:50%}
- .orbit-board:not(.a2a-expanded) #tool-summary{left:34%;top:13%}
- .orbit-board:not(.a2a-expanded) #tool-risk{left:66%;top:13%}
- .orbit-board:not(.a2a-expanded) #tool-conflicts{left:34%;top:86%}
- .orbit-board:not(.a2a-expanded) #tool-teams{left:66%;top:86%}
+ .cab-shell,.cab-layer{position:absolute;top:0;bottom:0;left:2%;width:96%;transition:left .75s cubic-bezier(.22,1,.36,1),width .75s cubic-bezier(.22,1,.36,1)}
+ .cab-shell{display:block;z-index:0;pointer-events:none;border:1.5px solid #7d9b84;border-radius:24px;background:linear-gradient(180deg,#f8fbf6,#e5f0e6);box-shadow:inset 0 0 0 1px #ffffff9c}
+ .cab-layer{z-index:2;display:block;padding:0;border:0;background:none;box-shadow:none}
+ .orbit-board.a2a-expanded .cab-shell,.orbit-board.a2a-expanded .cab-layer{left:0;width:56%}
+ .cab-shell-head{position:absolute;top:14px;left:16px;right:16px}
+ .cab-layer .orbit-node{position:absolute;width:var(--w,22%);transform:translate(-50%,-50%)}
+ .cab-layer #node-helix{left:34%;top:50%;width:34%}
+ .cab-layer #tool-summary{left:18%;top:28%;width:28%}
+ .cab-layer #tool-risk{left:70%;top:28%;width:28%}
+ .cab-layer #tool-conflicts{left:18%;top:82%;width:28%}
+ .cab-layer #tool-teams{left:48%;top:82%;width:28%}
+ .cab-layer #tool-calendar{left:78%;top:56%;width:32%}
+ .orbit-board.a2a-expanded{height:clamp(520px,64vh,700px)}
+ .orbit-board.a2a-expanded .cab-layer{display:grid;grid-template-columns:1fr 1fr;gap:8px;align-content:start;padding:64px 12px 12px}
+ .orbit-board.a2a-expanded .cab-layer #node-helix,.orbit-board.a2a-expanded .cab-layer #tool-summary,.orbit-board.a2a-expanded .cab-layer #tool-risk,.orbit-board.a2a-expanded .cab-layer #tool-conflicts,.orbit-board.a2a-expanded .cab-layer #tool-teams,.orbit-board.a2a-expanded .cab-layer #tool-calendar{position:relative;left:auto;top:auto;width:auto;transform:none}
+ .orbit-board.a2a-expanded .cab-layer #node-helix,.orbit-board.a2a-expanded .cab-layer #tool-calendar{grid-column:1/-1}
+ .orbit-board.a2a-expanded .cab-layer .orbit-card{padding:8px 10px;min-height:0;gap:3px}
+ .orbit-board.a2a-expanded .cab-layer .orbit-agent .orbit-card{padding:12px 14px}
+ .orbit-board.a2a-expanded .cab-layer .orbit-card strong{font-size:14px}
  .orbit-board:not(.a2a-expanded) [data-agent="copilot"].orbit-node{left:50%;top:50%;opacity:0;pointer-events:none;transform:translate(-50%,-50%) scale(.68)}
  .orbit-board.a2a-expanded [data-agent="copilot"].orbit-node{transition-delay:.08s}
+ .orbit-board.a2a-expanded .orbit-link-label{left:58%;top:46%}
 }
 .architecture-slide #sketch-slot:not([hidden]){width:97%;max-width:1600px;grid-area:1/1}
 .product-slide #part-two-title{display:none!important}
@@ -780,29 +792,43 @@ body:not(.presenting) .stage{min-height:0}
  .orbit-agent .orbit-card{padding:23px 18px;min-height:120px}
  .orbit-agent strong{font-size:26px}.orbit-agent span{font-size:13px}
  .orbit-link-label{position:relative;inset:auto;transform:none;grid-column:1/-1;justify-self:center;margin:10px 0;padding:10px 18px}
- #node-helix{order:0}#tool-summary{order:1}#tool-risk{order:2}#tool-conflicts{order:3}#tool-teams{order:4}
- .orbit-link-label{order:5}#node-copilot{order:6}#tool-knowledge{order:7}#tool-security{order:8}#tool-outlook{order:9;grid-column:1/-1}
+ .cab-shell{order:0;grid-column:1/-1}
+ .cab-layer #node-helix{order:0}#tool-summary{order:1}#tool-risk{order:2}#tool-conflicts{order:3}#tool-teams{order:4}#tool-calendar{order:5}
+ .orbit-link-label{order:6}#node-copilot{order:7}#tool-knowledge{order:8}#tool-security{order:9}#tool-outlook{order:10;grid-column:1/-1}
  .orbit-card small{font-size:9px}
  .architecture-apps{grid-template-columns:1fr;gap:8px;padding:0 10px}
  .arch-plus{justify-self:center}
 }
-@media(prefers-reduced-motion:reduce){.orbit-card,.orbit-board.a2a-expanded [data-agent="copilot"].orbit-node,.orbit-board.a2a-expanded .orbit-link-label{animation:none}.orbit-node,.orbit-link-label,.orbit-lines path{transition:none}}
+@media(prefers-reduced-motion:reduce){.orbit-card,.orbit-board.a2a-expanded [data-agent="copilot"].orbit-node,.orbit-board.a2a-expanded .orbit-link-label{animation:none}.orbit-node,.orbit-link-label,.orbit-lines path,.cab-shell{transition:none}}
+
+.messaging-product{display:grid;gap:12px;color:#163a2c;font-size:clamp(12px,1.15vw,17px)}
+.messaging-benefit{display:grid;gap:4px;padding:12px 16px;border-radius:14px;background:#e7f3df;border:1px solid #b7d0ab}
+.messaging-benefit strong{font-size:clamp(16px,1.6vw,24px);letter-spacing:-.03em}
+.messaging-benefit span{color:#3c5c49;line-height:1.35}
+.messaging-flow{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap}
+.messaging-flow span{padding:7px 12px;border-radius:999px;background:#173f30;color:#f4fbe8;font-weight:700;font-size:.85em}
+.messaging-flow span:nth-child(3){background:#8c4b14}
+.messaging-flow span:nth-child(5){background:#1f7a4d}
+.messaging-flow b{color:#5d7a68}
+.messaging-layout{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:12px;padding:12px}
+.messaging-compose,.messaging-results{display:grid;gap:8px;align-content:start}
+.messaging-compose label,.messaging-row{display:grid;gap:2px;padding:8px 10px;border-radius:8px;background:#e7f0e6;border:1px solid #d3e2d4}
+.messaging-compose label{font-size:.78em;color:#5a7464;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.messaging-compose b{font-size:1.15em;letter-spacing:0;text-transform:none;color:#173f30;font-weight:700}
+.messaging-send{justify-self:start;padding:9px 14px;border-radius:999px;background:#1f7a4d;color:#f4fff6;font-weight:750}
+.messaging-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.messaging-kpis span{padding:7px;border-radius:8px;background:#e7f0e6;font-size:.78em;color:#466454}
+.messaging-kpis b{display:block;font-size:1.35em;color:#173f30}
+.messaging-row{grid-template-columns:1.3fr .9fr auto;align-items:center;font-size:.92em}
+.messaging-row.head{background:transparent;border:0;padding:0 10px;color:#5d7868;font-size:.75em;letter-spacing:.04em;text-transform:uppercase}
+.messaging-row em{font-style:normal;font-weight:750;padding:3px 8px;border-radius:999px}
+.messaging-row em.ok{background:#d9efcf;color:#1d5b38}
+.messaging-row em.wait{background:#f8e7cf;color:#8a4e12}
+.messaging-results small{color:#5d7868}
+@media(max-width:800px){.messaging-layout,.messaging-kpis,.messaging-row{grid-template-columns:1fr}}
 </style>
 <header><span class="brand"><img src="helix-arena.png" alt="Helix Arena"></span><div class="header-actions"><button id="next-zone">Siguiente zona →</button><button id="network-toggle" aria-pressed="false">Mostrar red del campus</button><button id="present">Modo escenario</button><button id="full">Pantalla completa</button></div></header>
-<main><aside>
-<nav aria-label="Capítulos"></nav>
-<article aria-live="polite"><h1 id="title"></h1><p id="description"></p></article>
-
-<div class="section"><button id="roof" aria-pressed="false">Abrir cubiertas</button><button id="failure" hidden></button></div>
-<p id="status" role="status"></p>
-<div id="network-detail" class="section" hidden>
-  <small>TOPOLOGÍA SIMULADA</small>
-  <p><b>Troncal</b> · fibra entre el núcleo y los routers de zona.</p>
-  <p><b>Acceso</b> · switches para equipos cableados y AP para Wi‑Fi.</p>
-  <p><b>Estadio</b> · marcador IP, audio IP y Wi‑Fi de grada.</p>
-  <p><b>Operaciones</b> · consola de telemetría de AtletaPro.</p>
-</div>
-</aside><div class="stage">
+<main><div class="stage">
 <div id="cue" hidden aria-live="polite"><div id="cue-card">
   <small id="cue-phase"></small><h2 id="cue-title"></h2>
   <p id="cue-agent"></p><p id="cue-value"></p>
@@ -819,8 +845,7 @@ body:not(.presenting) .stage{min-height:0}
 <div id="stage-controls" hidden>
   <button id="prev-step">← Anterior</button><span id="step-count"></span>
   <button id="next-step">Siguiente →</button>
-</div><canvas aria-label="Maqueta tridimensional de Helix Arena"></canvas><div id="tour-label" aria-live="off">Helix Arena · Centro de alto rendimiento</div><div class="zoom"><button id="out" aria-label="Alejar">−</button><label for="zoom-level">Zoom <output id="zoom-value" for="zoom-level">100%</output></label><input id="zoom-level" type="range" min="65" max="700" step="1" value="100"><button id="in" aria-label="Acercar">+</button></div></div></main>
-<footer><span>ARRASTRA PARA GIRAR · MAYÚS + ARRASTRA PARA DESPLAZAR · RUEDA PARA ACERCAR</span><span>MAQUETA CONCEPTUAL / SIMULACIÓN</span></footer>
+</div><canvas aria-label="Maqueta tridimensional de Helix Arena"></canvas><div id="tour-label" aria-live="off">Helix Arena · Centro de alto rendimiento</div></div></main>
 <template id="sketch-dashboards">
 <div class="dashboard-annotated">
   <div class="dashboard-benefit"><strong>Una vista para cada equipo</strong><span>Combina información de Helix en dashboards personalizados para operaciones, servicio y negocio.</span></div>
@@ -1230,8 +1255,8 @@ body:not(.presenting) .stage{min-height:0}
 <div class="architecture-product">
  <div class="architecture-heading">
   <h2>A2A y MCP</h2>
-  <p id="arch-subtitle">Agente supervisor de cambios en BMC Helix y sus herramientas.</p>
-  <button id="expand-a2a" type="button" class="a2a-expand-btn" aria-expanded="false">✦ Expandir con A2A →</button>
+  <p id="arch-subtitle">El CAB Supervisor vive dentro de CAB Workspace. HAE construyó ahí el calendario de cambios.</p>
+  <button id="expand-a2a" type="button" class="a2a-expand-btn" aria-expanded="false">✦ Mostrar customización A2A →</button>
  </div>
  <div class="orbit-board">
   <svg class="orbit-lines" aria-hidden="true"><defs><marker id="a2a-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" style="fill:#285e45;stroke:none"/></marker></defs>
@@ -1239,28 +1264,53 @@ body:not(.presenting) .stage{min-height:0}
    <path data-agent="copilot" data-from="node-copilot" data-to="tool-knowledge"/><path data-agent="copilot" data-from="node-copilot" data-to="tool-security"/><path data-agent="copilot" data-from="node-copilot" data-to="tool-outlook"/>
    <path class="orbit-a2a" data-from="node-copilot" data-to="node-helix" marker-end="url(#a2a-arrow)"/>
   </svg>
-  <section id="node-helix" class="orbit-node orbit-agent" style="--x:27%;--y:50%;--w:28%"><div class="orbit-card"><div class="orbit-brand-row"><span class="helix-logo"><img src="bmc-helix.png?v=2" alt="BMC Helix"></span><span class="orbit-badge orbit-badge-ootb">De caja</span></div><strong>CAB Supervisor Agent</strong><span>Agente nativo HelixGPT · Contexto y coordinación del cambio</span></div></section>
-  <div id="tool-summary" class="orbit-node" style="--x:10%;--y:13%;--w:19%;--phase:-1s"><div class="orbit-card"><small>TOOL · DE CAJA</small><strong>Análisis de cambios</strong><span>Resumen para el CAB</span></div></div>
-  <div id="tool-risk" class="orbit-node" style="--x:34%;--y:13%;--w:20%;--phase:-2s"><div class="orbit-card"><small>TOOL · DE CAJA</small><strong>Documentación y riesgo</strong><span>Preparación del cambio</span></div></div>
-  <div id="tool-conflicts" class="orbit-node" style="--x:10%;--y:86%;--w:19%;--phase:-3s"><div class="orbit-card"><small>TOOL · DE CAJA</small><strong>Conflictos y seguimiento</strong><span>Ventanas y condiciones</span></div></div>
-  <div id="tool-teams" class="orbit-node orbit-custom" style="--x:35%;--y:86%;--w:22%;--phase:-4s"><div class="orbit-card"><small>CONEXIÓN MCP · CUSTOM</small><strong>Microsoft Teams</strong><span>Integración custom · Crear la reunión CAB</span></div></div>
+  <section class="cab-shell" aria-hidden="true"></section>
+  <div class="cab-layer">
+   <div class="cab-shell-head">
+    <div><strong>CAB Workspace</strong><span>Aplicación BMC Helix. El agente de caja y la vista hecha con HAE están dentro.</span></div>
+    <span class="orbit-badge orbit-badge-ootb">De caja</span>
+   </div>
+    <section id="node-helix" class="orbit-node orbit-agent" style="--x:34%;--y:46%;--w:34%"><div class="orbit-card"><div class="orbit-brand-row"><span class="helix-logo"><img src="bmc-helix.png?v=2" alt="BMC Helix"></span><span class="orbit-badge orbit-badge-ootb">De caja</span></div><strong>CAB Supervisor Agent</strong><span>Agente nativo, dentro de la aplicación</span></div></section>
+    <div id="tool-summary" class="orbit-node" style="--x:18%;--y:16%;--w:28%;--phase:-1s"><div class="orbit-card"><small>TOOL · DE CAJA</small><strong>Análisis de cambios</strong><span>Resumen para el CAB</span></div></div>
+    <div id="tool-risk" class="orbit-node" style="--x:72%;--y:16%;--w:30%;--phase:-2s"><div class="orbit-card"><small>TOOL · DE CAJA</small><strong>Documentación y riesgo</strong><span>Preparación del cambio</span></div></div>
+    <div id="tool-conflicts" class="orbit-node" style="--x:17%;--y:84%;--w:28%;--phase:-3s"><div class="orbit-card"><small>TOOL · DE CAJA</small><strong>Conflictos y seguimiento</strong><span>Ventanas y condiciones</span></div></div>
+    <div id="tool-teams" class="orbit-node orbit-custom" style="--x:46%;--y:84%;--w:28%;--phase:-4s"><div class="orbit-card"><small>CONEXIÓN MCP · CUSTOM</small><strong>Microsoft Teams</strong><span>Crear la reunión CAB</span></div></div>
+    <div id="tool-calendar" class="orbit-node orbit-vibe" style="--x:78%;--y:56%;--w:32%;--phase:-2s"><div class="orbit-card"><small>APLICACIÓN · HAE</small><strong>Calendario de cambios</strong><span>Vista construida con HAE dentro de CAB Workspace para cerrar las reuniones de Teams</span></div></div>
+  </div>
   <div class="orbit-link-label"><strong>A2A</strong><span>Copilot → Helix</span></div>
-  <section id="node-copilot" data-agent="copilot" class="orbit-node orbit-agent orbit-agent-custom" style="--x:73%;--y:50%;--w:28%;--phase:0s"><div class="orbit-card"><div class="orbit-brand-row"><span class="copilot-logo"><img src="m365-copilot.png?v=2" alt="Microsoft 365 Copilot"></span><small>COPILOT STUDIO</small><span class="orbit-badge orbit-badge-custom">Custom</span></div><strong>CAB Security Reviewer</strong><span>Agente custom en Copilot Studio · Seguridad y organización</span></div></section>
-  <div id="tool-knowledge" data-agent="copilot" class="orbit-node" style="--x:65%;--y:13%;--w:21%;--phase:-3s"><div class="orbit-card"><small>CONOCIMIENTO</small><strong>Seguridad y políticas</strong><span>AtletaPro · controles internos</span></div></div>
-  <div id="tool-security" data-agent="copilot" class="orbit-node" style="--x:90%;--y:13%;--w:19%;--phase:-4s"><div class="orbit-card"><small>TOOLS · AMPLIABLE</small><strong>Análisis de seguridad</strong><span>Vulnerabilidades y configuración</span></div></div>
-  <div id="tool-outlook" data-agent="copilot" class="orbit-node" style="--x:78%;--y:86%;--w:27%;--phase:-1s"><div class="orbit-card"><small>TOOL · OUTLOOK</small><strong>Calendarios de la organización</strong><span>Disponibilidad y huecos para el CAB</span></div></div>
- </div>
- <div class="architecture-apps">
-  <div class="arch-app">
-   <span class="orbit-badge orbit-badge-ootb">De caja</span>
-   <div><strong>CAB Workspace</strong><span>Aplicación estándar de BMC Helix para gestionar cambios</span></div>
-  </div>
-  <span class="arch-plus" aria-hidden="true">+</span>
-  <div class="arch-app arch-app-vibe">
-   <span class="orbit-badge orbit-badge-vibe">HAE · Vibe Coding</span>
-   <div><strong>Calendario de cambios · Reuniones Teams</strong><span>Vista construida usando HAE (Helix Agentic Coding = Vibe Coding) para cerrar reuniones de Teams de cambios</span></div>
-  </div>
+  <section id="node-copilot" data-agent="copilot" class="orbit-node orbit-agent orbit-agent-custom" style="--x:80%;--y:48%;--w:26%;--phase:0s"><div class="orbit-card"><div class="orbit-brand-row"><span class="copilot-logo"><img src="m365-copilot.png?v=2" alt="Microsoft 365 Copilot"></span><small>COPILOT STUDIO</small><span class="orbit-badge orbit-badge-custom">Custom</span></div><strong>CAB Security Reviewer</strong><span>Customización A2A · Seguridad y organización</span></div></section>
+  <div id="tool-knowledge" data-agent="copilot" class="orbit-node" style="--x:70%;--y:14%;--w:20%;--phase:-3s"><div class="orbit-card"><small>CONOCIMIENTO</small><strong>Seguridad y políticas</strong><span>AtletaPro · controles internos</span></div></div>
+  <div id="tool-security" data-agent="copilot" class="orbit-node" style="--x:92%;--y:16%;--w:18%;--phase:-4s"><div class="orbit-card"><small>TOOLS · AMPLIABLE</small><strong>Análisis de seguridad</strong><span>Vulnerabilidades y configuración</span></div></div>
+  <div id="tool-outlook" data-agent="copilot" class="orbit-node" style="--x:82%;--y:84%;--w:26%;--phase:-1s"><div class="orbit-card"><small>TOOL · OUTLOOK</small><strong>Calendarios de la organización</strong><span>Disponibilidad y huecos para el CAB</span></div></div>
  </div>
 </div>
 </template>
-<script src="arena.js?v=43"></script></html>
+<template id="sketch-messaging">
+<div class="messaging-product">
+  <div class="messaging-benefit"><strong>HAE construye la aplicación. Twilio entrega WhatsApp.</strong><span>Desde Innovation Studio se elige la plantilla, las personas o los grupos, y Helix guarda el estado de cada comunicado.</span></div>
+  <div class="messaging-flow" aria-hidden="true"><span>Innovation Studio</span><b>→</b><span>Twilio</span><b>→</b><span>WhatsApp</span></div>
+  <section class="mock-window">
+    <header><strong>BMC Helix · Interfaz de mensajería</strong><span>HAE · Innovation Studio</span></header>
+    <div class="messaging-layout">
+      <div class="messaging-compose">
+        <strong>Enviar comunicado WhatsApp</strong>
+        <label>Plantilla Twilio<b>Aviso AtletaPro · incidencia de red</b></label>
+        <label>Personas<b>Operaciones del campus</b></label>
+        <label>Grupos dinámicos<b>Primer equipo</b></label>
+        <label>Números adicionales<b>+34 600 111 222</b></label>
+        <div class="messaging-send">Enviar por WhatsApp</div>
+      </div>
+      <div class="messaging-results">
+        <strong>Resultado del envío</strong>
+        <div class="messaging-kpis"><span>Entregados<b>2</b></span><span>En curso<b>1</b></span><span>Fallidos<b>0</b></span></div>
+        <div class="messaging-row head"><b>Nombre</b><b>Teléfono</b><b>Estado</b></div>
+        <div class="messaging-row"><span>Mesa de operaciones</span><span>+34 610…</span><em class="ok">Entregado</em></div>
+        <div class="messaging-row"><span>Responsable de pista</span><span>+34 620…</span><em class="ok">Entregado</em></div>
+        <div class="messaging-row"><span>Número adicional</span><span>+34 600 111 222</span><em class="wait">Enviado</em></div>
+        <small>Helix consulta Twilio y actualiza cada línea a entregado o fallido.</small>
+      </div>
+    </div>
+  </section>
+</div>
+</template>
+<script src="arena.js?v=45"></script></html>

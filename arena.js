@@ -41,67 +41,108 @@ if(gl){
   gl.useProgram(geometryProgram);
 }
 const geometryBuffer=gl?gl.createBuffer():null;
+const colorCache=new Map();
+let gpuVertices=new Float32Array(16384);
+let gpuCount=0;
+let geometryOpacity='';
+const positionAttrib=gl?gl.getAttribLocation(geometryProgram,'position'):-1;
+const colorAttrib=gl?gl.getAttribLocation(geometryProgram,'color'):-1;
+if(gl){
+  gl.bindBuffer(gl.ARRAY_BUFFER,geometryBuffer);
+  gl.enableVertexAttribArray(positionAttrib);
+  gl.enableVertexAttribArray(colorAttrib);
+  gl.vertexAttribPointer(positionAttrib,3,gl.FLOAT,false,28,0);
+  gl.vertexAttribPointer(colorAttrib,4,gl.FLOAT,false,28,12);
+  gl.enable(gl.DEPTH_TEST);
+  gl.depthFunc(gl.LEQUAL);
+  gl.enable(gl.BLEND);
+  gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);
+  gl.clearColor(0,0,0,0);
+}
+function decodeColor(hex){
+  let base=colorCache.get(hex);
+  if(!base){
+    const value=hex.slice(1);
+    base=[
+      parseInt(value.slice(0,2),16)/255,
+      parseInt(value.slice(2,4),16)/255,
+      parseInt(value.slice(4,6),16)/255,
+      value.length===8?parseInt(value.slice(6,8),16)/255:1,
+    ];
+    colorCache.set(hex,base);
+  }
+  return base;
+}
+function pushVertex(point,color,opacity){
+  if(gpuCount+7>gpuVertices.length){
+    const next=new Float32Array(gpuVertices.length*2);
+    next.set(gpuVertices);
+    gpuVertices=next;
+  }
+  const index=gpuCount;
+  gpuVertices[index]=point[0]/width*2-1;
+  gpuVertices[index+1]=1-point[1]/height*2;
+  gpuVertices[index+2]=-point[2]/100;
+  gpuVertices[index+3]=color[0];
+  gpuVertices[index+4]=color[1];
+  gpuVertices[index+5]=color[2];
+  gpuVertices[index+6]=color[3]*opacity;
+  gpuCount+=7;
+}
+function submitBatch(mode){
+  if(!gpuCount) return;
+  gl.bufferData(gl.ARRAY_BUFFER,gpuVertices.subarray(0,gpuCount),gl.DYNAMIC_DRAW);
+  gl.drawArrays(mode,0,gpuCount/7);
+  gpuCount=0;
+}
 function renderGeometry(){
   if(geometryCanvas.width!==canvas.width || geometryCanvas.height!==canvas.height){
     geometryCanvas.width=canvas.width;
     geometryCanvas.height=canvas.height;
   }
-  geometryCanvas.style.opacity=chapter===networkChapter?'.24':'1';
-  gl.viewport(0,0,geometryCanvas.width,geometryCanvas.height);
-  gl.clearColor(0,0,0,0);
-  gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
-  gl.enable(gl.DEPTH_TEST);
-  gl.depthFunc(gl.LEQUAL);
-  gl.enable(gl.BLEND);
-  gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);
-  const rgba=(hex,opacity)=>{
-    const value=hex.slice(1);
-    return [parseInt(value.slice(0,2),16)/255,parseInt(value.slice(2,4),16)/255,parseInt(value.slice(4,6),16)/255,(value.length===8?parseInt(value.slice(6,8),16)/255:1)*opacity];
-  };
-  const vertex=(point,color)=>[point[0]/width*2-1,1-point[1]/height*2,-point[2]/100,...color];
-  const opaque=[],transparent=[],edges=[];
-  for(const face of faces){
-    if(face.opacity<=0) continue;
-    const color=rgba(face.color,face.opacity);
-    if(color[3]>0){
-      const target=color[3]>.999?opaque:transparent;
-      for(let i=1;i<face.points.length-1;i++) target.push(...vertex(face.points[0],color),...vertex(face.points[i],color),...vertex(face.points[i+1],color));
-    }
-    if(face.edge){
-      const edge=rgba(face.edge,face.opacity);
-      for(let i=0;i<face.points.length;i++) edges.push(...vertex(face.points[i],edge),...vertex(face.points[(i+1)%face.points.length],edge));
-    }
+  const nextOpacity=chapter===networkChapter?'.24':'1';
+  if(geometryOpacity!==nextOpacity){
+    geometryOpacity=nextOpacity;
+    geometryCanvas.style.opacity=nextOpacity;
   }
-  const submit=(vertices,mode)=>{
-    if(!vertices.length) return;
-    gl.bindBuffer(gl.ARRAY_BUFFER,geometryBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(vertices),gl.DYNAMIC_DRAW);
-    const position=gl.getAttribLocation(geometryProgram,'position');
-    const color=gl.getAttribLocation(geometryProgram,'color');
-    gl.enableVertexAttribArray(position);
-    gl.enableVertexAttribArray(color);
-    gl.vertexAttribPointer(position,3,gl.FLOAT,false,28,0);
-    gl.vertexAttribPointer(color,4,gl.FLOAT,false,28,12);
-    gl.drawArrays(mode,0,vertices.length/7);
+  gl.viewport(0,0,geometryCanvas.width,geometryCanvas.height);
+  gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
+  const writeFaces=(edges,transparent)=>{
+    gpuCount=0;
+    for(const face of faces){
+      if(face.opacity<=0) continue;
+      if(edges){
+        if(!face.edge) continue;
+        const edge=decodeColor(face.edge);
+        if(edge[3]*face.opacity<=0) continue;
+        for(let i=0;i<face.points.length;i++){
+          pushVertex(face.points[i],edge,face.opacity);
+          pushVertex(face.points[(i+1)%face.points.length],edge,face.opacity);
+        }
+        continue;
+      }
+      const color=decodeColor(face.color);
+      const alpha=color[3]*face.opacity;
+      if(alpha<=0 || (transparent?alpha>.999:alpha<=.999)) continue;
+      for(let i=1;i<face.points.length-1;i++){
+        pushVertex(face.points[0],color,face.opacity);
+        pushVertex(face.points[i],color,face.opacity);
+        pushVertex(face.points[i+1],color,face.opacity);
+      }
+    }
   };
   gl.depthMask(true);
   gl.enable(gl.POLYGON_OFFSET_FILL);
   gl.polygonOffset(1,1);
-  submit(opaque,gl.TRIANGLES);
+  writeFaces(false,false);
+  submitBatch(gl.TRIANGLES);
   gl.disable(gl.POLYGON_OFFSET_FILL);
-  submit(edges,gl.LINES);
+  writeFaces(true,false);
+  submitBatch(gl.LINES);
   gl.depthMask(false);
-  submit(transparent,gl.TRIANGLES);
+  writeFaces(false,true);
+  submitBatch(gl.TRIANGLES);
   gl.depthMask(true);
-}
-const nav = document.querySelector('nav');
-const failure = document.querySelector('#failure');
-const zoomSlider = document.querySelector('#zoom-level');
-const zoomValue = document.querySelector('#zoom-value');
-function syncZoom(){
-  const percent=Math.round(targetZoom*100);
-  zoomSlider.value=percent;
-  zoomValue.textContent=percent+'%';
 }
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 let chapter = 0, angle = -.65, lift = 0, focus = 0, drag = null, offset = 0;
@@ -116,57 +157,23 @@ networkToggle.onclick=()=>{
 function select(index) {
   chapter = index;
   document.body.classList.toggle('network', index === networkChapter);
-  failure.hidden = index !== networkChapter;
-  document.querySelector('#network-detail').hidden = index !== networkChapter;
-  document.querySelector('#roof').hidden = index === networkChapter;
-  updateFailure();
   offset = 0;
-  document.querySelector('#title').textContent = scenes[index][0];
-  document.querySelector('#description').textContent = scenes[index][1];
   document.querySelector('#next-zone').hidden=index===networkChapter;
   networkToggle.textContent=index===networkChapter?'Volver al recorrido':'Mostrar red del campus';
   networkToggle.setAttribute('aria-pressed',index===networkChapter);
-}
-function updateFailure(){
-  failure.textContent = failed ? 'Restablecer router' : 'Simular caída de router';
-  failure.setAttribute('aria-pressed', failed);
-  document.querySelector('#status').textContent = chapter === 0 ? 'Acerca la cámara para abrir las cubiertas' :
-    failed ? 'BB-R1-SPBR caído · AtletaPro afectado · dependencias de red marcadas en rojo' :
-    'Red operativa · todos los enlaces activos';
 }
 function visit(index){
   zone = index;
   offset = 0;
   targetZoom = zones[index][3];
-  syncZoom();
   panX = panY = 0;
   zoomAnchor = null;
-
 }
-failure.onclick = () => {
-  failed = !failed;
-  if(failed) visit(6);
-  updateFailure();
-};
-const roof = document.querySelector('#roof');
-roof.onclick = () => {
-  cutaway = !cutaway;
-  roof.setAttribute('aria-pressed',cutaway);
-  roof.textContent = cutaway ? 'Cerrar cubiertas' : 'Abrir cubiertas';
-};
 let tourZoomMultiplier=1;
 function magnify(factor){
   if(!presenting && chapter===0 && !reduced) tourZoomMultiplier=Math.max(.5,Math.min(3,tourZoomMultiplier*factor));
   targetZoom = Math.max(.65,Math.min(7,targetZoom*factor));
-  syncZoom();
 }
-zoomSlider.oninput = () => {
-  zoomAnchor = null;
-  targetZoom=Number(zoomSlider.value)/100;
-  syncZoom();
-};
-document.querySelector('#in').onclick = () => magnify(1.3);
-document.querySelector('#out').onclick = () => magnify(1/1.3);
 canvas.addEventListener('wheel',event => {
   event.preventDefault();
   const bounds = canvas.getBoundingClientRect();
@@ -187,7 +194,6 @@ fullscreenButton.onclick = async () => {
   }
 };
 window.addEventListener('keydown', event => {
-  if(event.target===zoomSlider) return;
   if(!['ArrowLeft','ArrowRight'].includes(event.key)) return;
   event.preventDefault();
   const direction=event.key === 'ArrowRight' ? 1 : -1;
@@ -410,7 +416,7 @@ function tourCamera(time){
 }
 
 function draw(time){
-  if(!reduced) alignArchitectureEdges();
+  if(!reduced && document.body.classList.contains('architecture-slide')) alignArchitectureEdges();
   const t=reduced?0:time/1000;
   const bounds=canvas.getBoundingClientRect();
   width=bounds.width; height=bounds.height;
@@ -748,6 +754,7 @@ const demoSteps = [
   {title:'Medir el valor de los agentes', capability:'Agent Outcomes', agent:'', value:'Cuantifica la capacidad digital creada y el valor que aportan los agentes al negocio.', action:'Comparar resultados por agente y periodo.', sketch:'outcomes', zone:6},
   {title:'Segunda parte', value:'', zone:0, closing:true},
   {title:'A2A y MCP', value:'', sketch:'architecture', zone:0},
+  {title:'Mensajería instantánea', capability:'Innovation Studio · HAE', agent:'', value:'Una aplicación de Innovation Studio, construida con HAE, manda WhatsApp por Twilio y controla cada comunicado.', action:'Elegir plantilla, personas o grupos, enviar y seguir el estado de entrega.', sketch:'messaging', zone:0},
 ];
 const stageSteps = demoSteps;
 const present = document.querySelector('#present');
@@ -758,11 +765,11 @@ const nextStep = document.querySelector('#next-step');
 let presenting = false;
 let stageStep = 0;
 let stageTransition = null;
-const stageAngles = [-.58,-.74,-.40,-.48,-.61,-.46,-.55,-.24,-.52,-.58,-.58,-.58];
+const stageAngles = [-.58,-.74,-.40,-.48,-.61,-.46,-.55,-.24,-.52,-.58,-.58,-.58,-.58];
 const stageMarkers = [
   [.2,1.3,12.3], [-.5,.85,10.4], [-3.5,1.85,9.5],
   [.2,1.3,12.3], [.2,1.3,12.3], [-.5,.85,10.4], [-3.5,1.85,9.5],
-  [-16.35,.8,10.45], [.2,1.3,12.3], [.2,1.3,12.3], [0,1,0], [0,1,0],
+  [-16.35,.8,10.45], [.2,1.3,12.3], [.2,1.3,12.3], [0,1,0], [0,1,0], [0,1,0],
 ];
 
 function drawStagePulse(time){
@@ -901,7 +908,7 @@ function showStep(index){
   document.body.classList.toggle('part-two-slide',Boolean(step.closing));
   document.body.classList.toggle('architecture-slide',step.sketch==='architecture');
   document.querySelector('#part-two-title').hidden=!step.closing;
-  document.body.classList.toggle('product-slide',['aiops','dashboards','change','teams','knowledge','problem','optimizer','outcomes','onboarding','architecture'].includes(step.sketch));
+  document.body.classList.toggle('product-slide',['aiops','dashboards','change','teams','knowledge','problem','optimizer','outcomes','onboarding','architecture','messaging'].includes(step.sketch));
   document.querySelector('#helixgpt-capabilities').hidden=step.sketch!=='aiops';
   failed=Boolean(step.outage);
   select(demo && step.zone===6 ? networkChapter : 0);
@@ -939,10 +946,10 @@ function showStep(index){
       expandA2A.onclick=()=>{
         const expanded=board.classList.toggle('a2a-expanded');
         expandA2A.setAttribute('aria-expanded',String(expanded));
-        expandA2A.textContent=expanded?'← Vista inicial':'✦ Expandir con A2A →';
+        expandA2A.textContent=expanded?'← Vista de la aplicación':'✦ Mostrar customización A2A →';
         if(subtitle) subtitle.textContent=expanded
-          ?'Dos agentes, sus herramientas y una conexión compartida.'
-          :'Agente supervisor de cambios en BMC Helix y sus herramientas.';
+          ?'La customización A2A conecta un agente de Copilot Studio con el supervisor, que sigue dentro de CAB Workspace.'
+          :'El CAB Supervisor vive dentro de CAB Workspace. HAE construyó ahí el calendario de cambios.';
         requestAnimationFrame(layoutSketch);
       };
     }
