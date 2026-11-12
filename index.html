@@ -706,6 +706,62 @@ body:not(.presenting) .stage{min-height:0}
  #part-two-title{top:calc(64% - 40vw);font-size:clamp(56px,17vw,180px)}
 }
 @media(prefers-reduced-motion:reduce){#part-two-title{animation:none}}
+
+.architecture-product{display:grid;gap:24px;color:#204b38;padding:16px 8px;font-size:clamp(14px,1.2vw,20px)}
+.architecture-heading{text-align:center}
+.architecture-heading h2{font-size:clamp(36px,5vw,76px);letter-spacing:-.06em;line-height:1;margin:0 0 12px}
+.architecture-heading p{font-size:.85em;color:#5e7b68}
+.architecture-diagram{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:22px;max-width:950px;margin:auto;width:100%}
+.architecture-diagram.expanded{grid-template-columns:minmax(0,1fr) 110px minmax(0,1fr);max-width:none;gap:12px}
+.arch-platform{display:grid;gap:0;padding:20px;border:1px solid #9ebca8;border-radius:20px;background:#f3f8ee;box-shadow:0 18px 50px #163e2420}
+.arch-platform>header{padding:0 0 16px;background:none;color:#234d39;border:0;letter-spacing:0;font:700 1.05em system-ui;gap:10px;flex-wrap:wrap}
+.arch-platform>header span{font-size:.65em;color:#5b7d64;background:#e1ecd8;padding:5px 9px;border-radius:20px}
+.arch-agent{padding:20px;background:#214c3a;color:#f2f9e9;border:1px solid #638670;border-radius:14px;box-shadow:0 8px 18px #163e2418;display:grid;gap:6px;animation:architecture-float 6s ease-in-out infinite}
+.arch-agent strong{font-size:1.2em;line-height:1.15}
+.arch-agent span{font-size:.72em;color:#cde5ad}
+.arch-connector{height:24px;border-left:2px dashed #7a9a69;justify-self:center;position:relative}
+.arch-connector::after{content:'↓';position:absolute;bottom:-5px;left:-7px;font-size:16px;color:#52794c}
+.arch-tools{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.arch-tool{display:grid;gap:7px;padding:12px 10px;background:#e5efdc;border:1px solid #b2c8a2;border-radius:10px;font-size:.72em;line-height:1.3;animation:architecture-float 7s 1s ease-in-out infinite}
+.arch-tool b{font-size:1.08em}
+.arch-tool span{color:#5c7752}
+.arch-mcp{display:flex;justify-content:center;align-items:center;gap:10px;font-size:.7em;font-weight:750;padding:14px 0}
+.arch-mcp::before,.arch-mcp::after{content:'';height:1px;width:20%;border-top:2px dashed #779568}
+.arch-teams{display:grid;gap:5px;padding:14px;background:#daeaba;border:1px solid #94b369;border-radius:12px;text-align:center;animation:architecture-float 6s 2s ease-in-out infinite}
+.arch-teams strong{font-size:.9em}.arch-teams span{font-size:.7em;color:#537246}
+.architecture-bridge{display:grid;justify-items:center;gap:14px;min-width:0}
+#expand-a2a{border-radius:999px;background:#214c3a;color:#f3fae9;border:1px solid #6d8d67;min-height:44px;padding:12px 18px;white-space:nowrap;font-size:14px}
+.expanded #expand-a2a{font-size:12px;padding:10px 12px;background:#e7f0de;color:#315b3a}
+.architecture-a2a-label[hidden],#copilot-specialist[hidden]{display:none}
+.architecture-a2a-label{display:grid;text-align:center;gap:6px;width:100%;color:#3b6443;font-size:.65em}
+.architecture-a2a-label strong{font-size:1.7em}
+.architecture-a2a-label i{height:2px;border-top:2px dashed #5c8151;position:relative;margin:6px 0}
+.architecture-a2a-label i::before{content:'◀';position:absolute;left:-2px;top:-9px;font-style:normal}
+.architecture-a2a-label span{line-height:1.35}
+.arch-specialist .arch-agent{background:#45663c;animation-delay:-2s}
+.arch-context{display:grid;gap:8px}
+.arch-context>div{display:grid;grid-template-columns:30px minmax(0,1fr);gap:8px;align-items:center;padding:11px;background:#e5efdc;border:1px solid #b5cba8;border-radius:10px;font-size:.75em}
+.arch-context i{font-style:normal;font-size:20px;color:#668548;text-align:center}
+.arch-context section{display:grid;gap:3px}.arch-context span{font-size:.87em;color:#597550}
+.arch-flow{margin-top:14px;padding:10px;border-top:1px solid #b5cba8;font-size:.67em;line-height:1.5;color:#547448;text-align:center}
+.architecture-note{text-align:center;font-size:.64em;color:#73856a}
+@keyframes architecture-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+.architecture-slide #sketch-slot:not([hidden]){width:96%;max-width:1500px;grid-area:1/1}
+.arch-specialist:not([hidden]){animation:window-enter .5s ease both}
+@media(max-width:1024px){
+ .architecture-slide .stage{grid-template-rows:auto!important}
+ .architecture-product{font-size:16px;padding:12px 0;gap:20px}
+ .architecture-diagram,.architecture-diagram.expanded{grid-template-columns:minmax(0,1fr);gap:18px}
+ .arch-platform{padding:16px}.arch-agent{padding:16px}
+ .architecture-bridge{gap:10px}.architecture-a2a-label{max-width:230px}
+ .architecture-a2a-label i{display:none}
+ .architecture-a2a-label strong::before{content:'↑ '}
+ .arch-tools{grid-template-columns:minmax(0,1fr)}
+ .arch-tool{grid-template-columns:1fr 1fr;align-items:center;font-size:13px;padding:10px 12px}
+ .arch-context>div{font-size:14px}
+ .architecture-note{font-size:11px;padding:0 10px}
+}
+@media(prefers-reduced-motion:reduce){.arch-agent,.arch-tool,.arch-teams,.arch-specialist:not([hidden]){animation:none}}
 </style>
 <header><span class="brand"><img src="helix-arena.png" alt="Helix Arena"></span><div class="header-actions"><button id="next-zone">Siguiente zona →</button><button id="network-toggle" aria-pressed="false">Mostrar red del campus</button><button id="present">Modo escenario</button><button id="full">Pantalla completa</button></div></header>
 <main><aside>
@@ -1144,4 +1200,36 @@ body:not(.presenting) .stage{min-height:0}
   </section>
 </div>
 </template>
-<script src="arena.js?v=40"></script></html>
+
+<template id="sketch-architecture">
+<div class="architecture-product">
+ <div class="architecture-heading"><h2>A2A y MCP</h2><p>Agentes que colaboran. Herramientas que ejecutan.</p></div>
+ <div class="architecture-diagram">
+  <section class="arch-platform">
+   <header><strong>BMC Helix</strong><span>HelixGPT</span></header>
+   <div class="arch-agent"><strong>✦ CAB Supervisor Agent</strong><span>Contexto y coordinación del cambio</span></div>
+   <div class="arch-connector" aria-hidden="true"></div>
+   <div class="arch-tools"><div class="arch-tool"><b>Análisis de cambios</b><span>Resumen para el CAB</span></div><div class="arch-tool"><b>Documentación y riesgo</b><span>Preparación del cambio</span></div><div class="arch-tool"><b>Conflictos y seguimiento</b><span>Ventanas y condiciones</span></div></div>
+   <div class="arch-mcp">↓ MCP</div>
+   <div class="arch-teams"><strong>Microsoft Teams · Reunión CAB</strong><span>Agenda · asistentes · enlace de reunión</span></div>
+  </section>
+  <div class="architecture-bridge">
+   <div class="architecture-a2a-label" hidden><strong>A2A</strong><i aria-hidden="true"></i><span>Copilot consulta a Helix<br>Helix devuelve contexto</span></div>
+   <button id="expand-a2a" aria-expanded="false" aria-controls="copilot-specialist">Ampliar con A2A →</button>
+  </div>
+  <section class="arch-platform arch-specialist" id="copilot-specialist" hidden>
+   <header><strong>Microsoft Copilot Studio</strong><span>Agente especialista</span></header>
+   <div class="arch-agent"><strong>✦ CAB Security Reviewer</strong><span>Seguridad y contexto de la organización</span></div>
+   <div class="arch-connector" aria-hidden="true"></div>
+   <div class="arch-context">
+    <div><i aria-hidden="true">▤</i><section><b>Conocimiento de seguridad</b><span>AtletaPro · políticas · controles internos</span></section></div>
+    <div><i aria-hidden="true">◇</i><section><b>Tools de seguridad</b><span>Vulnerabilidades y configuración · ampliación prevista</span></section></div>
+    <div><i aria-hidden="true">▦</i><section><b>Outlook · Calendarios</b><span>Disponibilidad y huecos de los participantes</span></section></div>
+   </div>
+   <div class="arch-flow">1 · Analizar seguridad → 2 · Consultar calendario → 3 · Coordinar con Helix por A2A</div>
+  </section>
+ </div>
+ <div class="architecture-note">Arquitectura de la demo · Convocatoria Teams de extremo a extremo pendiente de validar.</div>
+</div>
+</template>
+<script src="arena.js?v=41"></script></html>

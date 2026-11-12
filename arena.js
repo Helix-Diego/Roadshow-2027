@@ -746,6 +746,7 @@ const demoSteps = [
   {title:'Mejorar el catálogo', capability:'Service Optimizer', agent:'', value:'Las conversaciones con Employee Navigator revelan oportunidades para crear o mejorar servicios.', action:'Revisar las conversaciones y priorizar por impacto. Llevar la oportunidad a Catalog Curator.', sketch:'optimizer', zone:6},
   {title:'Medir el valor de los agentes', capability:'Agent Outcomes', agent:'', value:'Cuantifica la capacidad digital creada y el valor que aportan los agentes al negocio.', action:'Comparar resultados por agente y periodo.', sketch:'outcomes', zone:6},
   {title:'Segunda parte', value:'', zone:0, closing:true},
+  {title:'A2A y MCP', value:'', sketch:'architecture', zone:0},
 ];
 const stageSteps = demoSteps;
 const present = document.querySelector('#present');
@@ -756,11 +757,11 @@ const nextStep = document.querySelector('#next-step');
 let presenting = false;
 let stageStep = 0;
 let stageTransition = null;
-const stageAngles = [-.58,-.74,-.40,-.48,-.61,-.46,-.55,-.24,-.52,-.58,-.58];
+const stageAngles = [-.58,-.74,-.40,-.48,-.61,-.46,-.55,-.24,-.52,-.58,-.58,-.58];
 const stageMarkers = [
   [.2,1.3,12.3], [-.5,.85,10.4], [-3.5,1.85,9.5],
   [.2,1.3,12.3], [.2,1.3,12.3], [-.5,.85,10.4], [-3.5,1.85,9.5],
-  [-16.35,.8,10.45], [.2,1.3,12.3], [.2,1.3,12.3], [0,1,0],
+  [-16.35,.8,10.45], [.2,1.3,12.3], [.2,1.3,12.3], [0,1,0], [0,1,0],
 ];
 
 function drawStagePulse(time){
@@ -857,14 +858,15 @@ function showStep(index){
   const step=stageSteps[stageStep];
   const demo=Boolean(step.capability);
   document.body.classList.toggle('part-two-slide',Boolean(step.closing));
+  document.body.classList.toggle('architecture-slide',step.sketch==='architecture');
   document.querySelector('#part-two-title').hidden=!step.closing;
-  document.body.classList.toggle('product-slide',['aiops','dashboards','change','teams','knowledge','problem','optimizer','outcomes','onboarding'].includes(step.sketch));
+  document.body.classList.toggle('product-slide',['aiops','dashboards','change','teams','knowledge','problem','optimizer','outcomes','onboarding','architecture'].includes(step.sketch));
   document.querySelector('#helixgpt-capabilities').hidden=step.sketch!=='aiops';
   failed=Boolean(step.outage);
   select(demo && step.zone===6 ? networkChapter : 0);
   visit(0);
   cue.className=demo?'demo':'overview';
-  cue.hidden=Boolean(step.closing);
+  cue.hidden=Boolean(step.closing || step.sketch==='architecture');
   if(step.closing){targetZoom=1.23;cutaway=false;stageTransition=null;}
   tourLabel.hidden=true;
   document.querySelector('#cue-phase').textContent=step.capability || 'Visita al centro';
@@ -889,6 +891,17 @@ function showStep(index){
       topology.setAttribute('role','region');
       topology.setAttribute('aria-label','Topología del servicio AtletaPro');
     }
+    const expand=sketchSlot.querySelector('#expand-a2a');
+    if(expand) expand.onclick=()=>{
+      const diagram=sketchSlot.querySelector('.architecture-diagram');
+      const expanded=expand.getAttribute('aria-expanded')!=='true';
+      expand.setAttribute('aria-expanded',String(expanded));
+      diagram.classList.toggle('expanded',expanded);
+      sketchSlot.querySelector('#copilot-specialist').hidden=!expanded;
+      sketchSlot.querySelector('.architecture-a2a-label').hidden=!expanded;
+      expand.textContent=expanded?'← Contraer':'Ampliar con A2A →';
+      requestAnimationFrame(layoutSketch);
+    };
     requestAnimationFrame(layoutSketch);
   }
   previousStep.disabled=stageStep===0;
@@ -901,6 +914,7 @@ present.onclick=()=>{
   if(!presenting){
     document.body.classList.toggle('product-slide',false);
     document.body.classList.toggle('part-two-slide',false);
+    document.body.classList.toggle('architecture-slide',false);
     document.querySelector('#part-two-title').hidden=true;
     tourStart=null;
     failed=false;
