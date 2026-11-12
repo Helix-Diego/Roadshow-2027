@@ -842,21 +842,21 @@ function alignArchitectureEdges(){
         x1=from.left-bounds.left;y1=from.top+from.height/2-bounds.top;
         x2=to.left-bounds.left;y2=to.top+to.height/2-bounds.top;
         d=`M${x1},${y1} C0,${y1} 0,${y2} ${x2},${y2}`;
-      }else if(path.dataset.to==='cab-teams' && path.dataset.from==='cab-supervisor'){
-        x1=from.right-bounds.left;y1=from.top+from.height/2-bounds.top;
-        x2=to.right-bounds.left;y2=to.top+to.height/2-bounds.top;
-        const side=cab.querySelector('.cab-workspace').getBoundingClientRect().right-bounds.left-8;
-        d=`M${x1},${y1} C${side},${y1} ${side},${y2} ${x2},${y2}`;
-      }else if(path.classList.contains('cab-a2a-line') || path.dataset.from==='cab-calendar'){
-        x1=from.right-bounds.left;y1=from.top+from.height/2-bounds.top;
-        x2=to.left-bounds.left;y2=to.top+to.height/2-bounds.top;
-        const mid=(x1+x2)/2;
-        d=`M${x1},${y1} C${mid},${y1-18} ${mid},${y2+18} ${x2},${y2}`;
       }else{
-        x1=from.left+from.width/2-bounds.left;y1=from.bottom-bounds.top;
-        x2=to.left+to.width/2-bounds.left;y2=to.top-bounds.top;
-        if(path.dataset.from==='cab-security'){x1=from.left-bounds.left+12;x2=to.left-bounds.left;const side=x1-16;d=`M${x1},${y1} C${side},${y1+25} ${side},${y2+20} ${x2},${y2+20}`;}
-        else{const mid=(y1+y2)/2;d=`M${x1},${y1} C${x1},${mid} ${x2},${mid} ${x2},${y2}`;}
+        const dx=to.left+to.width/2-from.left-from.width/2;
+        const dy=to.top+to.height/2-from.top-from.height/2;
+        const horizontal=path.classList.contains('cab-a2a-line') || (Math.abs(dx)>Math.abs(dy) && path.dataset.from.startsWith('message'));
+        if(horizontal){
+          x1=(dx>0?from.right:from.left)-bounds.left;y1=from.top+from.height/2-bounds.top;
+          x2=(dx>0?to.left:to.right)-bounds.left;y2=to.top+to.height/2-bounds.top;
+          const middle=(x1+x2)/2;
+          d=`M${x1},${y1} C${middle},${y1} ${middle},${y2} ${x2},${y2}`;
+        }else{
+          x1=from.left+from.width/2-bounds.left;y1=(dy>0?from.bottom:from.top)-bounds.top;
+          x2=to.left+to.width/2-bounds.left;y2=(dy>0?to.top:to.bottom)-bounds.top;
+          const middle=(y1+y2)/2;
+          d=`M${x1},${y1} C${x1},${middle} ${x2},${middle} ${x2},${y2}`;
+        }
       }
       path.setAttribute('d',d);
     }
