@@ -801,31 +801,54 @@ body:not(.presenting) .stage{min-height:0}
 }
 @media(prefers-reduced-motion:reduce){.orbit-card,.orbit-board.a2a-expanded [data-agent="copilot"].orbit-node,.orbit-board.a2a-expanded .orbit-link-label{animation:none}.orbit-node,.orbit-link-label,.orbit-lines path,.cab-shell{transition:none}}
 
-.messaging-product{display:grid;gap:12px;color:#163a2c;font-size:clamp(12px,1.15vw,17px)}
-.messaging-benefit{display:grid;gap:4px;padding:12px 16px;border-radius:14px;background:#e7f3df;border:1px solid #b7d0ab}
-.messaging-benefit strong{font-size:clamp(16px,1.6vw,24px);letter-spacing:-.03em}
-.messaging-benefit span{color:#3c5c49;line-height:1.35}
-.messaging-flow{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap}
-.messaging-flow span{padding:7px 12px;border-radius:999px;background:#173f30;color:#f4fbe8;font-weight:700;font-size:.85em}
-.messaging-flow span:nth-child(3){background:#8c4b14}
-.messaging-flow span:nth-child(5){background:#1f7a4d}
-.messaging-flow b{color:#5d7a68}
-.messaging-layout{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:12px;padding:12px}
-.messaging-compose,.messaging-results{display:grid;gap:8px;align-content:start}
-.messaging-compose label,.messaging-row{display:grid;gap:2px;padding:8px 10px;border-radius:8px;background:#e7f0e6;border:1px solid #d3e2d4}
-.messaging-compose label{font-size:.78em;color:#5a7464;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
-.messaging-compose b{font-size:1.15em;letter-spacing:0;text-transform:none;color:#173f30;font-weight:700}
-.messaging-send{justify-self:start;padding:9px 14px;border-radius:999px;background:#1f7a4d;color:#f4fff6;font-weight:750}
-.messaging-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
-.messaging-kpis span{padding:7px;border-radius:8px;background:#e7f0e6;font-size:.78em;color:#466454}
-.messaging-kpis b{display:block;font-size:1.35em;color:#173f30}
-.messaging-row{grid-template-columns:1.3fr .9fr auto;align-items:center;font-size:.92em}
-.messaging-row.head{background:transparent;border:0;padding:0 10px;color:#5d7868;font-size:.75em;letter-spacing:.04em;text-transform:uppercase}
-.messaging-row em{font-style:normal;font-weight:750;padding:3px 8px;border-radius:999px}
-.messaging-row em.ok{background:#d9efcf;color:#1d5b38}
-.messaging-row em.wait{background:#f8e7cf;color:#8a4e12}
-.messaging-results small{color:#5d7868}
-@media(max-width:800px){.messaging-layout,.messaging-kpis,.messaging-row{grid-template-columns:1fr}}
+.arch-diagram{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;align-items:stretch;width:min(100%,1180px);margin:0 auto}
+.arch-diagram.is-expanded{grid-template-columns:minmax(0,1.15fr) 92px minmax(0,.95fr);align-items:stretch}
+.arch-pane{display:flex;flex-direction:column;gap:12px;min-width:0;height:100%;padding:16px;border:1.5px solid #7d9b84;border-radius:24px;background:linear-gradient(180deg,#f8fbf6,#e5f0e6);box-shadow:inset 0 0 0 1px #ffffff9c}
+.arch-pane-custom{display:none;border-style:dashed;border-color:#e0a65b;background:linear-gradient(180deg,#fffaf3,#fbf3e6)}
+.arch-diagram.is-expanded .arch-pane-custom{display:flex}
+.arch-pane-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.arch-pane-head div{display:grid;gap:3px;min-width:0}
+.arch-pane-head strong{font-size:clamp(16px,1.5vw,22px);letter-spacing:-.03em;color:#173f30}
+.arch-pane-head span:not(.arch-badge){font-size:13px;line-height:1.35;color:#4d6b58}
+.arch-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:stretch}
+.arch-grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.arch-span{grid-column:1/-1}
+.arch-card{position:relative;inset:auto;display:grid;gap:4px;align-content:start;width:auto;height:100%;margin:0;padding:12px 14px;border-radius:16px;border:1px solid #a8bf85;background:#e6efcf;color:#29462e;box-shadow:0 8px 18px #21462914;pointer-events:auto}
+.arch-card small{font:700 10px system-ui;letter-spacing:.08em;color:#607c44}
+.arch-card strong{font-size:clamp(14px,1.2vw,18px);line-height:1.2;letter-spacing:-.02em}
+.arch-card span{font-size:clamp(12px,.95vw,14px);line-height:1.35;color:#5a724b}
+.arch-card-agent{align-content:center;min-height:96px;padding:18px 20px;background:#173f30;border-color:#61876c;color:#f7fbea;box-shadow:0 14px 30px #163c2c24}
+.arch-card-agent small{color:#c8e3a8}
+.arch-card-agent span{color:#cee1c4}
+.arch-card-agent strong{font-size:clamp(20px,1.8vw,28px)}
+.arch-card-custom{background:#fbf3e6;border:1.5px dashed #c87b33;color:#4a3014}
+.arch-card-custom small{color:#a85914}
+.arch-card-custom span{color:#6f4f28}
+.arch-card-agent-custom{border:1.5px dashed #e0a65b}
+.arch-badge{display:inline-flex;align-items:center;flex:0 0 auto;padding:4px 10px;border-radius:999px;background:#21523d;color:#fff;border:1px solid #88b99c;font:700 10.5px system-ui;letter-spacing:.08em;text-transform:uppercase}
+.arch-badge-vibe{background:#8c4b14;border-color:#d49452}
+.arch-badge-custom{background:#8c4b14;border-color:#e0a65b}
+.arch-bridge{display:none;align-content:center;justify-items:center;gap:8px;text-align:center;color:#2b5940}
+.arch-diagram.is-expanded .arch-bridge{display:grid}
+.arch-bridge i{width:2px;height:42px;background:#285e45}
+.arch-bridge strong{font-size:18px;letter-spacing:.04em}
+.arch-bridge small{font-size:11px;color:#4d6b58}
+.arch-diagram.is-expanded .arch-pane{padding:10px;gap:8px}
+.arch-diagram.is-expanded .arch-grid{gap:8px}
+.arch-diagram.is-expanded .arch-card{padding:8px 10px}
+.arch-diagram.is-expanded .arch-card-agent{min-height:0;padding:12px 14px}
+.arch-diagram.is-expanded .arch-grid-3 .arch-card strong{font-size:13px;line-height:1.15}
+.arch-diagram.is-expanded .arch-grid-3 .arch-card span{font-size:11px}
+.arch-diagram.is-expanded .arch-pane-head span:not(.arch-badge){font-size:12px}
+.arch-brand{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px}
+.arch-brand img{display:block;height:20px;width:auto}
+.arch-brand .copilot-logo img{width:28px;height:28px;object-fit:contain}
+@media(max-width:1024px){
+ .arch-diagram.is-expanded{grid-template-columns:1fr}
+ .arch-grid,.arch-grid-3{grid-template-columns:1fr}
+ .arch-diagram.is-expanded .arch-bridge{grid-auto-flow:column;align-items:center;justify-content:center;padding:4px 0}
+ .arch-bridge i{width:42px;height:2px}
+}
 </style>
 <header><span class="brand"><img src="helix-arena.png" alt="Helix Arena"></span><div class="header-actions"><button id="next-zone">Siguiente zona →</button><button id="network-toggle" aria-pressed="false">Mostrar red del campus</button><button id="present">Modo escenario</button><button id="full">Pantalla completa</button></div></header>
 <main><div class="stage">
@@ -1258,59 +1281,72 @@ body:not(.presenting) .stage{min-height:0}
   <p id="arch-subtitle">El CAB Supervisor vive dentro de CAB Workspace. HAE construyó ahí el calendario de cambios.</p>
   <button id="expand-a2a" type="button" class="a2a-expand-btn" aria-expanded="false">✦ Mostrar customización A2A →</button>
  </div>
- <div class="orbit-board">
-  <svg class="orbit-lines" aria-hidden="true"><defs><marker id="a2a-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" style="fill:#285e45;stroke:none"/></marker></defs>
-   <path data-from="node-helix" data-to="tool-summary"/><path data-from="node-helix" data-to="tool-risk"/><path data-from="node-helix" data-to="tool-conflicts"/><path class="orbit-custom" data-from="node-helix" data-to="tool-teams"/>
-   <path data-agent="copilot" data-from="node-copilot" data-to="tool-knowledge"/><path data-agent="copilot" data-from="node-copilot" data-to="tool-security"/><path data-agent="copilot" data-from="node-copilot" data-to="tool-outlook"/>
-   <path class="orbit-a2a" data-from="node-copilot" data-to="node-helix" marker-end="url(#a2a-arrow)"/>
-  </svg>
-  <section class="cab-shell" aria-hidden="true"></section>
-  <div class="cab-layer">
-   <div class="cab-shell-head">
-    <div><strong>CAB Workspace</strong><span>Aplicación BMC Helix. El agente de caja y la vista hecha con HAE están dentro.</span></div>
-    <span class="orbit-badge orbit-badge-ootb">De caja</span>
+ <div class="arch-diagram">
+  <section class="arch-pane">
+   <header class="arch-pane-head">
+    <div><strong>CAB Workspace</strong><span>Aplicación BMC Helix. El agente de caja y el calendario de HAE están dentro.</span></div>
+    <span class="arch-badge">De caja</span>
+   </header>
+   <div class="arch-grid">
+    <article class="arch-card arch-card-agent arch-span">
+     <div class="arch-brand"><span class="helix-logo"><img src="bmc-helix.png?v=2" alt="BMC Helix"></span><span class="arch-badge">De caja</span></div>
+     <strong>CAB Supervisor Agent</strong><span>Agente nativo, dentro de la aplicación. Orquesta a los agentes del CAB.</span>
+    </article>
+    <div class="arch-grid arch-grid-3 arch-span">
+     <article class="arch-card"><small>AGENTE · DE CAJA</small><strong>CAB Approval Summary Agent</strong><span>Resume el cambio para la aprobación</span></article>
+     <article class="arch-card"><small>AGENTE · DE CAJA</small><strong>CAB Change Collision</strong><span>Detecta colisiones entre cambios</span></article>
+     <article class="arch-card"><small>AGENTE · DE CAJA</small><strong>CAB Follow Up Agent</strong><span>Da seguimiento después del CAB</span></article>
+    </div>
+    <article class="arch-card arch-card-custom"><small>CONEXIÓN MCP · CUSTOM</small><strong>Microsoft Teams</strong><span>Crear la reunión CAB</span></article>
+    <article class="arch-card arch-card-custom"><small>APLICACIÓN · HAE</small><strong>Calendario de cambios</strong><span>Vista construida con HAE dentro de CAB Workspace</span></article>
    </div>
-    <section id="node-helix" class="orbit-node orbit-agent" style="--x:34%;--y:46%;--w:34%"><div class="orbit-card"><div class="orbit-brand-row"><span class="helix-logo"><img src="bmc-helix.png?v=2" alt="BMC Helix"></span><span class="orbit-badge orbit-badge-ootb">De caja</span></div><strong>CAB Supervisor Agent</strong><span>Agente nativo, dentro de la aplicación</span></div></section>
-    <div id="tool-summary" class="orbit-node" style="--x:18%;--y:16%;--w:28%;--phase:-1s"><div class="orbit-card"><small>TOOL · DE CAJA</small><strong>Análisis de cambios</strong><span>Resumen para el CAB</span></div></div>
-    <div id="tool-risk" class="orbit-node" style="--x:72%;--y:16%;--w:30%;--phase:-2s"><div class="orbit-card"><small>TOOL · DE CAJA</small><strong>Documentación y riesgo</strong><span>Preparación del cambio</span></div></div>
-    <div id="tool-conflicts" class="orbit-node" style="--x:17%;--y:84%;--w:28%;--phase:-3s"><div class="orbit-card"><small>TOOL · DE CAJA</small><strong>Conflictos y seguimiento</strong><span>Ventanas y condiciones</span></div></div>
-    <div id="tool-teams" class="orbit-node orbit-custom" style="--x:46%;--y:84%;--w:28%;--phase:-4s"><div class="orbit-card"><small>CONEXIÓN MCP · CUSTOM</small><strong>Microsoft Teams</strong><span>Crear la reunión CAB</span></div></div>
-    <div id="tool-calendar" class="orbit-node orbit-vibe" style="--x:78%;--y:56%;--w:32%;--phase:-2s"><div class="orbit-card"><small>APLICACIÓN · HAE</small><strong>Calendario de cambios</strong><span>Vista construida con HAE dentro de CAB Workspace para cerrar las reuniones de Teams</span></div></div>
-  </div>
-  <div class="orbit-link-label"><strong>A2A</strong><span>Copilot → Helix</span></div>
-  <section id="node-copilot" data-agent="copilot" class="orbit-node orbit-agent orbit-agent-custom" style="--x:80%;--y:48%;--w:26%;--phase:0s"><div class="orbit-card"><div class="orbit-brand-row"><span class="copilot-logo"><img src="m365-copilot.png?v=2" alt="Microsoft 365 Copilot"></span><small>COPILOT STUDIO</small><span class="orbit-badge orbit-badge-custom">Custom</span></div><strong>CAB Security Reviewer</strong><span>Customización A2A · Seguridad y organización</span></div></section>
-  <div id="tool-knowledge" data-agent="copilot" class="orbit-node" style="--x:70%;--y:14%;--w:20%;--phase:-3s"><div class="orbit-card"><small>CONOCIMIENTO</small><strong>Seguridad y políticas</strong><span>AtletaPro · controles internos</span></div></div>
-  <div id="tool-security" data-agent="copilot" class="orbit-node" style="--x:92%;--y:16%;--w:18%;--phase:-4s"><div class="orbit-card"><small>TOOLS · AMPLIABLE</small><strong>Análisis de seguridad</strong><span>Vulnerabilidades y configuración</span></div></div>
-  <div id="tool-outlook" data-agent="copilot" class="orbit-node" style="--x:82%;--y:84%;--w:26%;--phase:-1s"><div class="orbit-card"><small>TOOL · OUTLOOK</small><strong>Calendarios de la organización</strong><span>Disponibilidad y huecos para el CAB</span></div></div>
+  </section>
+  <div class="arch-bridge" aria-hidden="true"><i></i><strong>A2A</strong><small>Copilot → Helix</small><i></i></div>
+  <section class="arch-pane arch-pane-custom">
+   <header class="arch-pane-head">
+    <div><strong>Customización A2A</strong><span>Otro agente, conectado al supervisor sin sacarlo de CAB Workspace.</span></div>
+    <span class="arch-badge arch-badge-custom">Custom</span>
+   </header>
+   <article class="arch-card arch-card-agent arch-card-agent-custom">
+    <div class="arch-brand"><span class="copilot-logo"><img src="m365-copilot.png?v=2" alt="Microsoft 365 Copilot"></span><span class="arch-badge arch-badge-custom">Custom</span></div>
+    <strong>CAB Security Reviewer</strong><span>Copilot Studio · Seguridad y organización</span>
+   </article>
+   <div class="arch-grid">
+    <article class="arch-card"><small>CONOCIMIENTO</small><strong>Seguridad y políticas</strong><span>AtletaPro · controles internos</span></article>
+    <article class="arch-card"><small>TOOLS · AMPLIABLE</small><strong>Análisis de seguridad</strong><span>Vulnerabilidades y configuración</span></article>
+    <article class="arch-card arch-span"><small>TOOL · OUTLOOK</small><strong>Calendarios de la organización</strong><span>Disponibilidad y huecos para el CAB</span></article>
+   </div>
+  </section>
  </div>
 </div>
 </template>
 <template id="sketch-messaging">
-<div class="messaging-product">
-  <div class="messaging-benefit"><strong>HAE construye la aplicación. Twilio entrega WhatsApp.</strong><span>Desde Innovation Studio se elige la plantilla, las personas o los grupos, y Helix guarda el estado de cada comunicado.</span></div>
-  <div class="messaging-flow" aria-hidden="true"><span>Innovation Studio</span><b>→</b><span>Twilio</span><b>→</b><span>WhatsApp</span></div>
-  <section class="mock-window">
-    <header><strong>BMC Helix · Interfaz de mensajería</strong><span>HAE · Innovation Studio</span></header>
-    <div class="messaging-layout">
-      <div class="messaging-compose">
-        <strong>Enviar comunicado WhatsApp</strong>
-        <label>Plantilla Twilio<b>Aviso AtletaPro · incidencia de red</b></label>
-        <label>Personas<b>Operaciones del campus</b></label>
-        <label>Grupos dinámicos<b>Primer equipo</b></label>
-        <label>Números adicionales<b>+34 600 111 222</b></label>
-        <div class="messaging-send">Enviar por WhatsApp</div>
-      </div>
-      <div class="messaging-results">
-        <strong>Resultado del envío</strong>
-        <div class="messaging-kpis"><span>Entregados<b>2</b></span><span>En curso<b>1</b></span><span>Fallidos<b>0</b></span></div>
-        <div class="messaging-row head"><b>Nombre</b><b>Teléfono</b><b>Estado</b></div>
-        <div class="messaging-row"><span>Mesa de operaciones</span><span>+34 610…</span><em class="ok">Entregado</em></div>
-        <div class="messaging-row"><span>Responsable de pista</span><span>+34 620…</span><em class="ok">Entregado</em></div>
-        <div class="messaging-row"><span>Número adicional</span><span>+34 600 111 222</span><em class="wait">Enviado</em></div>
-        <small>Helix consulta Twilio y actualiza cada línea a entregado o fallido.</small>
-      </div>
-    </div>
+<div class="architecture-product">
+ <div class="architecture-heading">
+  <h2>Mensajería conversacional</h2>
+  <p>Cursor y el SDK de Helix construyen la aplicación. HelixGPT ejecuta el envío con el contexto de la incidencia y de cada usuario.</p>
+ </div>
+ <div class="arch-diagram">
+  <section class="arch-pane">
+   <header class="arch-pane-head">
+    <div><strong>Interfaz de mensajería</strong><span>Aplicación de Innovation Studio desarrollada con Cursor y el SDK de Helix. Lee incidencias, usuarios y preferencias, y entrega por Twilio.</span></div>
+    <span class="arch-badge arch-badge-vibe">Cursor · SDK</span>
+   </header>
+   <div class="arch-grid arch-grid-3">
+    <article class="arch-card"><small>DATO DE LA APLICACIÓN</small><strong>Incidencias</strong><span>Número, servicio y contexto del aviso</span></article>
+    <article class="arch-card"><small>DATO DE LA APLICACIÓN</small><strong>Usuarios registrados</strong><span>Personas y grupos de la aplicación</span></article>
+    <article class="arch-card"><small>DATO DE LA APLICACIÓN</small><strong>Preferencias</strong><span>Canal, idioma y consentimiento de cada usuario</span></article>
+    <article class="arch-card arch-card-agent arch-span">
+     <div class="arch-brand"><span class="helix-logo"><img src="bmc-helix.png?v=2" alt="BMC Helix"></span><span class="arch-badge">HelixGPT</span></div>
+     <strong>Agente de comunicaciones</strong><span>Experiencia conversacional. Usa tools para preparar y lanzar el mensaje.</span>
+    </article>
+    <article class="arch-card"><small>TOOL</small><strong>Consultar la incidencia</strong><span>Trae el caso y el servicio afectado</span></article>
+    <article class="arch-card"><small>TOOL</small><strong>Leer usuario y preferencias</strong><span>Elige destinatario y canal</span></article>
+    <article class="arch-card"><small>TOOL · TWILIO</small><strong>Enviar la comunicación</strong><span>WhatsApp o correo, según la preferencia</span></article>
+    <article class="arch-card arch-card-custom arch-span"><small>INTEGRACIÓN</small><strong>Twilio → WhatsApp</strong><span>La aplicación entrega el mensaje y Helix conserva el estado de cada destinatario</span></article>
+   </div>
   </section>
+ </div>
 </div>
 </template>
-<script src="arena.js?v=45"></script></html>
+<script src="arena.js?v=47"></script></html>

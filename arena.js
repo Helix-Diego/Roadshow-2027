@@ -754,7 +754,7 @@ const demoSteps = [
   {title:'Medir el valor de los agentes', capability:'Agent Outcomes', agent:'', value:'Cuantifica la capacidad digital creada y el valor que aportan los agentes al negocio.', action:'Comparar resultados por agente y periodo.', sketch:'outcomes', zone:6},
   {title:'Segunda parte', value:'', zone:0, closing:true},
   {title:'A2A y MCP', value:'', sketch:'architecture', zone:0},
-  {title:'Mensajería instantánea', capability:'Innovation Studio · HAE', agent:'', value:'Una aplicación de Innovation Studio, construida con HAE, manda WhatsApp por Twilio y controla cada comunicado.', action:'Elegir plantilla, personas o grupos, enviar y seguir el estado de entrega.', sketch:'messaging', zone:0},
+  {title:'Mensajería conversacional', value:'', sketch:'messaging', zone:0},
 ];
 const stageSteps = demoSteps;
 const present = document.querySelector('#present');
@@ -906,15 +906,16 @@ function showStep(index){
   const step=stageSteps[stageStep];
   const demo=Boolean(step.capability);
   document.body.classList.toggle('part-two-slide',Boolean(step.closing));
-  document.body.classList.toggle('architecture-slide',step.sketch==='architecture');
+  const diagram=step.sketch==='architecture' || step.sketch==='messaging';
+  document.body.classList.toggle('architecture-slide',diagram);
   document.querySelector('#part-two-title').hidden=!step.closing;
-  document.body.classList.toggle('product-slide',['aiops','dashboards','change','teams','knowledge','problem','optimizer','outcomes','onboarding','architecture','messaging'].includes(step.sketch));
+  document.body.classList.toggle('product-slide',['aiops','dashboards','change','teams','knowledge','problem','optimizer','outcomes','onboarding','architecture'].includes(step.sketch));
   document.querySelector('#helixgpt-capabilities').hidden=step.sketch!=='aiops';
   failed=Boolean(step.outage);
   select(demo && step.zone===6 ? networkChapter : 0);
   visit(0);
   cue.className=demo?'demo':'overview';
-  cue.hidden=Boolean(step.closing || step.sketch==='architecture');
+  cue.hidden=Boolean(step.closing || diagram);
   if(step.closing){zoom=targetZoom=1.12;angle=stageAngles[stageStep];focus=focusZ=offset=panX=panY=0;lift=0;tilt=.53;zoomAnchor=null;cutaway=false;stageTransition=null;}
   tourLabel.hidden=true;
   document.querySelector('#cue-phase').textContent=step.capability || 'Visita al centro';
@@ -941,16 +942,15 @@ function showStep(index){
     }
     const expandA2A=sketchSlot.querySelector('#expand-a2a');
     if(expandA2A){
-      const board=sketchSlot.querySelector('.orbit-board');
+      const diagramBoard=sketchSlot.querySelector('.arch-diagram');
       const subtitle=sketchSlot.querySelector('#arch-subtitle');
       expandA2A.onclick=()=>{
-        const expanded=board.classList.toggle('a2a-expanded');
+        const expanded=diagramBoard.classList.toggle('is-expanded');
         expandA2A.setAttribute('aria-expanded',String(expanded));
         expandA2A.textContent=expanded?'← Vista de la aplicación':'✦ Mostrar customización A2A →';
         if(subtitle) subtitle.textContent=expanded
           ?'La customización A2A conecta un agente de Copilot Studio con el supervisor, que sigue dentro de CAB Workspace.'
           :'El CAB Supervisor vive dentro de CAB Workspace. HAE construyó ahí el calendario de cambios.';
-        requestAnimationFrame(layoutSketch);
       };
     }
     requestAnimationFrame(layoutSketch);
