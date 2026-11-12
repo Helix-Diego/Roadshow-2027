@@ -235,7 +235,8 @@ function project([x,y,z]) {
   z -= focusZ;
   const u = x*Math.cos(angle)-z*Math.sin(angle);
   const v = x*Math.sin(angle)+z*Math.cos(angle);
-  return [width*.50+u*scale+panX,height*.51+(v*tilt-y*Math.sqrt(1-tilt*tilt))*scale+panY,v*Math.sqrt(1-tilt*tilt)+y*tilt,y];
+  const centerY=presenting && stageSteps[stageStep]?.closing ? .64 : .51;
+  return [width*.50+u*scale+panX,height*centerY+(v*tilt-y*Math.sqrt(1-tilt*tilt))*scale+panY,v*Math.sqrt(1-tilt*tilt)+y*tilt,y];
 }
 function poly(vertices, color, edge, layer = 1) {
   const transformed=modelTransform ? vertices.map(([x,y,z])=>[x*.72,y,(z+7.2)*2.5+9]) : vertices;
@@ -744,6 +745,7 @@ const demoSteps = [
   {title:'Un onboarding, varios equipos', capability:'BMC Helix Business Workflows · Digital Workplace', agent:'Employee Navigator', value:'RR. HH., TI y operaciones coordinan la incorporación del atleta en un único flujo.', action:'Solicitar el onboarding, repartir tareas y seguir cada incorporación.', sketch:'onboarding', zone:5},
   {title:'Mejorar el catálogo', capability:'Service Optimizer', agent:'', value:'Las conversaciones con Employee Navigator revelan oportunidades para crear o mejorar servicios.', action:'Revisar las conversaciones y priorizar por impacto. Llevar la oportunidad a Catalog Curator.', sketch:'optimizer', zone:6},
   {title:'Medir el valor de los agentes', capability:'Agent Outcomes', agent:'', value:'Cuantifica la capacidad digital creada y el valor que aportan los agentes al negocio.', action:'Comparar resultados por agente y periodo.', sketch:'outcomes', zone:6},
+  {title:'Segunda parte', value:'', zone:0, closing:true},
 ];
 const stageSteps = demoSteps;
 const present = document.querySelector('#present');
@@ -754,11 +756,11 @@ const nextStep = document.querySelector('#next-step');
 let presenting = false;
 let stageStep = 0;
 let stageTransition = null;
-const stageAngles = [-.58,-.74,-.40,-.48,-.61,-.46,-.55,-.24,-.52,-.58];
+const stageAngles = [-.58,-.74,-.40,-.48,-.61,-.46,-.55,-.24,-.52,-.58,-.58];
 const stageMarkers = [
   [.2,1.3,12.3], [-.5,.85,10.4], [-3.5,1.85,9.5],
   [.2,1.3,12.3], [.2,1.3,12.3], [-.5,.85,10.4], [-3.5,1.85,9.5],
-  [-16.35,.8,10.45], [.2,1.3,12.3], [.2,1.3,12.3],
+  [-16.35,.8,10.45], [.2,1.3,12.3], [.2,1.3,12.3], [0,1,0],
 ];
 
 function drawStagePulse(time){
@@ -854,13 +856,16 @@ function showStep(index){
   if(stageStep!==previous) stageTransition={from:stageMarkers[previous],to:stageMarkers[stageStep]};
   const step=stageSteps[stageStep];
   const demo=Boolean(step.capability);
+  document.body.classList.toggle('part-two-slide',Boolean(step.closing));
+  document.querySelector('#part-two-title').hidden=!step.closing;
   document.body.classList.toggle('product-slide',['aiops','dashboards','change','teams','knowledge','problem','optimizer','outcomes','onboarding'].includes(step.sketch));
   document.querySelector('#helixgpt-capabilities').hidden=step.sketch!=='aiops';
   failed=Boolean(step.outage);
   select(demo && step.zone===6 ? networkChapter : 0);
   visit(0);
   cue.className=demo?'demo':'overview';
-  cue.hidden=false;
+  cue.hidden=Boolean(step.closing);
+  if(step.closing){targetZoom=1.23;cutaway=false;stageTransition=null;}
   tourLabel.hidden=true;
   document.querySelector('#cue-phase').textContent=step.capability || 'Visita al centro';
   document.querySelector('#cue-title').textContent=step.title;
@@ -895,6 +900,8 @@ present.onclick=()=>{
   document.body.classList.toggle('presenting',presenting);
   if(!presenting){
     document.body.classList.toggle('product-slide',false);
+    document.body.classList.toggle('part-two-slide',false);
+    document.querySelector('#part-two-title').hidden=true;
     tourStart=null;
     failed=false;
     select(0);

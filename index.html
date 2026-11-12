@@ -690,6 +690,22 @@ body:not(.presenting) .stage{min-height:0}
  .onboarding-person{gap:8px;padding:12px}
 }
 @media(prefers-reduced-motion:reduce){.onboarding-question,.onboarding-answer,.onboarding-person,.onboarding-task{animation:none}}
+
+/* A chapter curtain: the real campus geometry occludes the oversized title. */
+#part-two-title[hidden]{display:none}
+#part-two-title{position:absolute;z-index:0;left:-3%;top:12%;width:106%;margin:0;text-align:center;white-space:nowrap;font-family:Baskerville,"Palatino Linotype",Georgia,serif;font-size:clamp(110px,18vw,340px);font-weight:500;font-style:italic;line-height:1;padding-bottom:.18em;letter-spacing:-.055em;color:#315641;opacity:.78;mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent);pointer-events:none;animation:part-two-reveal 1.5s ease both}
+.part-two-slide .stage,.presenting.part-two-slide .stage{display:block;height:100%;min-height:0;padding:0;overflow:hidden;isolation:isolate;background:radial-gradient(ellipse at 50% 38%,#f5f8ef,#cfdccf)}
+.part-two-slide .stage .geometry-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:1;opacity:1!important}
+.part-two-slide .stage>canvas:not(.geometry-canvas){position:absolute;inset:0;width:100%;height:100%;z-index:2}
+.part-two-slide #tour-label{display:none}
+@keyframes part-two-reveal{from{opacity:0;transform:translateY(20px)}to{opacity:.78;transform:none}}
+@media(max-width:1024px){
+ body.part-two-slide{height:100dvh;min-height:0;display:grid;grid-template-rows:auto minmax(0,1fr)}
+ .presenting.part-two-slide main{height:100%;min-height:0;overflow:hidden}
+ .part-two-slide .stage .geometry-canvas{height:100%}
+ #part-two-title{top:calc(64% - 40vw);font-size:clamp(56px,17vw,180px)}
+}
+@media(prefers-reduced-motion:reduce){#part-two-title{animation:none}}
 </style>
 <header><span class="brand"><img src="helix-arena.png" alt="Helix Arena"></span><div class="header-actions"><button id="next-zone">Siguiente zona →</button><button id="network-toggle" aria-pressed="false">Mostrar red del campus</button><button id="present">Modo escenario</button><button id="full">Pantalla completa</button></div></header>
 <main><aside>
@@ -718,6 +734,7 @@ body:not(.presenting) .stage{min-height:0}
 <p id="cue-action"></p>
 </div></div>
 <div id="sketch-slot" hidden></div>
+<h2 id="part-two-title" hidden>Segunda parte</h2>
 <div id="stage-controls" hidden>
   <button id="prev-step">← Anterior</button><span id="step-count"></span>
   <button id="next-step">Siguiente →</button>
@@ -1127,4 +1144,4 @@ body:not(.presenting) .stage{min-height:0}
   </section>
 </div>
 </template>
-<script src="arena.js?v=39"></script></html>
+<script src="arena.js?v=40"></script></html>
