@@ -1,0 +1,65 @@
+/* BMC Helix Brand Guide, January 2026: core palette (pp. 9-12), gradients (p. 27).
+   UI only. Campus geometry, textures and network simulation remain in arena.js. */
+:root {
+  --helix-midnight:#052140;
+  --helix-orange:#FF5A4D;
+  --helix-sky:#EDFBFF;
+  --helix-cloud:#F7F8FD;
+  --helix-white:#FFFFFF;
+  --helix-blue:#264580;
+  --helix-lilac:#758CE5;
+  --helix-electric:#4040D9;
+  --helix-muted:#606176;
+  --helix-border:#D5DEEE;
+  --helix-blue-soft:#E3E8FA;
+  --helix-orange-soft:#FFEEED;
+  --helix-orange-border:#FFBDB8;
+  color-scheme:light;
+}
+body{background:var(--helix-cloud);color:var(--helix-midnight)}
+body>header,.brand{background:var(--helix-midnight)}
+body>header{border-bottom-color:rgb(255 255 255 / .18)}
+button{background:var(--helix-white);color:var(--helix-midnight);border-color:var(--helix-border)}
+button:hover:not(:disabled){background:var(--helix-sky);border-color:var(--helix-blue)}
+button:focus-visible{outline:3px solid var(--helix-electric);outline-offset:3px}
+#present,#next-step,.a2a-expand-btn{background:var(--helix-orange);color:var(--helix-midnight);border-color:var(--helix-orange)}
+#present:hover,#next-step:hover:not(:disabled),.a2a-expand-btn:hover{background:var(--helix-orange);color:var(--helix-midnight);box-shadow:0 5px 16px rgb(5 33 64 / .16)}
+#network-toggle[aria-pressed="true"]{background:var(--helix-orange);color:var(--helix-midnight);border-color:var(--helix-orange)}
+body>header #full{background:var(--helix-midnight);color:var(--helix-white);border-color:rgb(255 255 255 / .45)}
+#stage-controls:not([hidden]){background:var(--helix-midnight);color:var(--helix-white)}
+.a2a-expand-btn[aria-expanded="true"]{background:var(--helix-sky);color:var(--helix-midnight);border-color:var(--helix-border)}
+#cue-card{background:var(--helix-midnight);color:var(--helix-white);border-color:var(--helix-blue)}
+#cue-card :is(p,h2){color:var(--helix-white)}
+#cue-card :is(small,#cue-agent){color:var(--helix-sky)}
+#helixgpt-capabilities{background:var(--helix-blue);color:var(--helix-white)}
+#helixgpt-capabilities :is(strong,span){color:var(--helix-white)}
+:is(.dashboard-benefit,.change-benefit,.teams-benefit,.knowledge-benefit,.problem-benefit,.optimizer-benefit,.outcomes-benefit,.onboarding-benefit,.value-callout){background:var(--helix-sky);color:var(--helix-midnight);border-color:var(--helix-border);box-shadow:inset 3px 0 var(--helix-orange),0 5px 18px rgb(5 33 64 / .1)}
+.value-callout :is(strong,span),.value-callout::before{color:var(--helix-midnight)}
+.cab-main-agent .cab-node-face,.cab-copilot .cab-main-agent .cab-node-face,.single-activity{background:var(--helix-midnight);color:var(--helix-white);border-color:var(--helix-blue)}
+.cab-main-agent :is(strong,span,small),.cab-copilot .cab-main-agent span,.single-activity :is(strong,span,small){color:var(--helix-white)}
+.arch-badge,.orbit-badge-ootb{background:var(--helix-midnight);color:var(--helix-white);border-color:var(--helix-blue)}
+:is(.arch-badge-vibe,.arch-badge-custom,.orbit-badge-vibe,.orbit-badge-custom){background:var(--helix-orange);color:var(--helix-midnight);border-color:var(--helix-orange)}
+.cab-section-heading :is(.arch-badge-vibe,.arch-badge-custom){color:var(--helix-midnight)}
+.cab-calendar-view,.hae-processes .cab-node-face,.message-foundation{background:linear-gradient(110deg,var(--helix-sky),var(--helix-orange-soft));border-color:var(--helix-border)}
+.cab-calendar-view:before{background:linear-gradient(90deg,var(--helix-border),var(--helix-orange-border))}
+.hae-window-bar{background:linear-gradient(105deg,var(--helix-sky),var(--helix-orange-soft));color:var(--helix-midnight)}
+.hae-window-bar>span{color:var(--helix-midnight)}
+.hae-view .hae-window-body{background:var(--helix-midnight)}
+.hae-window-body>small,.hae-window-body>span,.hae-ui-field b{color:var(--helix-sky)}
+.hae-window-body>strong{color:var(--helix-white)}
+.hae-ui-field>span,.hae-ui-compose{background:var(--helix-blue);border-color:var(--helix-lilac);color:var(--helix-white)}
+.hae-ui-compose span{color:var(--helix-white)}
+.hae-ui-action{background:var(--helix-orange);color:var(--helix-midnight)}
+.situation-badges span:first-child{background:var(--helix-orange);color:var(--helix-midnight)}
+.chart-line{stroke:var(--helix-blue)}.chart-line.lime{stroke:var(--helix-lilac)}.chart-line.coral{stroke:var(--helix-orange)}.chart-fill{fill:var(--helix-lilac);opacity:.14}
+.bpmn-error-task rect,.bpmn-gateway{fill:var(--helix-orange-soft);stroke:var(--helix-orange)}
+.bpmn-gateway-mark,.bpmn-error-mark{fill:var(--helix-midnight)}
+.bpmn-error{fill:var(--helix-white);stroke:var(--helix-orange)}
+.single-bpmn-start,.single-bpmn-end{background:var(--helix-sky);border-color:var(--helix-blue)}
+.single-bpmn-edge{background:var(--helix-blue)}.single-bpmn-edge:after{border-left-color:var(--helix-blue)}
+/* Diagram labels keep normal-text contrast; pale palette colors stay on surfaces. */
+.bpmn-lanes text,.bpmn-note,.bpmn-task .bpmn-icon{fill:var(--helix-blue)}
+.bpmn-start,.bpmn-end{stroke:var(--helix-blue)}
+.timeline i{background:var(--helix-blue)}
+.timeline i:nth-last-child(-n+4){background:var(--helix-orange)}
+.header-actions button:focus-visible,#stage-controls button:focus-visible{outline-color:var(--helix-white)}
