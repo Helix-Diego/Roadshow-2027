@@ -1048,7 +1048,7 @@ body:not(.presenting) .stage{isolation:isolate}body:not(.presenting) .stage .geo
 @media(prefers-reduced-motion:reduce){#roadshow-title{transition:none}}
 
 </style>
-<link rel="stylesheet" href="brand.css?v=59">
+<link rel="stylesheet" href="brand.css?v=60">
 <header><span class="brand"><img src="helix-arena.png" alt="Helix Arena"></span><div class="header-actions"><button id="next-zone">Siguiente zona →</button><button id="network-toggle" aria-pressed="false">Mostrar red del campus</button><button id="present">Modo escenario</button><button id="full">Pantalla completa</button></div></header>
 <main><div class="stage">
 <div id="cue" hidden aria-live="polite"><div id="cue-card">
@@ -1477,8 +1477,7 @@ body:not(.presenting) .stage{isolation:isolate}body:not(.presenting) .stage .geo
    <path class="cab-custom-line" data-cab-mode="copilot" data-from="cab-security" data-to="cab-knowledge"/><path class="cab-custom-line" data-cab-mode="copilot" data-from="cab-security" data-to="cab-analysis"/><path class="cab-custom-line" data-cab-mode="copilot" data-from="cab-security" data-to="cab-outlook"/>
    <path class="cab-custom-line cab-voice-line" data-cab-mode="voice" data-from="cab-supervisor" data-to="cab-voice-agent"/>
    <path class="cab-custom-line" data-cab-mode="voice" data-from="cab-voice-agent" data-to="cab-voice-listen"/>
-   <path class="cab-custom-line" data-cab-mode="voice" data-from="cab-voice-agent" data-to="cab-voice-request"/>
-   <path class="cab-custom-line" data-cab-mode="voice" data-from="cab-voice-agent" data-to="cab-voice-reply"/>
+   <path class="cab-custom-line" data-cab-mode="voice" data-from="cab-voice-agent" data-to="cab-voice-security"/>
   </svg>
   <section class="cab-workspace">
    <div class="cab-section-heading"><div><div class="cab-app-title"><strong>CAB Workspace</strong></div><span>Aplicación BMC Helix · De caja</span></div><span class="arch-badge">De caja</span></div>
@@ -1501,11 +1500,10 @@ body:not(.presenting) .stage{isolation:isolate}body:not(.presenting) .stage .geo
   </section>
   <div class="cab-a2a-label cab-extension cab-voice-label" data-cab-mode="voice" hidden><strong>Voz</strong><span>Consulta ↔ respuesta</span></div>
   <section class="cab-copilot cab-voice cab-extension" data-cab-mode="voice" aria-hidden="true" hidden>
-   <div class="cab-section-heading"><div><strong>Grok Bot Voice</strong><span>Habla directamente con Helix</span></div><span class="arch-badge arch-badge-custom">WOW · Voz</span></div>
+   <div class="cab-section-heading"><div><strong>Grok Bot Voice</strong><span>Habla directamente con Helix</span></div><span class="arch-badge arch-badge-custom">Voz</span></div>
    <article id="cab-voice-listen" class="cab-node"><div class="cab-node-face"><small>INTERFAZ DE VOZ</small><strong>Hablar con el CAB</strong><div class="voice-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div></article>
-   <article id="cab-voice-agent" class="cab-node cab-main-agent"><div class="cab-node-face"><div class="grok-brand"><img src="grok.svg" alt="Grok"><small>GROK BOT VOICE</small></div><strong>Conversación con Helix</strong><span>El CAB Supervisor orquesta a sus subagentes</span></div></article>
-   <article id="cab-voice-request" class="cab-node"><div class="cab-node-face"><small>TÚ PREGUNTAS</small><strong>«Resúmeme los cambios del CAB»</strong><span>Una petición hablada, con contexto</span></div></article>
-   <article id="cab-voice-reply" class="cab-node"><div class="cab-node-face"><small>HELIX RESPONDE</small><strong>Resumen y seguimiento</strong><span>Grok comunica la respuesta por voz</span></div></article>
+   <article id="cab-voice-agent" class="cab-node cab-main-agent"><div class="cab-node-face"><div class="grok-brand"><img src="grok.svg" alt="Grok"><small>GROK BOT VOICE</small></div><strong>Conversación con Helix</strong><span>Voz sobre un agente especialista en seguridad de cambios</span></div></article>
+   <article id="cab-voice-security" class="cab-node"><div class="cab-node-face"><small>AGENTE ESPECIALISTA</small><strong>Seguridad de cambios</strong><span>Evalúa riesgos y políticas con conocimiento y tools de seguridad</span></div></article>
   </section>
  </div>
 </div>
@@ -1571,4 +1569,4 @@ body:not(.presenting) .stage{isolation:isolate}body:not(.presenting) .stage .geo
  </div>
 </div>
 </template>
-<script src="arena.js?v=59"></script></html>
+<script src="arena.js?v=60"></script></html>

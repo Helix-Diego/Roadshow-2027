@@ -1042,12 +1042,12 @@ function showStep(index){
           }
         }
         expandA2A.setAttribute('aria-expanded',String(expanded));
-        expandA2A.classList.toggle('is-wow-trigger',cabStage===1);
-        expandA2A.textContent=cabStage===0?'✦ Mostrar customización 1 →':cabStage===1?'✦ Mostrar WOW · Grok Voice →':'← Volver a customización 1';
+        expandA2A.classList.toggle('is-voice-trigger',cabStage===1);
+        expandA2A.textContent=cabStage===0?'✦ Mostrar customización 1 →':cabStage===1?'✦ Mostrar Voz →':'← Volver a customización 1';
         reset.hidden=!expanded;
-        title.textContent=cabStage===2?'WOW · Helix por voz':'A2A y MCP';
+        title.textContent=cabStage===2?'Helix por voz':'A2A y MCP';
         subtitle.textContent=cabStage===2
-          ?'Segunda customización · Grok Bot Voice habla directamente con los agentes del CAB de Helix.'
+          ?'Segunda customización · Grok Bot Voice usa un agente de seguridad de cambios para conversar con el CAB de Helix.'
           :cabStage===1?'Primera customización · HAE, MCP y un especialista de seguridad de Copilot conectado por A2A.'
           :'CAB Workspace · Una aplicación de caja, un supervisor y tres agentes especializados.';
         layoutSketch();
