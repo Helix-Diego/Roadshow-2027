@@ -884,7 +884,7 @@ function alignArchitectureEdges(){
       }else{
         const dx=to.left+to.width/2-from.left-from.width/2;
         const dy=to.top+to.height/2-from.top-from.height/2;
-        const horizontal=path.classList.contains('cab-a2a-line') || (Math.abs(dx)>Math.abs(dy) && path.dataset.from.startsWith('message'));
+        const horizontal=path.classList.contains('cab-a2a-line') || path.classList.contains('cab-voice-line') || (Math.abs(dx)>Math.abs(dy) && path.dataset.from.startsWith('message'));
         if(horizontal){
           x1=(dx>0?from.right:from.left)-bounds.left;y1=from.top+from.height/2-bounds.top;
           x2=(dx>0?to.left:to.right)-bounds.left;y2=to.top+to.height/2-bounds.top;
@@ -1022,16 +1022,33 @@ function showStep(index){
     if(expandA2A){
       const diagramBoard=sketchSlot.querySelector('.cab-board');
       const subtitle=sketchSlot.querySelector('#arch-subtitle');
+      const title=sketchSlot.querySelector('#cab-architecture-title');
+      const reset=sketchSlot.querySelector('#cab-reset');
       const workspace=diagramBoard.querySelector('.cab-workspace');
-      expandA2A.onclick=()=>{
+      let cabStage=0;
+      const showCabStage=next=>{
         workspace.getAnimations().forEach(animation=>animation.cancel());
         const origin=workspace.getBoundingClientRect();
-        const expanded=diagramBoard.classList.toggle('is-expanded');
+        cabStage=next;
+        const expanded=cabStage>0;
+        const mode=cabStage===2?'voice':cabStage===1?'copilot':'base';
+        diagramBoard.classList.toggle('is-expanded',expanded);
+        diagramBoard.dataset.cabView=mode;
+        for(const element of diagramBoard.querySelectorAll('[data-cab-mode]')){
+          const active=element.dataset.cabMode===mode;
+          if(element.tagName.toLowerCase()!=='path'){
+            element.hidden=!active;
+            element.setAttribute('aria-hidden',String(!active));
+          }
+        }
         expandA2A.setAttribute('aria-expanded',String(expanded));
-        expandA2A.textContent=expanded?'← Volver a la aplicación de caja':'✦ Mostrar customización →';
-        diagramBoard.querySelector('.cab-copilot').setAttribute('aria-hidden',String(!expanded));
-        if(subtitle) subtitle.textContent=expanded
-          ?'HAE amplía la aplicación. MCP agenda el CAB en Teams. A2A conecta al especialista de seguridad con el mismo supervisor.'
+        expandA2A.classList.toggle('is-wow-trigger',cabStage===1);
+        expandA2A.textContent=cabStage===0?'✦ Mostrar customización 1 →':cabStage===1?'✦ Mostrar WOW · Grok Voice →':'← Volver a customización 1';
+        reset.hidden=!expanded;
+        title.textContent=cabStage===2?'WOW · Helix por voz':'A2A y MCP';
+        subtitle.textContent=cabStage===2
+          ?'Segunda customización · Grok Bot Voice habla directamente con los agentes del CAB de Helix.'
+          :cabStage===1?'Primera customización · HAE, MCP y un especialista de seguridad de Copilot conectado por A2A.'
           :'CAB Workspace · Una aplicación de caja, un supervisor y tres agentes especializados.';
         layoutSketch();
         const destination=workspace.getBoundingClientRect();
@@ -1043,6 +1060,8 @@ function showStep(index){
           ],{duration:850,easing:'cubic-bezier(.22,1,.36,1)'});
         }
       };
+      expandA2A.onclick=()=>showCabStage(cabStage===0?1:cabStage===1?2:1);
+      reset.onclick=()=>showCabStage(0);
     }
     const expandWorkflow=sketchSlot.querySelector('#expand-workflow');
     if(expandWorkflow){

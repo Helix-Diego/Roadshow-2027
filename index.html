@@ -1048,7 +1048,7 @@ body:not(.presenting) .stage{isolation:isolate}body:not(.presenting) .stage .geo
 @media(prefers-reduced-motion:reduce){#roadshow-title{transition:none}}
 
 </style>
-<link rel="stylesheet" href="brand.css?v=58">
+<link rel="stylesheet" href="brand.css?v=59">
 <header><span class="brand"><img src="helix-arena.png" alt="Helix Arena"></span><div class="header-actions"><button id="next-zone">Siguiente zona →</button><button id="network-toggle" aria-pressed="false">Mostrar red del campus</button><button id="present">Modo escenario</button><button id="full">Pantalla completa</button></div></header>
 <main><div class="stage">
 <div id="cue" hidden aria-live="polite"><div id="cue-card">
@@ -1465,16 +1465,20 @@ body:not(.presenting) .stage{isolation:isolate}body:not(.presenting) .stage .geo
 <template id="sketch-architecture">
 <div class="architecture-product cab-architecture">
  <div class="architecture-heading">
-  <h2>A2A y MCP</h2>
+  <h2 id="cab-architecture-title">A2A y MCP</h2>
   <p id="arch-subtitle">CAB Workspace · Una aplicación de caja, un supervisor y tres agentes especializados.</p>
-  <button id="expand-a2a" type="button" class="a2a-expand-btn" aria-expanded="false" aria-controls="cab-architecture-board">✦ Mostrar customización →</button>
+  <div class="cab-expansion-controls"><button id="cab-reset" type="button" class="a2a-expand-btn cab-reset-btn" hidden>← Vista de caja</button><button id="expand-a2a" type="button" class="a2a-expand-btn" aria-expanded="false" aria-controls="cab-architecture-board">✦ Mostrar customización 1 →</button></div>
  </div>
- <div class="cab-board" id="cab-architecture-board">
+ <div class="cab-board" id="cab-architecture-board" data-cab-view="base">
   <svg class="cab-lines" aria-hidden="true">
    <path data-from="cab-supervisor" data-to="cab-summary"/><path data-from="cab-supervisor" data-to="cab-collision"/><path data-from="cab-supervisor" data-to="cab-followup"/>
    <path class="cab-custom-line" data-from="cab-supervisor" data-to="cab-teams"/>
-   <path class="cab-custom-line cab-a2a-line" data-from="cab-supervisor" data-to="cab-security"/>
-   <path class="cab-custom-line" data-from="cab-security" data-to="cab-knowledge"/><path class="cab-custom-line" data-from="cab-security" data-to="cab-analysis"/><path class="cab-custom-line" data-from="cab-security" data-to="cab-outlook"/>
+   <path class="cab-custom-line cab-a2a-line" data-cab-mode="copilot" data-from="cab-supervisor" data-to="cab-security"/>
+   <path class="cab-custom-line" data-cab-mode="copilot" data-from="cab-security" data-to="cab-knowledge"/><path class="cab-custom-line" data-cab-mode="copilot" data-from="cab-security" data-to="cab-analysis"/><path class="cab-custom-line" data-cab-mode="copilot" data-from="cab-security" data-to="cab-outlook"/>
+   <path class="cab-custom-line cab-voice-line" data-cab-mode="voice" data-from="cab-supervisor" data-to="cab-voice-agent"/>
+   <path class="cab-custom-line" data-cab-mode="voice" data-from="cab-voice-agent" data-to="cab-voice-listen"/>
+   <path class="cab-custom-line" data-cab-mode="voice" data-from="cab-voice-agent" data-to="cab-voice-request"/>
+   <path class="cab-custom-line" data-cab-mode="voice" data-from="cab-voice-agent" data-to="cab-voice-reply"/>
   </svg>
   <section class="cab-workspace">
    <div class="cab-section-heading"><div><div class="cab-app-title"><strong>CAB Workspace</strong></div><span>Aplicación BMC Helix · De caja</span></div><span class="arch-badge">De caja</span></div>
@@ -1487,13 +1491,21 @@ body:not(.presenting) .stage{isolation:isolate}body:not(.presenting) .stage .geo
     <div class="cab-view-copy"><small>AMPLIACIÓN DE CAB WORKSPACE · HAE</small><strong>Calendario de cambios</strong></div>
    </section>
   </section>
-  <div class="cab-a2a-label cab-extension"><strong>A2A</strong><span>Consulta del cambio</span></div>
-  <section class="cab-copilot cab-extension" aria-hidden="true">
+  <div class="cab-a2a-label cab-extension" data-cab-mode="copilot"><strong>A2A</strong><span>Consulta del cambio</span></div>
+  <section class="cab-copilot cab-extension" data-cab-mode="copilot" aria-hidden="true" hidden>
    <div class="cab-section-heading"><div><strong>Copilot Studio</strong><span>Agente especialista conectado a Helix</span></div><span class="arch-badge arch-badge-custom">Custom</span></div>
    <article id="cab-security" class="cab-node cab-main-agent"><div class="cab-node-face"><div class="arch-brand"><span class="copilot-logo"><img src="m365-copilot.png?v=2" alt="Microsoft 365 Copilot"></span></div><strong>CAB Security Reviewer</strong><span>Consulta el cambio al CAB Supervisor por A2A</span></div></article>
    <article id="cab-knowledge" class="cab-node"><div class="cab-node-face"><small>CONOCIMIENTO INGESTADO</small><strong>Políticas de seguridad</strong><span>Normativa y contexto de la organización</span></div></article>
    <article id="cab-analysis" class="cab-node"><div class="cab-node-face"><small>TOOLS · SEGURIDAD</small><strong>Análisis de seguridad</strong><span>Evalúa riesgos y controles del cambio</span></div></article>
    <article id="cab-outlook" class="cab-node"><div class="cab-node-face"><small>TOOL · OUTLOOK</small><strong>Consultar calendarios</strong><span>Disponibilidad de los participantes del CAB</span></div></article>
+  </section>
+  <div class="cab-a2a-label cab-extension cab-voice-label" data-cab-mode="voice" hidden><strong>Voz</strong><span>Consulta ↔ respuesta</span></div>
+  <section class="cab-copilot cab-voice cab-extension" data-cab-mode="voice" aria-hidden="true" hidden>
+   <div class="cab-section-heading"><div><strong>Grok Bot Voice</strong><span>Habla directamente con Helix</span></div><span class="arch-badge arch-badge-custom">WOW · Voz</span></div>
+   <article id="cab-voice-listen" class="cab-node"><div class="cab-node-face"><small>INTERFAZ DE VOZ</small><strong>Hablar con el CAB</strong><div class="voice-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div></article>
+   <article id="cab-voice-agent" class="cab-node cab-main-agent"><div class="cab-node-face"><div class="grok-brand"><img src="grok.svg" alt="Grok"><small>GROK BOT VOICE</small></div><strong>Conversación con Helix</strong><span>El CAB Supervisor orquesta a sus subagentes</span></div></article>
+   <article id="cab-voice-request" class="cab-node"><div class="cab-node-face"><small>TÚ PREGUNTAS</small><strong>«Resúmeme los cambios del CAB»</strong><span>Una petición hablada, con contexto</span></div></article>
+   <article id="cab-voice-reply" class="cab-node"><div class="cab-node-face"><small>HELIX RESPONDE</small><strong>Resumen y seguimiento</strong><span>Grok comunica la respuesta por voz</span></div></article>
   </section>
  </div>
 </div>
@@ -1559,4 +1571,4 @@ body:not(.presenting) .stage{isolation:isolate}body:not(.presenting) .stage .geo
  </div>
 </div>
 </template>
-<script src="arena.js?v=58"></script></html>
+<script src="arena.js?v=59"></script></html>
